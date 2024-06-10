@@ -1,12 +1,12 @@
-FROM ubuntu:latest AS build 
-RUN apt-get update 
-RUN apt-get install openjdk-17-jdk -y 
-COPY . .
+# FROM ubuntu:latest AS build 
+# RUN apt-get update 
+# RUN apt-get install openjdk-17-jdk -y 
+# COPY . .
 # Base Image
-FROM ubuntu:latest
+# FROM ubuntu:latest
 
 #Update APT repository & Install gnupg
-RUN apt-get update && apt-get install -y gnupg
+# RUN apt-get update && apt-get install -y gnupg
 
 # #Add an account for running MySQL
 # RUN groupadd -r mysql && useradd -r -g mysql mysql
@@ -37,15 +37,15 @@ RUN apt-get update && apt-get install -y gnupg
 # VOLUME /var/lib/mysql
 
 #Expose the default port
-EXPOSE 3306
+# EXPOSE 3306
 
 #Start MySQL
-CMD ["mysqld","--user","mysql"]
-RUN mvn clean build
-FROM openjdk:17.0.1-jdk
-COPY --from=build  /target/Employer-0.0.1-SNAPSHOT.war demo.war
-EXPOSE 8080 
-ENTRYPOINT [ "java" , "-jar" , "demo.war" ]
+# CMD ["mysqld","--user","mysql"]
+# RUN mvn clean build
+# FROM openjdk:17.0.1-jdk
+# COPY --from=build  /target/Employer-0.0.1-SNAPSHOT.war demo.war
+# EXPOSE 8080 
+# ENTRYPOINT [ "java" , "-jar" , "demo.war" ]
 
 
 
