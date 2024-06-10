@@ -53,14 +53,14 @@
 
 # =========================
 # First stage: build the application
-# FROM maven:3.8.4-openjdk-17 AS build
-# WORKDIR /app
-# COPY . .
-# RUN mvn clean package
+FROM maven:3.8.4-openjdk-17 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package
 
 # Second stage: create the runtime image
-# FROM openjdk:17.0.1-jdk-slim
-# WORKDIR /app
-# COPY --from=build /app/target/Employer-0.0.1-SNAPSHOT.war demo.war
-# EXPOSE 19279
-# ENTRYPOINT ["java", "-jar", "demo.war"]
+FROM openjdk:17.0.1-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/Employer-0.0.1-SNAPSHOT.war demo.war
+EXPOSE 19279
+ENTRYPOINT ["java", "-jar", "demo.war"]
