@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "schema_user")
-public class Merchandise {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "userid")
@@ -59,14 +59,14 @@ public class Merchandise {
         this.unit = unit;
     }
 
-    public Merchandise() {
+    public Product() {
     }
 
     public void setExp(String exp) {
         this.exp = exp;
     }
 
-    public Merchandise(Long iD, String name, String exp, String sub, String unit) {
+    public Product(Long iD, String name, String exp, String sub, String unit) {
         ID = iD;
         this.name = name;
         this.exp = exp;

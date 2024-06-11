@@ -1,13 +1,11 @@
 package com.rs.employer.repository;
 
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.rs.employer.model.Employee;
+import com.rs.employer.model.Product;
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
 }
-
