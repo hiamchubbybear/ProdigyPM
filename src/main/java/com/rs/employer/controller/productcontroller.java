@@ -16,11 +16,12 @@ import com.rs.employer.model.Product;
 import com.rs.employer.service.ProductService;
 
 @RestController
-@RequestMapping(path = "/v1/m1")
+@RequestMapping(path = "/v1")
 public class productcontroller {
     @Autowired
     private ProductService productServiceImplement;
-
+    
+   
     @GetMapping(path = "/getmerid")
     public Product getUserById(@RequestParam(name = "ID") Long ID) {
         return productServiceImplement.getProduct(ID);

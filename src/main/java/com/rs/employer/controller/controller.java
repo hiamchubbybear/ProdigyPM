@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rs.employer.dto.userdto;
 import com.rs.employer.model.Customer;
 import com.rs.employer.service.CustomerImplement;
 
 @RequestMapping(path = "/v1")
 @RestController
 public class controller {
+    // public final CustomerRepository customerRepository;
+
     @Autowired
     private CustomerImplement customerImplement;
 
@@ -24,6 +27,11 @@ public class controller {
         List<Customer> list = customerImplement.listAllCustomer();
         return list;
 
+    }
+
+    @GetMapping(path = "/userdto")
+    public userdto getUserData(@RequestParam(name = "userid") Long ID) {
+        return customerImplement.getUserData(ID);
     }
 
     @GetMapping(path = "/get")

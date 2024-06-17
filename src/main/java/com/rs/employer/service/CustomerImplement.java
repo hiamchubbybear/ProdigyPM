@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rs.employer.dto.userdto;
 import com.rs.employer.model.Customer;
 import com.rs.employer.repository.CustomerRepository;
 
@@ -62,6 +63,11 @@ public class CustomerImplement implements CustomerService {
         } else
             throw new IllegalStateException("User have id:  " + UserID + " does not exist ");
     }
+    public userdto getUserData(Long UserID) {
+        Customer customer = listCustomerById(UserID);
+        userdto userdto = new userdto( customer.getName(), customer.getAddress(), customer.getUsername(), customer.getRole(), customer.isGender(), customer.getStatus(), customer.getBirthDay());
+        return userdto;
+    }
 
     public Customer registerUser(String username, String password, String login) {
         if (username != null && password != null && login != null) {
@@ -77,4 +83,5 @@ public class CustomerImplement implements CustomerService {
     public List<Customer> listAllCustomer() {
         return (List<Customer>) customerRepository.findAll();
     }
+
 }

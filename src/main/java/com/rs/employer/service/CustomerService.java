@@ -15,5 +15,7 @@ public interface CustomerService {
 
     public Customer updateCustomer(Long ID, Customer customer);
 
+    // public List<userdto> getUserData(Long ID);
+
     public Customer registerUser(String username, String password, String login);
 }
