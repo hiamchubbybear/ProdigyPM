@@ -34,7 +34,7 @@ public class Customer {
     private String status;
     // @DateTimeFormat(pattern = "dd/mm/yyyy")
     @Column(name = "birthday")
-    private DateTimeFormat birthDay;
+    private String birthDay;
 
     public Long getId() {
         return id;
