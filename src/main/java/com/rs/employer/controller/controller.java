@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +31,12 @@ public class controller {
 
     }
 
+    @PostMapping("/birth")
+    public String postMethodName(@RequestBody String entity) {
+
+        return entity;
+    }
+
     @GetMapping(path = "/userdto")
     public userdto getUserData(@RequestParam(name = "userid") Long ID) {
         return customerImplement.getUserData(ID);
@@ -44,18 +52,18 @@ public class controller {
         return customerImplement.deleteCustomerById(UserID);
     }
 
-    @GetMapping(path = "/update")
+    @PostMapping(path = "/update")
     public Customer updatCustomer(@RequestParam(name = "userid") Long UserID,
             @RequestBody Customer customer) {
         return customerImplement.updateCustomer(UserID, customer);
     }
 
-    @GetMapping(path = "/add")
+    @PutMapping(path = "/add")
     public void addCustomer(@RequestBody Customer customer) {
         customerImplement.addCustomer(customer);
     }
 
-    @GetMapping(path = "/register")
+    @PutMapping(path = "/register")
     public Customer registerCustomer(String username, String password, String login) {
         return customerImplement.registerUser(username, password, login);
     }

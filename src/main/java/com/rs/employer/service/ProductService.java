@@ -10,7 +10,7 @@ import com.rs.employer.model.Product;
 public interface ProductService {
     public List<Product> getAllProduct();
 
-    public Boolean addProduct(Product product);
+    public Boolean addProduct(Product product ) ;
 
     public String updateProduct(Long id, Product product);
 

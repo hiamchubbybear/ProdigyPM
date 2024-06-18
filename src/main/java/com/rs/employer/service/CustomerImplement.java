@@ -63,9 +63,11 @@ public class CustomerImplement implements CustomerService {
         } else
             throw new IllegalStateException("User have id:  " + UserID + " does not exist ");
     }
+
     public userdto getUserData(Long UserID) {
         Customer customer = listCustomerById(UserID);
-        userdto userdto = new userdto( customer.getName(), customer.getAddress(), customer.getUsername(), customer.getRole(), customer.isGender(), customer.getStatus(), customer.getBirthDay());
+        userdto userdto = new userdto(customer.getName(), customer.getAddress(), customer.getUsername(),
+                customer.getRole(), customer.isGender(), customer.getStatus(), customer.getBirthDay());
         return userdto;
     }
 
