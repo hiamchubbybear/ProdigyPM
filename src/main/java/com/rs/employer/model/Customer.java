@@ -2,8 +2,6 @@ package com.rs.employer.model;
 
 import java.sql.Time;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,7 +32,7 @@ public class Customer {
     private String status;
     // @DateTimeFormat(pattern = "dd/mm/yyyy")
     @Column(name = "birthday")
-    private String birthDay;
+    private Time birthDay;
 
     public Long getId() {
         return id;
