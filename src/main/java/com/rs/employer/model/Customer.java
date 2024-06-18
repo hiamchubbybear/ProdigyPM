@@ -32,9 +32,9 @@ public class Customer {
     private boolean gender;
     @Column(name = "status")
     private String status;
-    @DateTimeFormat(pattern = "dd/mm/yyyy")
+    // @DateTimeFormat(pattern = "dd/mm/yyyy")
     @Column(name = "birthday")
-    private Time birthDay;
+    private DateTimeFormat birthDay;
 
     public Long getId() {
         return id;
