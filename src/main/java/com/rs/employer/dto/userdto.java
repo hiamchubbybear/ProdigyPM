@@ -1,6 +1,7 @@
 package com.rs.employer.dto;
 
 import java.sql.Time;
+import java.util.Date;
 
 
 
@@ -12,10 +13,10 @@ public class userdto {
     private boolean gender;
     private String password;
     private String status;
-    private Time birthDay;
+    private Date birthDay;
 
     public userdto(String name, String address, String username, String role, boolean gender, String status,
-            Time birthDay) {
+            Date birthDay) {
         this.name = name;
         this.address = address;
         this.username = username;
@@ -93,7 +94,7 @@ public class userdto {
         this.status = status;
     }
 
-    public Time getBirthDay() {
+    public Date getBirthDay() {
         return birthDay;
     }
 

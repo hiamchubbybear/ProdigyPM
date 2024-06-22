@@ -1,6 +1,8 @@
 package com.rs.employer.model;
 
-import java.sql.Time;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,15 +16,15 @@ import jakarta.persistence.Table;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
     @Column(name = "name")
     private String name;
     @Column(name = "address")
     private String address;
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "role")
     private String role;
@@ -30,9 +32,9 @@ public class Customer {
     private boolean gender;
     @Column(name = "status")
     private String status;
-    // @DateTimeFormat(pattern = "dd/mm/yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthday")
-    private Time birthDay;
+    private Date birthDay;
 
     public Long getId() {
         return id;
@@ -98,11 +100,11 @@ public class Customer {
         this.status = status;
     }
 
-    public Time getBirthDay() {
+    public Date getBirthDay() {
         return birthDay;
     }
 
-    public void setBirthDay(Time birthDay) {
+    public void setBirthDay(Date birthDay) {
         this.birthDay = birthDay;
     }
 
