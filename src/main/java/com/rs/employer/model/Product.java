@@ -15,7 +15,7 @@ public class Product {
     @Id
     // Auto increment by 1
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userid", nullable = false)
+    @Column(name = "ID", nullable = false)
     private Long ID;
     // Name of the product
     @Column(name = "name")
