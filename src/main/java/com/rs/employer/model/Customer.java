@@ -9,7 +9,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 // Customer class
@@ -17,7 +16,7 @@ import jakarta.persistence.Table;
 @Table(name = "schema_user")
 public class Customer {
     // ID for the customer
-    @Id
+    @jakarta.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
