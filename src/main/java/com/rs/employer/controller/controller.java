@@ -1,6 +1,7 @@
 package com.rs.employer.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -34,27 +35,27 @@ public class controller {
 
     // List customer by ID as user
     @GetMapping(path = "/customertdata")
-    public userdto getUserData(@RequestParam(name = "userid") Long ID) {
-        return customerImplement.getUserData(ID);
+    public userdto getUserData(@RequestParam(name = "userid") String username) {
+        return customerImplement.getUserData(username);
     }
 
     // List customer by ID as administrator
     @GetMapping(path = "/getcustomerbyid")
-    public Customer getPaticipateUser(@RequestParam(name = "userid") Long UserID) {
-        return customerImplement.listCustomerById(UserID);
+    public Customer getPaticipateUser(@RequestParam(name = "userid") String username) {
+        return customerImplement.listCustomerById(username);
     }
 
     // Delete customer by ID
     @DeleteMapping(path = "/delete")
-    public boolean deleteCustomer(@RequestParam(name = "userid") Long UserID) {
-        return customerImplement.deleteCustomerById(UserID);
+    public boolean deleteCustomer(@RequestParam(name = "userid") String username) {
+        return customerImplement.deleteCustomerById(username);
     }
 
     // Update customer by ID
     @PostMapping(path = "/update")
-    public Customer updatCustomer(@RequestParam(name = "userid") Long UserID,
+    public Customer updatCustomer(@RequestParam(name = "userid") String username,
             @RequestBody Customer customer) {
-        return customerImplement.updateCustomer(UserID, customer);
+        return customerImplement.updateCustomer(username, customer);
     }
 
     // Add customer

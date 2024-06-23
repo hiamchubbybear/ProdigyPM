@@ -28,10 +28,9 @@ public class CustomerImplement implements CustomerService {
 
     // Update customer by ID
     @Override
-    public Customer updateCustomer(Long UserID, Customer customer) {
-        Customer customer1 = customerRepository.getReferenceById(UserID);
+    public Customer updateCustomer(String username, Customer customer) {
+        Customer customer1 = customerRepository.getReferenceById(username);
         if (customer1 != null) {
-            customer1.setId(UserID);
             customer1.setName(customer.getName());
             customer1.setAddress(customer.getAddress());
             customer1.setUsername(customer.getUsername());
@@ -46,12 +45,12 @@ public class CustomerImplement implements CustomerService {
 
     // Delete customer by ID
     @Override
-    public Boolean deleteCustomerById(Long UserID) {
-        if (customerRepository.existsById(UserID)) {
-            Optional<Customer> eOptional = customerRepository.findById(UserID);
+    public Boolean deleteCustomerById(String username) {
+        if (customerRepository.existsById(username)) {
+            Optional<Customer> eOptional = customerRepository.findById(username);
             Customer customer1 = eOptional.get();
             if (customer1.getId() != null) {
-                customerRepository.deleteById(UserID);
+                customerRepository.deleteById(username);
                 return true;
             }
         }
@@ -60,18 +59,18 @@ public class CustomerImplement implements CustomerService {
 
     // List customer by ID
     @Override
-    public Customer listCustomerById(Long UserID) {
-        Optional<Customer> eOptional = customerRepository.findById(UserID);
+    public Customer listCustomerById(String username) {
+        Optional<Customer> eOptional = customerRepository.findById(username);
         Customer customer1 = eOptional.get();
         if (customer1.getId() != null) {
             return customer1;
         } else
-            throw new IllegalStateException("User have id:  " + UserID + " does not exist ");
+            throw new IllegalStateException("User have id:  " + username + " does not exist ");
     }
 
     // List customer dto by ID as user
-    public userdto getUserData(Long UserID) {
-        Customer customer = listCustomerById(UserID);
+    public userdto getUserData(String username) {
+        Customer customer = listCustomerById(username);
         userdto userdto = new userdto(customer.getName(), customer.getAddress(), customer.getUsername(),
                 customer.getRole(), customer.isGender(), customer.getStatus(), customer.getBirthDay());
         return userdto;

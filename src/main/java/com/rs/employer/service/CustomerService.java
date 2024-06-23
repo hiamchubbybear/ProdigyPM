@@ -10,16 +10,16 @@ public interface CustomerService {
     public Customer addCustomer(Customer customer);
 
     // List customer by ID
-    public Customer listCustomerById(Long ID);
+    public Customer listCustomerById(String username);
 
     // Delete customer by ID
-    public Boolean deleteCustomerById(Long ID);
+    public Boolean deleteCustomerById(String username);
 
     // List all customer
     public List<Customer> listAllCustomer();
 
     // Update customer by ID
-    public Customer updateCustomer(Long ID, Customer customer);
+    public Customer updateCustomer(String username, Customer customer);
 
     // List customer by ID as user
     // public List<userdto> getUserData(Long ID);
