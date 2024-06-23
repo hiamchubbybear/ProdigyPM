@@ -16,35 +16,34 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "schema_user")
 public class Customer {
-
+    // ID for the customer
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
     // UUID of the customer auto generated
     @Column(name = "uuid", updatable = false, nullable = false)
     private UUID uuid = UUID.randomUUID();
-    // ID for the customer
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false, updatable = false)
-    private Long id;
     // Name of the customer
-    @Column(name = "name" , nullable= false , updatable=true)
+    @Column(name = "name", nullable = false, updatable = true)
     private String name;
     // Address of the customer
-    @Column(name = "address" , nullable=false, updatable=true)
+    @Column(name = "address", nullable = true, updatable = true)
     private String address;
     // Username of the customer
-    @Column(name = "username", nullable = false , updatable=false)
+    @Column(name = "username", nullable = false, updatable = false)
     private String username;
     // Password of the customer
-    @Column(name = "password", nullable = false , updatable = true)
+    @Column(name = "password", nullable = false, updatable = true)
     private String password;
     // Role of the customer
-    @Column(name = "role",nullable = true, updatable = true)
+    @Column(name = "role", nullable = true, updatable = true)
     private String role;
     // Gender of the customer
-    @Column(name = "gender",nullable = false , updatable = true)
+    @Column(name = "gender", nullable = false, updatable = true)
     private boolean gender;
     // Status of the customer
-    @Column(name = "status", updatable= true , nullable=false) 
+    @Column(name = "status", updatable = true, nullable = false)
     private String status;
     // Birthday of the customer
     @JsonFormat(pattern = "yyyy-MM-dd")
