@@ -23,13 +23,13 @@ public class CustomerImplement implements CustomerService {
             return customerRepository.save(customer);
         }
         throw new IllegalStateException(
-                " Can not add customer with username: " + customer.getUsername() + " cause username is existed ");
+                " Can not add customer with userid: " + customer.getUsername() + " cause userid is existed ");
     }
 
     // Update customer by ID
     @Override
-    public Customer updateCustomer(String username, Customer customer) {
-        Customer customer1 = customerRepository.getReferenceById(username);
+    public Customer updateCustomer(Long userid, Customer customer) {
+        Customer customer1 = customerRepository.getReferenceById(userid);
         if (customer1 != null) {
             customer1.setName(customer.getName());
             customer1.setAddress(customer.getAddress());
@@ -45,12 +45,12 @@ public class CustomerImplement implements CustomerService {
 
     // Delete customer by ID
     @Override
-    public Boolean deleteCustomerById(String username) {
-        if (customerRepository.existsById(username)) {
-            Optional<Customer> eOptional = customerRepository.findById(username);
+    public Boolean deleteCustomerById(Long userid) {
+        if (customerRepository.existsById(userid)) {
+            Optional<Customer> eOptional = customerRepository.findById(userid);
             Customer customer1 = eOptional.get();
             if (customer1.getId() != null) {
-                customerRepository.deleteById(username);
+                customerRepository.deleteById(userid);
                 return true;
             }
         }
@@ -59,28 +59,29 @@ public class CustomerImplement implements CustomerService {
 
     // List customer by ID
     @Override
-    public Customer listCustomerById(String username) {
-        Optional<Customer> eOptional = customerRepository.findById(username);
+    public Customer listCustomerById(Long userid) {
+        Optional<Customer> eOptional = customerRepository.findById(userid);
         Customer customer1 = eOptional.get();
         if (customer1.getId() != null) {
             return customer1;
         } else
-            throw new IllegalStateException("User have id:  " + username + " does not exist ");
+            throw new IllegalStateException("User have id:  " + userid + " does not exist ");
     }
 
     // List customer dto by ID as user
-    public userdto getUserData(String username) {
-        Customer customer = listCustomerById(username);
+    public userdto getUserData(Long userid) {
+        Customer customer = listCustomerById(userid);
         userdto userdto = new userdto(customer.getName(), customer.getAddress(), customer.getUsername(),
                 customer.getRole(), customer.isGender(), customer.getStatus(), customer.getBirthDay());
         return userdto;
     }
 
     // Register user
-    public Customer registerUser(String username, String password, String login) {
-        if (username != null && password != null && login != null) {
+    public Customer registerUser(Long userid, String password, String login) {
+        if (userid != null && password != null && login != null) {
             Customer customer = new Customer();
-            customer.setUsername(username);
+            customer.setId(userid);
+            customer.setUsername(login);
             customer.setPassword(password);
             return customerRepository.save(customer);
         } else

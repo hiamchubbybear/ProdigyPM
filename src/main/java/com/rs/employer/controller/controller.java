@@ -35,27 +35,27 @@ public class controller {
 
     // List customer by ID as user
     @GetMapping(path = "/customertdata")
-    public userdto getUserData(@RequestParam(name = "userid") String username) {
-        return customerImplement.getUserData(username);
+    public userdto getUserData(@RequestParam(name = "userid") Long userid) {
+        return customerImplement.getUserData(userid);
     }
 
     // List customer by ID as administrator
     @GetMapping(path = "/getcustomerbyid")
-    public Customer getPaticipateUser(@RequestParam(name = "userid") String username) {
-        return customerImplement.listCustomerById(username);
+    public Customer getPaticipateUser(@RequestParam(name = "userid") Long userid) {
+        return customerImplement.listCustomerById(userid);
     }
 
     // Delete customer by ID
     @DeleteMapping(path = "/delete")
-    public boolean deleteCustomer(@RequestParam(name = "userid") String username) {
-        return customerImplement.deleteCustomerById(username);
+    public boolean deleteCustomer(@RequestParam(name = "userid") Long userid) {
+        return customerImplement.deleteCustomerById(userid);
     }
 
     // Update customer by ID
     @PostMapping(path = "/update")
-    public Customer updatCustomer(@RequestParam(name = "userid") String username,
+    public Customer updatCustomer(@RequestParam(name = "userid") Long userid,
             @RequestBody Customer customer) {
-        return customerImplement.updateCustomer(username, customer);
+        return customerImplement.updateCustomer(userid, customer);
     }
 
     // Add customer
@@ -66,8 +66,8 @@ public class controller {
 
     // Register customer
     @PutMapping(path = "/register")
-    public Customer registerCustomer(String username, String password, String login) {
-        return customerImplement.registerUser(username, password, login);
+    public Customer registerCustomer(Long userid, String password, String login) {
+        return customerImplement.registerUser(userid, password, login);
     }
 
     // Hello world

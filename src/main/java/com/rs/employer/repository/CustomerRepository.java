@@ -7,6 +7,6 @@ import com.rs.employer.model.Customer;
 
 // Database JPA repository for Customer
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, String> {
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
 }

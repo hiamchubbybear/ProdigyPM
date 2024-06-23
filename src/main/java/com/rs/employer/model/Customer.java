@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -15,30 +17,34 @@ import jakarta.persistence.Table;
 @Table(name = "schema_user")
 public class Customer {
 
-    // UUID of the customer
-    @Column(name = "id", updatable = false, nullable = false)
-    private UUID id = UUID.randomUUID();
+    // UUID of the customer auto generated
+    @Column(name = "uuid", updatable = false, nullable = false)
+    private UUID uuid = UUID.randomUUID();
+    // ID for the customer
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false, updatable = false)
+    private Long id;
     // Name of the customer
-    @Column(name = "name")
+    @Column(name = "name" , nullable= false , updatable=true)
     private String name;
     // Address of the customer
-    @Column(name = "address")
+    @Column(name = "address" , nullable=false, updatable=true)
     private String address;
     // Username of the customer
-    @Id
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false , updatable=false)
     private String username;
     // Password of the customer
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = false , updatable = true)
     private String password;
     // Role of the customer
-    @Column(name = "role")
+    @Column(name = "role",nullable = true, updatable = true)
     private String role;
     // Gender of the customer
-    @Column(name = "gender")
+    @Column(name = "gender",nullable = false , updatable = true)
     private boolean gender;
     // Status of the customer
-    @Column(name = "status")
+    @Column(name = "status", updatable= true , nullable=false) 
     private String status;
     // Birthday of the customer
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -46,11 +52,19 @@ public class Customer {
     private Date birthDay;
 
     // Getters and Setters
-    public UUID getId() {
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
