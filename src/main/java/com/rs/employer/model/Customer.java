@@ -2,40 +2,50 @@ package com.rs.employer.model;
 
 import java.util.Date;
 
+import org.springframework.data.annotation.Id;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
+// Customer class
 @Entity
-@Table(name = "employee")
+@Table(name = "schema_user")
 public class Customer {
+    // ID of the customer
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+    // Name of the customer
     @Column(name = "name")
     private String name;
+    // Address of the customer
     @Column(name = "address")
     private String address;
+    // Username of the customer
     @Column(name = "username", nullable = false)
     private String username;
+    // Password of the customer
     @Column(name = "password", nullable = false)
     private String password;
+    // Role of the customer    
     @Column(name = "role")
     private String role;
+    // Gender of the customer
     @Column(name = "gender")
     private boolean gender;
+    // Status of the customer
     @Column(name = "status")
     private String status;
+    // Birthday of the customer
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthday")
     private Date birthDay;
-
+    //  Getters and Setters
     public Long getId() {
         return id;
     }

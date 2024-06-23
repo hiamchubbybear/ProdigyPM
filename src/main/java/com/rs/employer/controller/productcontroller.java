@@ -15,30 +15,34 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rs.employer.model.Product;
 import com.rs.employer.service.ProductService;
 
+//Controller for product
 @RestController
-@RequestMapping(path = "/v1")
+@RequestMapping(path = "/api/product")
 public class productcontroller {
     @Autowired
     private ProductService productServiceImplement;
-    
-   
-    @GetMapping(path = "/getmerid")
+
+    // List product by ID
+    @GetMapping(path = "/getproductbyid")
     public Product getUserById(@RequestParam(name = "ID") Long ID) {
         return productServiceImplement.getProduct(ID);
     }
 
-    @GetMapping(path = "/getallmer")
+    // List all product in database
+    @GetMapping(path = "/getallproduct")
     public List<Product> getAllProduct(Product product) {
         List<Product> list = productServiceImplement.getAllProduct();
         return list;
     }
 
-    @PostMapping(path = "/addmer")
+    // Add product
+    @PostMapping(path = "/add")
     public Boolean addProduct(@RequestBody Product product) {
         return productServiceImplement.addProduct(product);
     }
 
-    @DeleteMapping(path = "/deletemer")
+    // Delete product by ID
+    @DeleteMapping(path = "/delete")
     public String deleteProduct(@RequestParam(name = "ID") Long ID) {
         if (productServiceImplement.deleteProduct(ID))
 
@@ -47,6 +51,7 @@ public class productcontroller {
             return "User can't delete";
     }
 
+    // Update product by ID
     @PutMapping(path = "/change")
     public String changeProduct(@RequestParam(name = "ID", required = true) Long ID,
             @RequestBody Product product) {

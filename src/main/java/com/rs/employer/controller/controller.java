@@ -17,62 +17,61 @@ import com.rs.employer.dto.userdto;
 import com.rs.employer.model.Customer;
 import com.rs.employer.service.CustomerImplement;
 
-@RequestMapping(path = "/v1")
+//Controller for customer
+@RequestMapping(path = "/api/customer")
 @RestController
 @CrossOrigin
 public class controller {
-    // public final CustomerRepository customerRepository;
-
     @Autowired
     private CustomerImplement customerImplement;
 
-    @GetMapping(path = "/getallus")
+    // List all customer in database
+    @GetMapping(path = "/allcustomer")
     public List<Customer> getAllUser() {
         List<Customer> list = customerImplement.listAllCustomer();
         return list;
-
     }
 
-    @PostMapping("/birth")
-    public String postMethodName(@RequestBody String entity) {
-
-        return entity;
-    }
-
-    @GetMapping(path = "/userdto")
+    // List customer by ID as user
+    @GetMapping(path = "/customertdata")
     public userdto getUserData(@RequestParam(name = "userid") Long ID) {
         return customerImplement.getUserData(ID);
     }
 
-    @GetMapping(path = "/get")
+    // List customer by ID as administrator
+    @GetMapping(path = "/getcustomerbyid")
     public Customer getPaticipateUser(@RequestParam(name = "userid") Long UserID) {
         return customerImplement.listCustomerById(UserID);
     }
 
+    // Delete customer by ID
     @DeleteMapping(path = "/delete")
     public boolean deleteCustomer(@RequestParam(name = "userid") Long UserID) {
         return customerImplement.deleteCustomerById(UserID);
     }
 
+    // Update customer by ID
     @PostMapping(path = "/update")
     public Customer updatCustomer(@RequestParam(name = "userid") Long UserID,
             @RequestBody Customer customer) {
         return customerImplement.updateCustomer(UserID, customer);
     }
 
+    // Add customer
     @PutMapping(path = "/add")
     public void addCustomer(@RequestBody Customer customer) {
         customerImplement.addCustomer(customer);
     }
 
+    // Register customer
     @PutMapping(path = "/register")
     public Customer registerCustomer(String username, String password, String login) {
         return customerImplement.registerUser(username, password, login);
     }
 
+    // Hello world
     @GetMapping(path = "/hello")
     public String hello() {
         return "HelloWorld";
     }
-
 }

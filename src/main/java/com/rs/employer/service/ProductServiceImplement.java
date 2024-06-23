@@ -9,17 +9,20 @@ import org.springframework.stereotype.Service;
 import com.rs.employer.model.Product;
 import com.rs.employer.repository.ProductRepository;
 
+// Service implement for product
 @Service
 class ProductServiceImplement implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    // Add product
     @Override
     public Boolean addProduct(Product product) {
         productRepository.save(product);
         return true;
     }
 
+    // List product by ID
     @Override
     public Product getProduct(Long ID) {
         Optional<Product> eOptional = productRepository.findById(ID);
@@ -27,6 +30,7 @@ class ProductServiceImplement implements ProductService {
         return product;
     }
 
+    // Delete product by ID
     @Override
     public Boolean deleteProduct(Long ID) {
         Optional<Product> eOptional = productRepository.findById(ID);
@@ -35,14 +39,15 @@ class ProductServiceImplement implements ProductService {
             return false;
         else
             return true;
-
     }
 
+    // List all product
     @Override
     public List<Product> getAllProduct() {
         return (List<Product>) productRepository.findAll();
     }
 
+    // Update product by ID
     @Override
     public String updateProduct(Long ID, Product product) {
         Optional<Product> eOptional = productRepository.findById(ID);
@@ -55,5 +60,5 @@ class ProductServiceImplement implements ProductService {
             return "Your new products are change to a new ID is :" + ID;
         }
     }
-        
+
 }

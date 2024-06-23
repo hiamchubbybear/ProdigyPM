@@ -3,8 +3,7 @@ package com.rs.employer.dto;
 import java.sql.Time;
 import java.util.Date;
 
-
-
+// User with data transfer object class as a user  
 public class userdto {
     private String name;
     private String address;
@@ -15,6 +14,7 @@ public class userdto {
     private String status;
     private Date birthDay;
 
+    // User with data transfer object class as a user with password
     public userdto(String name, String address, String username, String role, boolean gender, String status,
             Date birthDay) {
         this.name = name;
@@ -26,6 +26,7 @@ public class userdto {
         this.birthDay = birthDay;
     }
 
+    // User with data transfer object class as a user without password
     public userdto(String name, String address, String username, String role, boolean gender, String password,
             String status, Time birthDay) {
         this.name = name;
@@ -38,6 +39,7 @@ public class userdto {
         this.birthDay = birthDay;
     }
 
+    // Getters and Setters
     public String getName() {
         return name;
     }

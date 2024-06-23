@@ -7,22 +7,30 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+// Product class
 @Entity
-@Table(name = "schema_user")
+@Table(name = "schema_product")
 public class Product {
+    // ID of the product
     @Id
+    // Auto increment by 1
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userid")
+    @Column(name = "userid", nullable = false)
     private Long ID;
+    // Name of the product
     @Column(name = "name")
     private String name;
+    // Expriation date of the product
     @Column(name = "exp")
     private String exp;
+    // Sub category of the product
     @Column(name = "sub")
     private String sub;
+    // Unit of the product
     @Column(name = "unit")
     private String unit;
 
+    // Getters and Setters
     public Long getID() {
         return ID;
     }
@@ -66,6 +74,7 @@ public class Product {
         this.exp = exp;
     }
 
+    // Constructor
     public Product(Long iD, String name, String exp, String sub, String unit) {
         ID = iD;
         this.name = name;

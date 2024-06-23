@@ -10,11 +10,13 @@ import com.rs.employer.dto.userdto;
 import com.rs.employer.model.Customer;
 import com.rs.employer.repository.CustomerRepository;
 
+// Service for customer
 @Service
 public class CustomerImplement implements CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    // Add customer
     @Override
     public Customer addCustomer(Customer customer) {
         if (customer != null) {
@@ -24,6 +26,7 @@ public class CustomerImplement implements CustomerService {
                 " Can not add customer with username: " + customer.getUsername() + " cause username is existed ");
     }
 
+    // Update customer by ID
     @Override
     public Customer updateCustomer(Long UserID, Customer customer) {
         Customer customer1 = customerRepository.getReferenceById(UserID);
@@ -41,6 +44,7 @@ public class CustomerImplement implements CustomerService {
         throw new IllegalStateException("User data can not found");
     }
 
+    // Delete customer by ID
     @Override
     public Boolean deleteCustomerById(Long UserID) {
         if (customerRepository.existsById(UserID)) {
@@ -54,6 +58,7 @@ public class CustomerImplement implements CustomerService {
         return false;
     }
 
+    // List customer by ID
     @Override
     public Customer listCustomerById(Long UserID) {
         Optional<Customer> eOptional = customerRepository.findById(UserID);
@@ -64,6 +69,7 @@ public class CustomerImplement implements CustomerService {
             throw new IllegalStateException("User have id:  " + UserID + " does not exist ");
     }
 
+    // List customer dto by ID as user
     public userdto getUserData(Long UserID) {
         Customer customer = listCustomerById(UserID);
         userdto userdto = new userdto(customer.getName(), customer.getAddress(), customer.getUsername(),
@@ -71,6 +77,7 @@ public class CustomerImplement implements CustomerService {
         return userdto;
     }
 
+    // Register user
     public Customer registerUser(String username, String password, String login) {
         if (username != null && password != null && login != null) {
             Customer customer = new Customer();
@@ -81,6 +88,7 @@ public class CustomerImplement implements CustomerService {
             return null;
     }
 
+    // List all customer
     @Override
     public List<Customer> listAllCustomer() {
         return (List<Customer>) customerRepository.findAll();
