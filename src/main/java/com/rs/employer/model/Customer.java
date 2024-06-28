@@ -7,34 +7,38 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 // Customer class
+// @Data
+// @Setter
+// @Getter
+// @AllArgsConstructor
+// @NoAllArgsConstructor
 @Entity
-@Table(name = "schema_user")
+@Table(name = "schema_customer")
 public class Customer {
     // ID for the customer
-    @jakarta.persistence.Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "id")
     private Long id;
     // UUID of the customer auto generated
+    @Id
     @Column(name = "uuid", updatable = false, nullable = false)
     private UUID uuid = UUID.randomUUID();
-    // Name of the customer
-    @Column(name = "name", nullable = false, updatable = true)
-    private String name;
-    // Address of the customer
-    @Column(name = "address", nullable = true, updatable = true)
-    private String address;
     // Username of the customer
     @Column(name = "username", nullable = false, updatable = false)
     private String username;
     // Password of the customer
     @Column(name = "password", nullable = false, updatable = true)
     private String password;
+    // Name of the customer
+    @Column(name = "name", nullable = false, updatable = true)
+    private String name;
+    // Address of the customer
+    @Column(name = "address", nullable = true, updatable = true)
+    private String address;
     // Role of the customer
     @Column(name = "role", nullable = true, updatable = true)
     private String role;
@@ -49,15 +53,6 @@ public class Customer {
     @Column(name = "birthday")
     private Date birthDay;
 
-    // Getters and Setters
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
     public Long getId() {
         return id;
     }
@@ -66,20 +61,12 @@ public class Customer {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public String getUsername() {
@@ -96,6 +83,22 @@ public class Customer {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getRole() {
@@ -127,6 +130,23 @@ public class Customer {
     }
 
     public void setBirthDay(Date birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public Customer() {
+    }
+
+    public Customer(Long id, UUID uuid, String username, String password, String name, String address, String role,
+            boolean gender, String status, Date birthDay) {
+        this.id = id;
+        this.uuid = uuid;
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.address = address;
+        this.role = role;
+        this.gender = gender;
+        this.status = status;
         this.birthDay = birthDay;
     }
 
