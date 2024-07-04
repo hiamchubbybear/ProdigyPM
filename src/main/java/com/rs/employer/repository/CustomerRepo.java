@@ -10,5 +10,7 @@ import com.rs.employer.model.Customer;
 // Database JPA repository for Customer
 @Repository
 public interface CustomerRepo extends JpaRepository<Customer, UUID> {
-
+    // @Query("UPDATE customer set id = 2 where id = ?1")
+    
+    
 }

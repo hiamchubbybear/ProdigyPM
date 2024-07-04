@@ -32,10 +32,8 @@ public class CustomerImplement implements CustomerService {
     // Update customer by ID
     @Override
     public Customer updateCustomer(UUID id, Customer customer) {
-        if (customerRepository.findById(id).isPresent()) {
-            customerRepository.deleteById(id);
-            customerRepository.save(customer);
-        }
+        customerRepository.deleteById(id);
+        customerRepository.save(customer);
         throw new IllegalStateException("User data can not found");
     }
 
