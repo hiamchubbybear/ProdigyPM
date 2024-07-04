@@ -34,6 +34,7 @@ public class CustomerImplement implements CustomerService {
     public Customer updateCustomer(UUID id, Customer customer) {
         Customer customer1 = customerRepository.getReferenceById(id);
         if (customer1 != null) {
+            customer1.setId(customer.getId());
             customer1.setUsername(customer.getUsername());
             customer1.setPassword(customer.getPassword());
             customer1.setName(customer.getName());
@@ -42,7 +43,7 @@ public class CustomerImplement implements CustomerService {
             customer1.setGender(customer.isGender());
             customer1.setStatus(customer.getStatus());
             customer1.setBirthDay(customer.getBirthDay());
-            return customerRepository.save(customer1);
+            customerRepository.save(customer1);
         }
         throw new IllegalStateException("User data can not found");
     }
