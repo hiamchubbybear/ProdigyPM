@@ -1,5 +1,6 @@
 package com.rs.employer.model;
 
+import java.time.Instant;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -45,72 +46,97 @@ public class Product {
     // Expriation date of the product
     @Column(name = "expire_date_product", nullable = false)
     private Date exp;
+    @Column(name = "create_at", nullable = false, updatable = false)
+    private Instant create;
+    @Column(name = "update_at", nullable = false, updatable = false)
+    private Instant update;
     // Sub category of the product
     @Column(name = "subtitle_product", nullable = false)
     private String sub;
     // Unit of the product
     @Column(name = "unit_product", nullable = false)
     private String unit;
+
     public Long getID() {
         return ID;
     }
+
     public void setID(Long iD) {
         ID = iD;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public String getType() {
         return type;
     }
+
     public void setType(String type) {
         this.type = type;
     }
+
     public Long getSize() {
         return size;
     }
+
     public void setSize(Long size) {
         this.size = size;
     }
+
     public Long getWeight() {
         return weight;
     }
+
     public void setWeight(Long weight) {
         this.weight = weight;
     }
+
     public String getWeight_unit() {
         return weight_unit;
     }
+
     public void setWeight_unit(String weight_unit) {
         this.weight_unit = weight_unit;
     }
+
     public String getSize_unit() {
         return size_unit;
     }
+
     public void setSize_unit(String size_unit) {
         this.size_unit = size_unit;
     }
+
     public Date getExp() {
         return exp;
     }
+
     public void setExp(Date exp) {
         this.exp = exp;
     }
+
     public String getSub() {
         return sub;
     }
+
     public void setSub(String sub) {
         this.sub = sub;
     }
+
     public String getUnit() {
         return unit;
     }
+
     public void setUnit(String unit) {
         this.unit = unit;
     }
+
     public Product(Long iD, String name, String type, Long size, Long weight, String weight_unit, String size_unit,
             Date exp, String sub, String unit) {
         ID = iD;
@@ -124,5 +150,21 @@ public class Product {
         this.sub = sub;
         this.unit = unit;
     }
-    
+
+    public Instant getCreate() {
+        return create;
+    }
+
+    public void setCreate(Instant create) {
+        this.create = create;
+    }
+
+    public Instant getUpdate() {
+        return update;
+    }
+
+    public void setUpdate(Instant update) {
+        this.update = update;
+    }
+
 }

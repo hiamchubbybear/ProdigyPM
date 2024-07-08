@@ -1,5 +1,6 @@
 package com.rs.employer.serviceimplements;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,11 +18,14 @@ import com.rs.employer.service.CustomerService;
 public class CustomerImplement implements CustomerService {
     @Autowired
     private CustomerRepo customerRepository;
+    private Instant date;
 
     // Add customer
     @Override
     public Customer addCustomer(Customer customer) {
-        if (customer.getId() != null) {
+        if (customerRepository.findByUsername(customer.getUsername()).equals(null)) {
+            customer.setCreate(date.now());
+            customer.setUpdate(date.now());
             return customerRepository.save(customer);
         }
         throw new IllegalStateException(
@@ -32,8 +36,20 @@ public class CustomerImplement implements CustomerService {
     // Update customer by ID
     @Override
     public Customer updateCustomer(UUID id, Customer customer) {
-        customerRepository.deleteById(id);
-        customerRepository.save(customer);
+        Optional<Customer> customer1 = customerRepository.findById(id);
+        Customer customer2 = customer1.get();
+        if (customer1.isPresent()) {
+            customer2.setId(customer.getId());
+            customer2.setAddress(customer.getAddress());
+            customer2.setBirthDay(customer.getBirthDay());
+            customer2.setGender(customer.isGender());
+            customer2.setName(customer.getName());
+            customer2.setPassword(customer.getPassword());
+            customer2.setRole(customer.getRole());
+            customer2.setStatus(customer.getStatus());
+            customer2.setUsername(customer.getUsername());
+            return customerRepository.save(customer2);
+        }
         throw new IllegalStateException("User data can not found");
     }
 

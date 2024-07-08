@@ -1,5 +1,6 @@
 package com.rs.employer.model;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
@@ -49,6 +50,10 @@ public class Customer {
     @Column(name = "status", updatable = true, nullable = false)
     private String status;
     // Birthday of the customer
+    @Column(name = "create_at", nullable = false, updatable = false)
+    private Instant create;
+    @Column(name = "update_at", nullable = false, updatable = false)
+    private Instant update;
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthday")
     private Date birthDay;
@@ -148,6 +153,22 @@ public class Customer {
         this.gender = gender;
         this.status = status;
         this.birthDay = birthDay;
+    }
+
+    public Instant getCreate() {
+        return create;
+    }
+
+    public void setCreate(Instant create) {
+        this.create = create;
+    }
+
+    public Instant getUpdate() {
+        return update;
+    }
+
+    public void setUpdate(Instant update) {
+        this.update = update;
     }
 
 }
