@@ -6,14 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.model.Product;
+import com.rs.employer.repository.ProductRepository;
 import com.rs.employer.service.ProductService;
 
 //Controller for product
@@ -23,15 +24,17 @@ import com.rs.employer.service.ProductService;
 public class productcontroller {
     @Autowired
     private ProductService productServiceImplement;
+    @Autowired
+    private ProductRepository repo;
 
     // List product by ID
-    @GetMapping(path = "/getproductbyid")
-    public Product getUserById(@RequestParam(name = "ID") Long ID) {
+    @GetMapping(path = "/getbyid/{id}")
+    public Product getUserById(@PathVariable(name = "id") Long ID) {
         return productServiceImplement.getProduct(ID);
     }
 
     // List all product in database
-    @GetMapping(path = "/getallproduct")
+    @GetMapping(path = "/all")
     public List<Product> getAllProduct(Product product) {
         List<Product> list = productServiceImplement.getAllProduct();
         return list;
@@ -44,20 +47,21 @@ public class productcontroller {
     }
 
     // Delete product by ID
-    @DeleteMapping(path = "/delete")
-    public String deleteProduct(@RequestParam(name = "ID") Long ID) {
-        if (productServiceImplement.deleteProduct(ID))
-
+    @DeleteMapping(path = "/delete/{id}")
+    public String deleteProduct(@PathVariable(name = "id") Long ID) {
+        if (repo.existsById(ID) && productServiceImplement.deleteProduct(ID))
             return "User deleted ";
         else
             return "User can't delete";
     }
 
     // Update product by ID
-    @PutMapping(path = "/change")
-    public String changeProduct(@RequestParam(name = "ID", required = true) Long ID,
+    @PutMapping(path = "/update/{id}")
+    public String changeProduct(@PathVariable(name = "id", required = true) Long ID,
             @RequestBody Product product) {
-        return productServiceImplement.updateProduct(ID, product);
+        if (repo.findById(ID).isPresent()) {
+            return productServiceImplement.updateProduct(ID, product);
+        } else
+            throw new NullPointerException("Product" + product.getID() + " is not exist in database ");
     }
-
 }

@@ -1,5 +1,6 @@
 package com.rs.employer.serviceimplements;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,10 +16,14 @@ import com.rs.employer.service.ProductService;
 class ProductImplement implements ProductService {
     @Autowired
     private ProductRepository productRepository;
+    Instant date;
+    // Instant.now(Clock.system(ZoneId.of("Asia/HoChiMinh"))).truncatedTo(ChronoUnit.SECONDS);
 
     // Add product
     @Override
     public Boolean addProduct(Product product) {
+        product.setCreate(date.now());
+        product.setUpdate(date.now());
         productRepository.save(product);
         return true;
     }
@@ -59,7 +64,9 @@ class ProductImplement implements ProductService {
         if (product1.getID().equals(null))
             throw new NullPointerException("User is not exist ");
         else {
+
             productRepository.deleteById(ID);
+            product.setUpdate(date.now());
             productRepository.save(product);
             return "Your new products are change to a new ID is :" + ID;
         }
