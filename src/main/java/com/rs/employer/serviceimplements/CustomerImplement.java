@@ -23,7 +23,7 @@ public class CustomerImplement implements CustomerService {
     // Add customer
     @Override
     public Customer addCustomer(Customer customer) {
-        if (customerRepository.findByUsername(customer.getUsername()).equals(null)) {
+        if (customerRepository.findByUsername(customer.getUsername()) != null) {
             customer.setCreate(date.now());
             customer.setUpdate(date.now());
             return customerRepository.save(customer);

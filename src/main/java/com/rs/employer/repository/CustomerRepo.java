@@ -12,6 +12,6 @@ import com.rs.employer.model.Customer;
 @Repository
 public interface CustomerRepo extends JpaRepository<Customer, UUID> {
     // @Query("SELECT u FROM schema_customer u WHERE u.username = :username")
-    Optional<Customer> findByUsername(String username);
-
+    // Optional<Customer> findByUsername(String username);
+    Optional<Customer> findByUsername(String email);
 }
