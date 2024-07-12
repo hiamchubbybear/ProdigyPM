@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.userdto;
 import com.rs.employer.model.Customer;
 import com.rs.employer.serviceimplements.CustomerImplement;
+
+import jakarta.validation.Valid;
 
 //Controller for customer
 @RequestMapping(path = "/api/customer")
@@ -60,8 +63,10 @@ public class customercontroller {
 
     // Add customer
     @PutMapping(path = "/add")
-    public void addCustomer(@RequestBody Customer customer) {
-        customerImplement.addCustomer(customer);
+    public ApiRespone<Customer> addCustomer(@RequestBody @Valid Customer customer) {
+        ApiRespone<Customer> apirespone = new ApiRespone<Customer>();
+        apirespone.setResult(customerImplement.addCustomer(customer));
+        return apirespone;
     }
 
     // Register customer

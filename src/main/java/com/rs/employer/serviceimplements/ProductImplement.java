@@ -27,7 +27,7 @@ class ProductImplement implements ProductService {
         productRepository.save(product);
         return true;
     }
-
+    public Product product;
     // List product by ID
     @Override
     public Product getProduct(Long ID) {

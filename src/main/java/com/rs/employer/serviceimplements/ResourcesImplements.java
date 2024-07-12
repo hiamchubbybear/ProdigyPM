@@ -11,7 +11,6 @@ import com.rs.employer.repository.ProductRepository;
 import com.rs.employer.repository.ResourcesRepo;
 import com.rs.employer.service.ResourcesService;
 
-
 @Service
 public class ResourcesImplements implements ResourcesService {
     @Autowired
@@ -29,7 +28,7 @@ public class ResourcesImplements implements ResourcesService {
     public void addProductResources(Resources product) {
 
         repository.save(product);
-        repository.findById(product.getID()); 
+        repository.findById(product.getID());
     }
 
     @Override
@@ -41,7 +40,7 @@ public class ResourcesImplements implements ResourcesService {
         } else {
             product1.setTitles(product.getTitles());
             product1.setLocale(product.getLocale());
-            product1.setResources_id(product.getResources_id());
+            product1.setID(pID);
             product1.setCreate(product.getCreate());
             product1.setUpdate(product.getUpdate());
             return "Succed";

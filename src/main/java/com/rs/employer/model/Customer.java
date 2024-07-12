@@ -5,11 +5,15 @@ import java.util.Date;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.rs.employer.ValidateAnotation.ValidateRole;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 // Customer class
 // @Data
@@ -29,9 +33,12 @@ public class Customer {
     @Column(name = "uuid", updatable = false, nullable = false)
     private UUID uuid = UUID.randomUUID();
     // Username of the customer
+    @NotNull
     @Column(name = "username", nullable = false, updatable = false)
     private String username;
     // Password of the customer
+    @Size(min= 8 , max = 13)
+    @NotBlank
     @Column(name = "password", nullable = false, updatable = true)
     private String password;
     // Name of the customer
@@ -41,7 +48,8 @@ public class Customer {
     @Column(name = "address", nullable = true, updatable = true)
     private String address;
     // Role of the customer
-    @Column(name = "role", nullable = true, updatable = true)
+    @Column(name = "role_id", nullable = true, updatable = true)
+    @ValidateRole
     private String role;
     // Gender of the customer
     @Column(name = "gender", nullable = false, updatable = true)

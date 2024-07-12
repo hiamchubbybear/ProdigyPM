@@ -19,11 +19,12 @@ public class CustomerImplement implements CustomerService {
     @Autowired
     private CustomerRepo customerRepository;
     private Instant date;
+    // ZoneId zone = ZoneId.of("Asia/HoChiMinh");
 
     // Add customer
     @Override
     public Customer addCustomer(Customer customer) {
-        if (customerRepository.findByUsername(customer.getUsername()) != null) {
+        if (!customerRepository.existsByUsername(customer.getUsername())) {
             customer.setCreate(date.now());
             customer.setUpdate(date.now());
             return customerRepository.save(customer);
@@ -38,7 +39,8 @@ public class CustomerImplement implements CustomerService {
     public Customer updateCustomer(UUID id, Customer customer) {
         Optional<Customer> customer1 = customerRepository.findById(id);
         Customer customer2 = customer1.get();
-        if (customer1.isPresent()) {
+        customerRepository.deleteByUsername(customer.getUsername());
+        if (customer1 != null) {
             customer2.setId(customer.getId());
             customer2.setAddress(customer.getAddress());
             customer2.setBirthDay(customer.getBirthDay());
@@ -47,10 +49,11 @@ public class CustomerImplement implements CustomerService {
             customer2.setPassword(customer.getPassword());
             customer2.setRole(customer.getRole());
             customer2.setStatus(customer.getStatus());
-            customer2.setUsername(customer.getUsername());
+            customer2.setUpdate(date.now());
             return customerRepository.save(customer2);
         }
-        throw new IllegalStateException("User data can not found");
+
+        throw new IllegalStateException("User " + customer.getUsername() + " not found");
     }
 
     // Delete customer by ID
@@ -64,7 +67,7 @@ public class CustomerImplement implements CustomerService {
                 return true;
             }
         }
-        return false;
+        throw new IllegalStateException("Data binding " + "not found");
     }
 
     // List customer by ID
@@ -82,11 +85,14 @@ public class CustomerImplement implements CustomerService {
 
     // List customer dto by ID as user
     public userdto getUserData(UUID id) {
-        Customer customer = listCustomerById(id);
-        userdto userdto = new userdto(customer.getName(), customer.getAddress(),
-                customer.getUsername(), customer.getRole(), customer.isGender(), customer.getStatus(),
-                customer.getBirthDay());
-        return userdto;
+        if (customerRepository.existsById(id)) {
+            Customer customer = listCustomerById(id);
+            userdto userdto = new userdto(customer.getName(), customer.getAddress(),
+                    customer.getUsername(), customer.getRole(), customer.isGender(), customer.getStatus(),
+                    customer.getBirthDay());
+            return userdto;
+        } else
+            throw new IllegalStateException("Customer ID" + id + "not found");
     }
 
     // Register user
@@ -97,7 +103,7 @@ public class CustomerImplement implements CustomerService {
             customer.setPassword(password);
             return customerRepository.save(customer);
         } else
-            return null;
+            throw new IllegalStateException("Your data input false ");
     }
 
     // List all customer
