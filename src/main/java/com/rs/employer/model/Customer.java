@@ -4,8 +4,12 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rs.employer.ValidateAnotation.ValidateRole;
+import com.rs.employer.ValidateAnotation.ValidateStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +18,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 // Customer class
 // @Data
@@ -22,6 +27,9 @@ import jakarta.validation.constraints.Size;
 // @AllArgsConstructor
 // @NoAllArgsConstructor
 @Entity
+@DynamicUpdate
+@DynamicInsert
+@Data
 @Table(name = "schema_customer")
 public class Customer {
     // ID for the customer
@@ -34,10 +42,11 @@ public class Customer {
     private UUID uuid = UUID.randomUUID();
     // Username of the customer
     @NotNull
+    @Size(min = 3, max = 20, message = "USERNAME_INVALID")
     @Column(name = "username", nullable = false, updatable = false)
     private String username;
     // Password of the customer
-    @Size(min= 8 , max = 13)
+    @Size(min = 8, message = "PASSWORD_INVALID")
     @NotBlank
     @Column(name = "password", nullable = false, updatable = true)
     private String password;
@@ -55,13 +64,14 @@ public class Customer {
     @Column(name = "gender", nullable = false, updatable = true)
     private boolean gender;
     // Status of the customer
+    @ValidateStatus
     @Column(name = "status", updatable = true, nullable = false)
     private String status;
     // Birthday of the customer
     @Column(name = "create_at", nullable = false, updatable = false)
     private Instant create;
     @Column(name = "update_at", nullable = false, updatable = false)
-    private Instant update;
+    private Instant update; 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthday")
     private Date birthDay;

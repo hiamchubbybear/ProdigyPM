@@ -4,7 +4,7 @@ public class ApiRespone<T> {
     private int code = 100;
     private String message = "Make request successfull";
     private String term = "https://currencylayer.com/documentation";
-    private T result;
+    private T data;
 
     public int getCode() {
         return code;
@@ -22,12 +22,12 @@ public class ApiRespone<T> {
         this.message = message;
     }
 
-    public T getResult() {
-        return result;
+    public T getData() {
+        return data;
     }
 
-    public void setResult(T result) {
-        this.result = result;
+    public void setData(T data) {
+        this.data= data;
     }
 
     public String getTerm() {

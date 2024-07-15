@@ -12,10 +12,11 @@ import jakarta.validation.Payload;
 @Target({ ElementType.FIELD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = AnnotationValidation.class)
-public @interface ValidateRole {
+@Constraint(validatedBy = StatusAnotation.class)
 
-	public String message() default "Invalid Role: It must be one in{\\\"Admin\\\", \\\"User\\\", \\\"Manager\\\", \\\"Vendor\\\"}";
+public @interface ValidateStatus {
+
+	public String message() default "Invalid Role: It must be one in {\\\"Active\\\", \\\"Inactive\\\", \\\"Suspend\\\", \\\"Offline\\\"} ";
 
 	Class<?>[] groups() default {};
 

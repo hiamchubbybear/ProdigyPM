@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dto.userdto;
+import com.rs.employer.globalexception.AppException;
+import com.rs.employer.globalexception.ErrorCode;
+import com.rs.employer.mapper.Mapping;
 import com.rs.employer.model.Customer;
 import com.rs.employer.repository.CustomerRepo;
 import com.rs.employer.service.CustomerService;
@@ -20,6 +23,8 @@ public class CustomerImplement implements CustomerService {
     private CustomerRepo customerRepository;
     private Instant date;
     // ZoneId zone = ZoneId.of("Asia/HoChiMinh");
+    @Autowired
+    private Mapping userMapping;
 
     // Add customer
     @Override
@@ -29,31 +34,20 @@ public class CustomerImplement implements CustomerService {
             customer.setUpdate(date.now());
             return customerRepository.save(customer);
         }
-        throw new IllegalStateException(
-                " Can not add customer with id: " + customer.getUsername()
-                        + " cause id is existed ");
+        throw new AppException(ErrorCode.USERNAME_EXISTED);
     }
 
     // Update customer by ID
     @Override
     public Customer updateCustomer(UUID id, Customer customer) {
         Optional<Customer> customer1 = customerRepository.findById(id);
-        Customer customer2 = customer1.get();
-        customerRepository.deleteByUsername(customer.getUsername());
-        if (customer1 != null) {
-            customer2.setId(customer.getId());
-            customer2.setAddress(customer.getAddress());
-            customer2.setBirthDay(customer.getBirthDay());
-            customer2.setGender(customer.isGender());
-            customer2.setName(customer.getName());
-            customer2.setPassword(customer.getPassword());
-            customer2.setRole(customer.getRole());
-            customer2.setStatus(customer.getStatus());
+        if (customer1.isPresent()) {
+            Customer customer2 = userMapping.customerMapper(customer);
+            customer2.setCreate(customer.getCreate());
             customer2.setUpdate(date.now());
             return customerRepository.save(customer2);
         }
-
-        throw new IllegalStateException("User " + customer.getUsername() + " not found");
+        throw new AppException(ErrorCode.USER_NOTFOUND);
     }
 
     // Delete customer by ID
@@ -67,7 +61,7 @@ public class CustomerImplement implements CustomerService {
                 return true;
             }
         }
-        throw new IllegalStateException("Data binding " + "not found");
+        throw new AppException(ErrorCode.USER_NOTFOUND);
     }
 
     // List customer by ID
@@ -80,7 +74,7 @@ public class CustomerImplement implements CustomerService {
         if (customer1.getId() != null) {
             return customer1;
         } else
-            throw new IllegalStateException("User have id:  " + id + " does not exist ");
+            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
 
     // List customer dto by ID as user
@@ -92,7 +86,7 @@ public class CustomerImplement implements CustomerService {
                     customer.getBirthDay());
             return userdto;
         } else
-            throw new IllegalStateException("Customer ID" + id + "not found");
+            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
 
     // Register user
@@ -103,7 +97,7 @@ public class CustomerImplement implements CustomerService {
             customer.setPassword(password);
             return customerRepository.save(customer);
         } else
-            throw new IllegalStateException("Your data input false ");
+            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
 
     // List all customer
