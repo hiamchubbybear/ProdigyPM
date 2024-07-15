@@ -31,9 +31,11 @@ public class customercontroller {
 
     // List all customer in database
     @GetMapping(path = "/all")
-    public List<Customer> getAllUser() {
+    public ApiRespone<List<Customer>> getAllUser() {
+        ApiRespone<List<Customer>> apiRespone = new ApiRespone<>();
         List<Customer> list = customerImplement.listAllCustomer();
-        return list;
+        apiRespone.setData(list);
+        return apiRespone; 
     }
 
     // List customer by ID as user
@@ -65,7 +67,7 @@ public class customercontroller {
     @PutMapping(path = "/add")
     public ApiRespone<Customer> addCustomer(@RequestBody @Valid Customer customer) {
         ApiRespone<Customer> apirespone = new ApiRespone<Customer>();
-        apirespone.setResult(customerImplement.addCustomer(customer));
+        apirespone.setData(customerImplement.addCustomer(customer));
         return apirespone;
     }
 
