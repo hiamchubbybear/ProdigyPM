@@ -4,7 +4,11 @@ import java.sql.Time;
 import java.util.Date;
 
 // User with data transfer object class as a user  
+<<<<<<< HEAD
 class Userdto {
+=======
+public class Userdto {
+>>>>>>> ce7d02fddc301c76b925ce1e3197e13ee1da889c
     private String name;
     private String address;
     private String username;
