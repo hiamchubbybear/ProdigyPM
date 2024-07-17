@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
-import com.rs.employer.dto.Userdto;
 import com.rs.employer.model.Customer;
 import com.rs.employer.model.Product;
 import com.rs.employer.serviceimplements.CustomerImplement;
@@ -40,12 +39,12 @@ class Customercontroller {
     }
 
     // List customer by ID as user
-    @GetMapping(path = "/userdto/{id}")
-    public ApiRespone<Userdto> getUserData(@PathVariable(name = "id") UUID id) {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(customerImplement.getUserData(id));
-        return apiRespone;
-    }
+    // @GetMapping(path = "/userdto/{id}")
+    // public ApiRespone<Userdto> getUserData(@PathVariable(name = "id") UUID id) {
+    // ApiRespone apiRespone = new ApiRespone<>();
+    // apiRespone.setData(customerImplement.getUserData(id));
+    // return apiRespone;
+    // }
 
     // List customer by ID as administrator
     @GetMapping(path = "/getbyid/{id}")

@@ -4,11 +4,7 @@ import java.sql.Time;
 import java.util.Date;
 
 // User with data transfer object class as a user  
-<<<<<<< HEAD
-class Userdto {
-=======
-public class Userdto {
->>>>>>> ce7d02fddc301c76b925ce1e3197e13ee1da889c
+public class userdto {
     private String name;
     private String address;
     private String username;
@@ -18,8 +14,7 @@ public class Userdto {
     private String status;
     private Date birthDay;
 
-    // User with data transfer object class as a user with password
-    public Userdto(String name, String address, String username, String role, boolean gender, String status,
+    public userdto(String name, String address, String username, String role, boolean gender, String status,
             Date birthDay) {
         this.name = name;
         this.address = address;
@@ -31,7 +26,7 @@ public class Userdto {
     }
 
     // User with data transfer object class as a user without password
-    public Userdto(String name, String address, String username, String role, boolean gender,
+    public userdto(String name, String address, String username, String role, boolean gender,
             String status, Time birthDay) {
         this.name = name;
         this.address = address;

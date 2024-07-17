@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rs.employer.dto.Userdto;
+import com.rs.employer.dto.userdto;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.Mapping;
@@ -91,10 +91,10 @@ public class CustomerImplement implements CustomerService {
     }
 
     // List customer dto by ID as user
-    public Userdto getUserData(UUID id) {
+    public userdto getUserData(UUID id) {
         if (customerRepository.existsById(id)) {
             Customer customer = listCustomerById(id);
-            Userdto userdto = new Userdto(customer.getName(), customer.getAddress(),
+            userdto userdto = new userdto(customer.getName(), customer.getAddress(),
                     customer.getUsername(), customer.getRole(), customer.isGender(), customer.getStatus(),
                     customer.getBirthDay());
             return userdto;
