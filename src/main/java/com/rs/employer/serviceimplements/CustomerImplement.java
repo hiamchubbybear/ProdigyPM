@@ -6,14 +6,16 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.rs.employer.dto.userdto;
+import com.rs.employer.dto.ProductNameAndPlaceDto;
+import com.rs.employer.dto.Userdto;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.Mapping;
 import com.rs.employer.model.Customer;
-import com.rs.employer.model.Product;
 import com.rs.employer.repository.CustomerRepo;
 import com.rs.employer.service.CustomerService;
 
@@ -31,6 +33,8 @@ public class CustomerImplement implements CustomerService {
     @Override
     public Customer addCustomer(Customer customer) {
         if (!customerRepository.existsByUsername(customer.getUsername())) {
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
+            customer.setPassword(passwordEncoder.encode(customer.getPassword()));
             customer.setCreate(date.now());
             customer.setUpdate(date.now());
             // customer.setProducts(customerRepository.getAllProductDetail());
@@ -43,12 +47,13 @@ public class CustomerImplement implements CustomerService {
     public Customer updateCustomer(UUID id, Customer customer) {
         Optional<Customer> customer1 = customerRepository.findById(id);
         Customer customer2 = customer1.get();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
         if (customer2 != null) {
             Customer customer3 = new Customer();
             // Customer customer2 = userMapping.customerMapper(customer);
             customer3.setId(customer.getId());
             customer3.setUsername(customer.getUsername());
-            customer3.setPassword(customer.getPassword());
+            customer3.setPassword(passwordEncoder.encode(customer.getPassword()));
             customer3.setName(customer.getName());
             customer3.setAddress(customer.getAddress());
             customer3.setRole(customer.getRole());
@@ -57,7 +62,6 @@ public class CustomerImplement implements CustomerService {
             customer3.setUpdate(date.now());
             customer3.setCreate(customer2.getCreate());
             customer3.setBirthDay(customer.getBirthDay());
-
             return customerRepository.save(customer3);
         }
         throw new AppException(ErrorCode.USER_NOTFOUND);
@@ -91,10 +95,10 @@ public class CustomerImplement implements CustomerService {
     }
 
     // List customer dto by ID as user
-    public userdto getUserData(UUID id) {
+    public Userdto getUserData(UUID id) {
         if (customerRepository.existsById(id)) {
             Customer customer = listCustomerById(id);
-            userdto userdto = new userdto(customer.getName(), customer.getAddress(),
+            Userdto userdto = new Userdto(customer.getName(), customer.getAddress(),
                     customer.getUsername(), customer.getRole(), customer.isGender(), customer.getStatus(),
                     customer.getBirthDay());
             return userdto;
@@ -132,7 +136,7 @@ public class CustomerImplement implements CustomerService {
     }
 
     @Override
-    public List<Product> getAll() {
-        return customerRepository.getAllProductDetail();
+    public Optional<ProductNameAndPlaceDto> getAll() {
+        return customerRepository.getData();
     }
 }

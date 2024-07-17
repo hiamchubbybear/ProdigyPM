@@ -42,7 +42,7 @@ public class Product {
     private Date exp;
     @Column(name = "create_at", nullable = false, updatable = false)
     private Instant create;
-    @Column(name = "update_at", nullable = false, updatable = false)
+    @Column(name = "update_at", nullable = false, updatable = true)
     private Instant update;
     @Column(name = "subtitle_product", nullable = false)
     private String sub;
@@ -50,9 +50,11 @@ public class Product {
     private String unit;
     @ManyToMany(mappedBy = "products")
     private List<Customer> posts = new ArrayList<>();
+
     public Long getID() {
         return id;
     }
+
     public Product(Long id, String name, String type, Long size, Long weight, String weight_unit, String size_unit,
             Date exp, Instant create, Instant update, String sub, String unit, List<Customer> posts) {
         this.id = id;

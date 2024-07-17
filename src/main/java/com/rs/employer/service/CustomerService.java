@@ -1,12 +1,13 @@
 package com.rs.employer.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.rs.employer.dto.ProductNameAndPlaceDto;
 import com.rs.employer.model.Customer;
-import com.rs.employer.model.Product;
 
 // Service interface for customer
 @Service
@@ -33,5 +34,5 @@ public interface CustomerService {
     // Register user
     public Customer registerUser(UUID id, String password, String login);
 
-    public List<Product> getAll();
+    public Optional<ProductNameAndPlaceDto> getAll();
 }

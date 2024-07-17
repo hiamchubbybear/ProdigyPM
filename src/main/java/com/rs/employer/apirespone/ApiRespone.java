@@ -1,5 +1,5 @@
 package com.rs.employer.apirespone;
-
+// @Data
 public class ApiRespone<T> {
     private int code = 100;
     private String message = "Make request successfull";
@@ -27,7 +27,7 @@ public class ApiRespone<T> {
     }
 
     public void setData(T data) {
-        this.data= data;
+        this.data = data;
     }
 
     public String getTerm() {
