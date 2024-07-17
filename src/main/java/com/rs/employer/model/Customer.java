@@ -1,24 +1,31 @@
 package com.rs.employer.model;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.UuidGenerator;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rs.employer.ValidateAnotation.ValidateRole;
 import com.rs.employer.ValidateAnotation.ValidateStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 
 // Customer class
 // @Data
@@ -29,23 +36,18 @@ import lombok.Data;
 @Entity
 @DynamicUpdate
 @DynamicInsert
-@Data
 @Table(name = "schema_customer")
 public class Customer {
-    // ID for the customer
-
-    @Column(name = "id")
+    @Column(name = "user_id")
     private Long id;
-    // UUID of the customer auto generated
     @Id
-    @Column(name = "uuid", updatable = false, nullable = false)
-    private UUID uuid = UUID.randomUUID();
-    // Username of the customer
+    @Column(name = "uuid")
+    @UuidGenerator
+    private UUID uuid;
     @NotNull
     @Size(min = 3, max = 20, message = "USERNAME_INVALID")
     @Column(name = "username", nullable = false, updatable = false)
     private String username;
-    // Password of the customer
     @Size(min = 8, message = "PASSWORD_INVALID")
     @NotBlank
     @Column(name = "password", nullable = false, updatable = true)
@@ -63,18 +65,24 @@ public class Customer {
     // Gender of the customer
     @Column(name = "gender", nullable = false, updatable = true)
     private boolean gender;
-    // Status of the customer
     @ValidateStatus
-    @Column(name = "status", updatable = true, nullable = false)
+    @Column(name = "status")
     private String status;
     // Birthday of the customer
     @Column(name = "create_at", nullable = false, updatable = false)
     private Instant create;
-    @Column(name = "update_at", nullable = false, updatable = false)
-    private Instant update; 
+    @LastModifiedDate
+    @Column(name = "update_at")
+    private Instant update;
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthday")
     private Date birthDay;
+    @ManyToMany()
+    @JsonIgnore
+    @JoinTable(name = "customer_product",
+     joinColumns = @JoinColumn(name = "customer_id"), 
+     inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private List<Product> products = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -173,6 +181,25 @@ public class Customer {
         this.birthDay = birthDay;
     }
 
+    public Customer(Long id, UUID uuid, @NotNull @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username,
+            @Size(min = 8, message = "PASSWORD_INVALID") @NotBlank String password, String name, String address,
+            String role, boolean gender, String status, Instant create, Instant update, Date birthDay,
+            List<Product> products) {
+        this.id = id;
+        this.uuid = uuid;
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.address = address;
+        this.role = role;
+        this.gender = gender;
+        this.status = status;
+        this.create = create;
+        this.update = update;
+        this.birthDay = birthDay;
+        this.products = products;
+    }
+
     public Instant getCreate() {
         return create;
     }
@@ -185,8 +212,24 @@ public class Customer {
         return update;
     }
 
-    public void setUpdate(Instant update) {
-        this.update = update;
+    public void setUpdate(Instant instant) {
+        this.update = instant;
+    }
+
+    // public List<Product> getProducts() {
+    // return products;
+    // }
+
+    // public void setProducts(List<Product> products) {
+    // this.products = products;
+    // }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
 }

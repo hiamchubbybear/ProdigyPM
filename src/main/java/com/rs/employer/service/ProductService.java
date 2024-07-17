@@ -13,7 +13,7 @@ public interface ProductService {
     public List<Product> getAllProduct();
 
     // Add product
-    public Boolean addProduct(Product product);
+    public Product addProduct(Product product);
 
     // Update product by ID
     public String updateProduct(Long id, Product product);

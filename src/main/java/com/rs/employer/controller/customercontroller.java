@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
-import com.rs.employer.dto.userdto;
+import com.rs.employer.dto.Userdto;
 import com.rs.employer.model.Customer;
+import com.rs.employer.model.Product;
 import com.rs.employer.serviceimplements.CustomerImplement;
 
 import jakarta.validation.Valid;
@@ -25,7 +26,7 @@ import jakarta.validation.Valid;
 @RequestMapping(path = "/api/customer")
 @RestController
 @CrossOrigin
-public class customercontroller {
+class Customercontroller {
     @Autowired
     private CustomerImplement customerImplement;
 
@@ -35,19 +36,23 @@ public class customercontroller {
         ApiRespone<List<Customer>> apiRespone = new ApiRespone<>();
         List<Customer> list = customerImplement.listAllCustomer();
         apiRespone.setData(list);
-        return apiRespone; 
+        return apiRespone;
     }
 
     // List customer by ID as user
     @GetMapping(path = "/userdto/{id}")
-    public userdto getUserData(@PathVariable(name = "id") UUID id) {
-        return customerImplement.getUserData(id);
+    public ApiRespone<Userdto> getUserData(@PathVariable(name = "id") UUID id) {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(customerImplement.getUserData(id));
+        return apiRespone;
     }
 
     // List customer by ID as administrator
     @GetMapping(path = "/getbyid/{id}")
-    public Customer getPaticipateUser(@PathVariable(name = "id") UUID id) {
-        return customerImplement.listCustomerById(id);
+    public ApiRespone<Customer> getPaticipateUser(@PathVariable(name = "id") UUID id) {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(customerImplement.listCustomerById(id));
+        return apiRespone;
     }
 
     // Delete customer by ID
@@ -58,9 +63,11 @@ public class customercontroller {
 
     // Update customer by ID
     @PostMapping(path = "/update/{id}")
-    public Customer updatCustomer(@PathVariable(name = "id") UUID id,
+    public ApiRespone<Customer> updatCustomer(@PathVariable(name = "id") UUID id,
             @RequestBody Customer customer) {
-        return customerImplement.updateCustomer(id, customer);
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(customerImplement.updateCustomer(id, customer));
+        return apiRespone;
     }
 
     // Add customer
@@ -77,9 +84,26 @@ public class customercontroller {
         return customerImplement.registerUser(id, password, login);
     }
 
+    @PostMapping(path = "/pwd")
+    public ApiRespone<Customer> udpatePassword(@PathVariable UUID uuid, @RequestBody String password) {
+        Customer apiCustomer = customerImplement.updatePassword(uuid, password);
+        ApiRespone<Customer> cusApiRespone = new ApiRespone<>();
+        cusApiRespone.setData(apiCustomer);
+        return cusApiRespone;
+    }
+
     // Hello world
     @GetMapping(path = "/hello")
-    public String hello() {
-        return "HelloWorld";
+    public ApiRespone<String> hello() {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData("HelloWorld");
+        return apiRespone;
+    }
+
+    @GetMapping(path = "/product")
+    public ApiRespone<List<Product>> helo() {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(customerImplement.getAll());
+        return apiRespone;
     }
 }

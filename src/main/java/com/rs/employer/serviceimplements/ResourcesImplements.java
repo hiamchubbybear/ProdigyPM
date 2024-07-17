@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rs.employer.globalexception.AppException;
+import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Resources;
 import com.rs.employer.repository.ProductRepository;
 import com.rs.employer.repository.ResourcesRepo;
@@ -25,10 +27,8 @@ public class ResourcesImplements implements ResourcesService {
     }
 
     @Override
-    public void addProductResources(Resources product) {
-
-        repository.save(product);
-        repository.findById(product.getID());
+    public Resources addProductResources(Resources product) {
+        return repository.save(product);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ResourcesImplements implements ResourcesService {
         Optional<Resources> productList = repository.findById(pID);
         Resources product1 = productList.get();
         if (product1.equals(pID)) {
-            return "Can not access";
+            throw new AppException(ErrorCode.USER_NOTFOUND);
         } else {
             product1.setTitles(product.getTitles());
             product1.setLocale(product.getLocale());
@@ -44,7 +44,7 @@ public class ResourcesImplements implements ResourcesService {
             product1.setCreate(product.getCreate());
             product1.setUpdate(product.getUpdate());
             return "Succed";
-        }
+        } 
     }
 
     @Override
@@ -53,8 +53,8 @@ public class ResourcesImplements implements ResourcesService {
         if (resourcesList.isPresent()) {
             repository.deleteById(id);
             return true;
-        }
-        return false;
+        } else 
+        throw new AppException(ErrorCode.USER_NOTFOUND);
     }
 
     @Override
@@ -62,6 +62,5 @@ public class ResourcesImplements implements ResourcesService {
         Optional<Resources> eOptional = repository.findById(rID);
         Resources product = eOptional.get();
         return product;
-
-    }
+    } 
 }

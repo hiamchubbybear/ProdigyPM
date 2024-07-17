@@ -21,13 +21,14 @@ class ProductImplement implements ProductService {
 
     // Add product
     @Override
-    public Boolean addProduct(Product product) {
+    public Product addProduct(Product product) {
         product.setCreate(date.now());
         product.setUpdate(date.now());
-        productRepository.save(product);
-        return true;
+        return productRepository.save(product);
     }
+
     public Product product;
+
     // List product by ID
     @Override
     public Product getProduct(Long ID) {

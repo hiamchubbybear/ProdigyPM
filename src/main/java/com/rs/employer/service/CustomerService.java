@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.model.Customer;
+import com.rs.employer.model.Product;
 
 // Service interface for customer
 @Service
@@ -27,7 +28,10 @@ public interface CustomerService {
 
     // List customer by ID as user
     // public List<userdto> getUserData(Long ID);
+    public Customer updatePassword(UUID id, String pwd);
 
     // Register user
     public Customer registerUser(UUID id, String password, String login);
+
+    public List<Product> getAll();
 }
