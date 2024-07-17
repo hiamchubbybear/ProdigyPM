@@ -37,15 +37,26 @@ public class CustomerImplement implements CustomerService {
         throw new AppException(ErrorCode.USERNAME_EXISTED);
     }
 
-    // Update customer by ID
     @Override
     public Customer updateCustomer(UUID id, Customer customer) {
         Optional<Customer> customer1 = customerRepository.findById(id);
-        if (customer1.isPresent()) {
-            Customer customer2 = userMapping.customerMapper(customer);
-            customer2.setCreate(customer.getCreate());
-            customer2.setUpdate(date.now());
-            return customerRepository.save(customer2);
+        Customer customer2 = customer1.get();
+        if (customer2 != null) {
+            Customer customer3 = new Customer();
+            // Customer customer2 = userMapping.customerMapper(customer);
+            customer3.setId(customer.getId());
+            customer3.setUsername(customer.getUsername());
+            customer3.setPassword(customer.getPassword());
+            customer3.setName(customer.getName());
+            customer3.setAddress(customer.getAddress());
+            customer3.setRole(customer.getRole());
+            customer3.setGender(customer.isGender());
+            customer3.setStatus(customer.getStatus());
+            customer3.setUpdate(date.now());
+            customer3.setCreate(customer2.getCreate());
+            customer3.setBirthDay(customer.getBirthDay());
+
+            return customerRepository.save(customer3);
         }
         throw new AppException(ErrorCode.USER_NOTFOUND);
     }
@@ -104,5 +115,17 @@ public class CustomerImplement implements CustomerService {
     @Override
     public List listAllCustomer() {
         return customerRepository.findAll();
+    }
+
+    @Override
+    public Customer updatePassword(UUID id, String password) {
+        Optional<Customer> eCustomer = customerRepository.findById(id);
+        if (eCustomer != null) {
+            Customer customer1 = eCustomer.get();
+            customer1.setPassword(password);
+            customer1.setUpdate(date.now());
+            return customerRepository.save(customer1);
+        } else
+            throw new AppException(ErrorCode.USERNAME_INVALID);
     }
 }
