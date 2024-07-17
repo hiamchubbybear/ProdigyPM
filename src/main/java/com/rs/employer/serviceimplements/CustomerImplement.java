@@ -8,11 +8,12 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rs.employer.dto.userdto;
+import com.rs.employer.dto.Userdto;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.Mapping;
 import com.rs.employer.model.Customer;
+import com.rs.employer.model.Product;
 import com.rs.employer.repository.CustomerRepo;
 import com.rs.employer.service.CustomerService;
 
@@ -32,6 +33,7 @@ public class CustomerImplement implements CustomerService {
         if (!customerRepository.existsByUsername(customer.getUsername())) {
             customer.setCreate(date.now());
             customer.setUpdate(date.now());
+            // customer.setProducts(customerRepository.getAllProductDetail());
             return customerRepository.save(customer);
         }
         throw new AppException(ErrorCode.USERNAME_EXISTED);
@@ -89,10 +91,10 @@ public class CustomerImplement implements CustomerService {
     }
 
     // List customer dto by ID as user
-    public userdto getUserData(UUID id) {
+    public Userdto getUserData(UUID id) {
         if (customerRepository.existsById(id)) {
             Customer customer = listCustomerById(id);
-            userdto userdto = new userdto(customer.getName(), customer.getAddress(),
+            Userdto userdto = new Userdto(customer.getName(), customer.getAddress(),
                     customer.getUsername(), customer.getRole(), customer.isGender(), customer.getStatus(),
                     customer.getBirthDay());
             return userdto;
@@ -127,5 +129,10 @@ public class CustomerImplement implements CustomerService {
             return customerRepository.save(customer1);
         } else
             throw new AppException(ErrorCode.USERNAME_INVALID);
+    }
+
+    @Override
+    public List<Product> getAll() {
+        return customerRepository.getAllProductDetail();
     }
 }

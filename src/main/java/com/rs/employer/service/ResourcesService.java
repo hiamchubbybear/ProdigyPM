@@ -12,7 +12,7 @@ public interface ResourcesService {
     public List<Resources> getAllProductByResourcesID();
 
     // Add product
-    public void addProductResources(Resources product);
+    public Resources addProductResources(Resources product);
 
     // Update product by ID
     public String updateProductResources(Long id, Resources product);
