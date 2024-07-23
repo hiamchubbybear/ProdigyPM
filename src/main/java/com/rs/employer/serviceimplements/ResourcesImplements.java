@@ -40,11 +40,11 @@ public class ResourcesImplements implements ResourcesService {
         } else {
             product1.setTitles(product.getTitles());
             product1.setLocale(product.getLocale());
-            product1.setID(pID);
+            product1.setResourceid(pID);
             product1.setCreate(product.getCreate());
             product1.setUpdate(product.getUpdate());
             return "Succed";
-        } 
+        }
     }
 
     @Override
@@ -53,14 +53,14 @@ public class ResourcesImplements implements ResourcesService {
         if (resourcesList.isPresent()) {
             repository.deleteById(id);
             return true;
-        } else 
-        throw new AppException(ErrorCode.USER_NOTFOUND);
+        } else
+            throw new AppException(ErrorCode.USER_NOTFOUND);
     }
 
-    @Override
-    public Resources getProductResourcesByID(Long rID) {
-        Optional<Resources> eOptional = repository.findById(rID);
-        Resources product = eOptional.get();
-        return product;
-    } 
+     public Resources getProductResourcesByID(Long rID) {
+         Optional<Resources> eOptional = repository.findById(rID);
+         Resources product = eOptional.get();
+         return product;
+     }
+
 }

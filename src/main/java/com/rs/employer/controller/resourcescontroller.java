@@ -34,17 +34,17 @@ class Resourcescontroller {
         return apiRespone;
     }
 
-    @PutMapping(path = "/add")
+    @PostMapping(path = "/add")
     public ApiRespone<Resources> addresource(@RequestBody Resources product) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(rsservice.addProductResources(product));
         return apiRespone;
     }
 
-    @PostMapping(path = "/update/{id}")
+    @PutMapping(path = "/update/{id}")
     public ApiRespone<Resources> updateresouces(@RequestBody Resources product) {
         ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(rsservice.updateProductResources(product.getID(), product));
+        apiRespone.setData(rsservice.updateProductResources(product.getResourceid(), product));
         return apiRespone;
     }
 

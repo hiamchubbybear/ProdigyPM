@@ -61,7 +61,7 @@ class Customercontroller {
     }
 
     // Update customer by ID
-    @PostMapping(path = "/update/{id}")
+    @PutMapping(path = "/update/{id}")
     public ApiRespone<Customer> updatCustomer(@PathVariable(name = "id") UUID id,
             @RequestBody Customer customer) {
         ApiRespone apiRespone = new ApiRespone<>();
@@ -70,7 +70,7 @@ class Customercontroller {
     }
 
     // Add customer
-    @PutMapping(path = "/add")
+    @PostMapping(path = "/add")
     public ApiRespone<Customer> addCustomer(@RequestBody @Valid Customer customer) {
         ApiRespone<Customer> apirespone = new ApiRespone<Customer>();
         apirespone.setData(customerImplement.addCustomer(customer));
@@ -83,7 +83,7 @@ class Customercontroller {
         return customerImplement.registerUser(id, password, login);
     }
 
-    @PostMapping(path = "/pwd")
+    @PutMapping(path = "/pwd")
     public ApiRespone<Customer> udpatePassword(@PathVariable UUID uuid, @RequestBody String password) {
         Customer apiCustomer = customerImplement.updatePassword(uuid, password);
         ApiRespone<Customer> cusApiRespone = new ApiRespone<>();
@@ -99,10 +99,10 @@ class Customercontroller {
         return apiRespone;
     }
 
-    @GetMapping(path = "/product")
-    public ApiRespone<List<Product>> helo() {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(customerImplement.getAll());
-        return apiRespone;
-    }
+//    @GetMapping(path = "/product")
+//    public ApiRespone<List<Product>> helo() {
+//        ApiRespone apiRespone = new ApiRespone<>();
+//        apiRespone.setData(customerImplement.getAll());
+//        return apiRespone;
+//    }
 }

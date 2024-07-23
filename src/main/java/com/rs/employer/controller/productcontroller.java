@@ -1,6 +1,7 @@
 package com.rs.employer.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,33 +15,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
-import com.rs.employer.globalexception.AppException;
-import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Product;
 import com.rs.employer.repository.ProductRepository;
-import com.rs.employer.service.ProductService;
+import com.rs.employer.serviceimplements.ProductImplement;
+
 //Controller for product
 @RestController
 @RequestMapping(path = "/api/product")
 @CrossOrigin
-class Productcontroller {
+public class Productcontroller {
     @Autowired
-    private ProductService productServiceImplement;
-    @Autowired
-    private ProductRepository repo;
+    private ProductImplement repo;
 
     // List product by ID
     @GetMapping(path = "/getbyid/{id}")
-    public ApiRespone<Product> getUserById(@PathVariable(name = "id") Long ID) {
+    public ApiRespone<Optional<Product>> getUserById(@PathVariable(name = "id") Long ID) {
         ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(productServiceImplement.getProduct(ID));
+        apiRespone.setData(repo.getProduct(ID));
         return apiRespone;
     }
 
     // List all product in database
     @GetMapping(path = "/all")
-    public ApiRespone<List<Product>> getAllProduct(Product product) {
-        List<Product> list = productServiceImplement.getAllProduct();
+    public ApiRespone<Optional<Product>> getAllProduct(Product product) {
+        List<Product> list = repo.getAllProduct();
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(list);
         return apiRespone;
@@ -50,30 +48,24 @@ class Productcontroller {
     @PostMapping(path = "/add")
     public ApiRespone<Boolean> addProduct(@RequestBody Product product) {
         ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(productServiceImplement.addProduct(product));
+        apiRespone.setData(repo.addProduct(product));
         return apiRespone;
     }
 
     // Delete product by ID
     @DeleteMapping(path = "/delete/{id}")
-    public ApiRespone<String> deleteProduct(@PathVariable(name = "id") Long ID) {
-        if (repo.existsById(ID) && productServiceImplement.deleteProduct(ID)) {
-            ApiRespone apiRespone = new ApiRespone<>();
-            apiRespone.setData("User deleted");
-            return apiRespone;
-        } else
-            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+    public ApiRespone<Boolean> deleteProductByID(@PathVariable(name = "id") Long ID) {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(repo.deleteProduct(ID));
+        return apiRespone;
     }
 
     // Update product by ID
     @PutMapping(path = "/update/{id}")
     public ApiRespone<String> changeProduct(@PathVariable(name = "id", required = true) Long ID,
             @RequestBody Product product) {
-        if (repo.findById(ID).isPresent()) {
-            ApiRespone apiRespone = new ApiRespone<>();
-            apiRespone.setData(productServiceImplement.updateProduct(ID, product));
-            return apiRespone;
-        } else
-            throw new AppException(ErrorCode.USER_NOTFOUND);
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(repo.updateProduct(ID, product));
+        return apiRespone;
     }
 }
