@@ -18,6 +18,7 @@ import lombok.experimental.FieldDefaults;
 public class AuthenticationDto {
     public String username;
     public String password;
+    public String role;
 
     public AuthenticationDto() {
     }
@@ -36,5 +37,13 @@ public class AuthenticationDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

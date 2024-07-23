@@ -10,20 +10,28 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
 
-// @Data
-// @Setter
-// @Getter
-// @AllArgsConstructor
-// @NoArgsConstructor
+@Data
+@Setter
+@Getter
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "schema_resources")
+@NonNull
 public class Resources {
     // ID of the product
     @Id
-    @Column(name = "Resource_Id")
+    @Column(name = "Resourceid")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private Long resourceid;
     // Name of the product
     @Column(name = "Resources_Name", nullable = true)
     private String name;
@@ -44,68 +52,81 @@ public class Resources {
     @Column(name = "Update_At", nullable = false)
     private Date update;
     public Date now = new Date();
-    public Resources(Long iD, String name, String titles, String locale, String company, Date create, Date update,
-            Date now) {
-        ID = iD;
-        this.name = name;
-        this.titles = titles;
-        this.locale = locale;
-        this.company = company;
-        this.create = create;
-        this.update = update;
-        this.now = now;
+
+    public Long getResourceid() {
+        return resourceid;
     }
-    public Resources() {
+
+    public void setResourceid(Long resourceid) {
+        this.resourceid = resourceid;
     }
-    public Long getID() {
-        return ID;
-    }
-    public void setID(Long iD) {
-        ID = iD;
-    }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public String getTitles() {
         return titles;
     }
+
     public void setTitles(String titles) {
         this.titles = titles;
     }
+
     public String getLocale() {
         return locale;
     }
+
     public void setLocale(String locale) {
         this.locale = locale;
     }
+
     public String getCompany() {
         return company;
     }
+
     public void setCompany(String company) {
         this.company = company;
     }
+
     public Date getCreate() {
         return create;
     }
+
     public void setCreate(Date create) {
         this.create = create;
     }
+
     public Date getUpdate() {
         return update;
     }
+
     public void setUpdate(Date update) {
         this.update = update;
     }
+
     public Date getNow() {
         return now;
     }
+
     public void setNow(Date now) {
         this.now = now;
     }
 
-   
+    public Resources(Long resourceid, String name, String titles, String locale, String company, Date create,
+            Date update, Date now) {
+        this.resourceid = resourceid;
+        this.name = name;
+        this.titles = titles;
+        this.locale = locale;
+        this.company = company;
+        this.create = create;
+        this.update = update;
+        this.now = now;
+    }
 
 }

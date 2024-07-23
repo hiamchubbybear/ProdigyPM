@@ -55,4 +55,13 @@ public class GlobleExceptionHandler {
         apiRespone.setData(false);
         return ResponseEntity.badRequest().body(apiRespone);
     }
+
+    @ExceptionHandler(value = RuntimeException.class)
+    ResponseEntity<ApiRespone> runtimeRespone(AppException exception) {
+        ErrorCode ec = exception.getErrorCode();
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setCode(ec.getCode());
+        apiRespone.setMessage(ec.getStatus());
+        return ResponseEntity.badRequest().body(apiRespone);
+    }
 }

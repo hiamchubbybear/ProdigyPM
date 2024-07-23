@@ -1,6 +1,7 @@
 package com.rs.employer.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public interface ProductService {
     public Boolean deleteProduct(Long id);
 
     // List product by ID
-    public Product getProduct(Long id);
+    public Optional<Product> getProduct(Long id);
 
     // Register user
     // public Product registerUser(String username, String password, String login);
