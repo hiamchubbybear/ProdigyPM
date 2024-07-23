@@ -1,10 +1,9 @@
 package com.rs.employer.dto;
 
-import java.sql.Time;
 import java.util.Date;
 
-// User with data transfer object class as a user  
-public class Userdto {
+public class userdto {
+
     private String name;
     private String address;
     private String username;
@@ -14,25 +13,13 @@ public class Userdto {
     private String status;
     private Date birthDay;
 
-    public Userdto(String name, String address, String username, String role, boolean gender, String status,
+    public userdto(String name, String address, String username, String role, boolean gender, String status,
             Date birthDay) {
         this.name = name;
         this.address = address;
         this.username = username;
         this.role = role;
         this.gender = gender;
-        this.status = status;
-        this.birthDay = birthDay;
-    }
-
-    public Userdto(String name, String address, String username, String role, boolean gender,
-            String status, Time birthDay) {
-        this.name = name;
-        this.address = address;
-        this.username = username;
-        this.role = role;
-        this.gender = gender;
-        this.password = null;
         this.status = status;
         this.birthDay = birthDay;
     }
@@ -98,7 +85,7 @@ public class Userdto {
         return birthDay;
     }
 
-    public void setBirthDay(Time birthDay) {
+    public void setBirthDay(Date birthDay) {
         this.birthDay = birthDay;
     }
 
