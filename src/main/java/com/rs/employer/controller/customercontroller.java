@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.model.Customer;
-import com.rs.employer.model.Product;
 import com.rs.employer.serviceimplements.CustomerImplement;
 
 import jakarta.validation.Valid;
@@ -25,7 +24,7 @@ import jakarta.validation.Valid;
 @RequestMapping(path = "/api/customer")
 @RestController
 @CrossOrigin
-class Customercontroller {
+public class Customercontroller {
     @Autowired
     private CustomerImplement customerImplement;
 
@@ -99,10 +98,10 @@ class Customercontroller {
         return apiRespone;
     }
 
-//    @GetMapping(path = "/product")
-//    public ApiRespone<List<Product>> helo() {
-//        ApiRespone apiRespone = new ApiRespone<>();
-//        apiRespone.setData(customerImplement.getAll());
-//        return apiRespone;
-//    }
+    // @GetMapping(path = "/product")
+    // public ApiRespone<List<Product>> helo() {
+    // ApiRespone apiRespone = new ApiRespone<>();
+    // apiRespone.setData(customerImplement.getAll());
+    // return apiRespone;
+    // }
 }
