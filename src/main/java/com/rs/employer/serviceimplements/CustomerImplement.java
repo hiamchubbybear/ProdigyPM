@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.rs.employer.dto.userdto;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
-import com.rs.employer.mapper.Mapping;
 import com.rs.employer.model.Customer;
 import com.rs.employer.repository.CustomerRepo;
 import com.rs.employer.service.CustomerService;
@@ -26,9 +25,6 @@ public class CustomerImplement implements CustomerService {
     private CustomerRepo customerRepository;
     private Instant date;
     // ZoneId zone = ZoneId.of("Asia/HoChiMinh");
-    @Autowired
-    private Mapping userMapping;
-
     // Add customer
     @Override
     public Customer addCustomer(Customer customer) {
