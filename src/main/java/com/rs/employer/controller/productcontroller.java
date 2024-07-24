@@ -22,7 +22,7 @@ import com.rs.employer.serviceimplements.ProductImplement;
 @RestController
 @RequestMapping(path = "/api/product")
 @CrossOrigin
-public class Productcontroller {
+public class productcontroller {
     @Autowired
     private ProductImplement repo;
 

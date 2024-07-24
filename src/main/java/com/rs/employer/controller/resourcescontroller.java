@@ -22,7 +22,7 @@ import com.rs.employer.serviceimplements.ResourcesImplements;
 @RestController
 @RequestMapping(path = "/api/resouces")
 @CrossOrigin
-public class Resourcescontroller {
+public class resourcescontroller {
 
     @Autowired
     public ResourcesImplements rsservice;
