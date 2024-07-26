@@ -10,11 +10,7 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Getter
-@Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class IntrospectRequest {
     private String token;
@@ -26,4 +22,12 @@ public class IntrospectRequest {
     public void setToken(String token) {
         this.token = token;
     }
+
+    public IntrospectRequest(String token) {
+        this.token = token;
+    }
+
+    public IntrospectRequest() {
+    }
 }
+

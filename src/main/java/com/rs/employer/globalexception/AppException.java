@@ -17,5 +17,4 @@ public class AppException extends IllegalStateException {
     public void setErrorCode(ErrorCode errorCode) {
         this.errorCode = errorCode;
     }
-    AuthenticationRespone respone = new AuthenticationRespone();
 }

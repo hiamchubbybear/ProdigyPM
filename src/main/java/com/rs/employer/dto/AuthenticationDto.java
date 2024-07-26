@@ -1,5 +1,10 @@
 package com.rs.employer.dto;
 
+import com.rs.employer.ValidateAnotation.ValidateRole;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,10 +20,21 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Entity
 public class AuthenticationDto {
+    @NotNull
+    @Id
     public String username;
+    @NotNull
     public String password;
+    @ValidateRole
     public String role;
+
+    public AuthenticationDto(String username, String password, String role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
 
     public AuthenticationDto() {
     }

@@ -19,7 +19,6 @@ public class ProductImplement implements ProductService {
     @Autowired
     private ProductRepository productRepository;
     Instant date;
-    // Instant.now(Clock.system(ZoneId.of("Asia/HoChiMinh"))).truncatedTo(ChronoUnit.SECONDS);
 
     // Add product
     @Override
@@ -31,8 +30,6 @@ public class ProductImplement implements ProductService {
         } else
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
     }
-
-    public Product product;
 
     // List product by ID
     @Override

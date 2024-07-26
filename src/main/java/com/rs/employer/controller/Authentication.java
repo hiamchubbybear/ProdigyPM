@@ -2,6 +2,8 @@ package com.rs.employer.controller;
 
 import java.text.ParseException;
 
+import com.rs.employer.dto.AuthenticationDto;
+import com.rs.employer.dto.AuthenticationRespone.AuthenticationRespone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,27 +25,25 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Authentication {
-//    @Autowired
-//    private AuthenticationServiceImp authen;
+    @Autowired
+    private AuthenticationServiceImp authen;
 
-    // @PostMapping("/login")
-    // public ApiRespone<AuthenticationRespone> postMethodName(@RequestBody
-    // AuthenticationDto authenticated) {
-    // boolean result = authen.authenticate(authenticated);
-    // AuthenticationRespone respone = new AuthenticationRespone();
-    // ApiRespone apiRespone = new ApiRespone<>();
-    // respone.setAuthenticated(result);
-    // apiRespone.setData(respone);
-    // return apiRespone;
-    // // return ApiRespone.<AuthenticationDto>builder().setData(result).build();
-    // }
-//    @PostMapping("/introspect")
-//    ApiRespone<IntrospectResponse> authenticate(@RequestBody IntrospectRequest request)
-//            throws ParseException {
-        // var result = AuthenticationServiceImp.introspect(request);
-        // return ApiResponse.<IntrospectResponse>builder()
-        // .result(result)
-        // .build();
-//        return null;
-//    }
+     @PostMapping("/login")
+     public ApiRespone<AuthenticationRespone> postMethodName(@RequestBody
+        AuthenticationDto authenticated) {
+     var result = authen.authentication(authenticated);
+     ApiRespone apiRespone = new ApiRespone<>();
+     apiRespone.setData(result);
+     return apiRespone;
+//      return ApiRespone.<AuthenticationDto>builder().setData(result).build();
+     }
+     @PostMapping("/token")
+    public ApiRespone<IntrospectRequest> introspect (@RequestBody IntrospectRequest authenticated)
+             throws ParseException, JOSEException {
+             var result = authen.introspectRequest(authenticated);
+             ApiRespone apiRespone = new ApiRespone<>();
+             apiRespone.setData(result);
+             return apiRespone;
+     }
+
 }

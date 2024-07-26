@@ -19,7 +19,7 @@ import com.rs.employer.model.Product;
 public interface CustomerRepo extends JpaRepository<Customer, UUID> {
         boolean existsByUsername(String username );
         boolean existsByUserid(Long userid);
-//        Optional<Customer> findByUsername(String username);
+        Optional<Customer> findByUsername(String username);
 
 //        void deleteByUsername(String username);
 //
