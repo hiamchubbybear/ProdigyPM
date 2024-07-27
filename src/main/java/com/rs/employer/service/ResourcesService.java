@@ -19,7 +19,6 @@ public interface ResourcesService {
 
     // Delete product by ID
     public Boolean deleteProductResources(Long id);
-
     // List product by ID
     // public Resources getProductResourcesByID(Long rID);
 }

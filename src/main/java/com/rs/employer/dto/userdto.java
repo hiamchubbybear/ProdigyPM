@@ -16,8 +16,6 @@ public class userdto {
 
     public userdto(String name, String address, String username, Set<String> role, boolean gender, String password, String status, Date birthDay) {
 
-
-
         this.name = name;
         this.address = address;
         this.username = username;

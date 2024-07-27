@@ -24,13 +24,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-
-// Customer class
-// @Data
-// @Setter
-// @Getter
-// @AllArgsConstructor
-// @NoAllArgsConstructor
 @Entity
 @Data
 @DynamicUpdate
@@ -66,7 +59,6 @@ public class Customer {
   public void setRole(Set<String> role) {
     this.role = role;
   }
-
   // Role of the customer
   @Column(name = "role_id", nullable = true, updatable = true)
   @ValidateRole
