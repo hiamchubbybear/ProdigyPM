@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.model.Customer;
+import com.rs.employer.model.Product;
 import com.rs.employer.serviceimplements.CustomerImplement;
 
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 
 //Controller for customer
 @RequestMapping(path = "/api/customer")
@@ -47,7 +49,7 @@ public class customercontroller {
 
     // List customer by ID as administrator
     @GetMapping(path = "/getbyid/{id}")
-    public ApiRespone<Customer> getPaticipateUser(@PathVariable(name = "id") UUID id) {
+    public ApiRespone<Customer> getPaticipateUser(@PathVariable UUID id) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(customerImplement.listCustomerById(id));
         return apiRespone;
@@ -55,13 +57,13 @@ public class customercontroller {
 
     // Delete customer by ID
     @DeleteMapping(path = "/delete/{id}")
-    public boolean deleteCustomer(@PathVariable(name = "id") UUID id) {
+    public boolean deleteCustomer(@PathVariable UUID id) {
         return customerImplement.deleteCustomerById(id);
     }
 
     // Update customer by ID
     @PutMapping(path = "/update/{id}")
-    public ApiRespone<Customer> updatCustomer(@PathVariable(name = "id") UUID id,
+    public ApiRespone<Customer> updatCustomer(@PathVariable UUID id,
             @RequestBody Customer customer) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(customerImplement.updateCustomer(id, customer));
@@ -104,4 +106,11 @@ public class customercontroller {
     // apiRespone.setData(customerImplement.getAll());
     // return apiRespone;
     // }
+    @GetMapping("/birth/{name}")
+    public ApiRespone<Product> birthDayList(@PathParam("name") String name) {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(customerImplement.findByName(name));
+        return apiRespone;
+    }
+
 }

@@ -1,25 +1,29 @@
 package com.rs.employer.dto;
 
 import java.util.Date;
+import java.util.Set;
 
 public class userdto {
 
     private String name;
     private String address;
     private String username;
-    private String role;
+    private Set<String> role;
     private boolean gender;
     private String password;
     private String status;
     private Date birthDay;
 
-    public userdto(String name, String address, String username, String role, boolean gender, String status,
-            Date birthDay) {
+    public userdto(String name, String address, String username, Set<String> role, boolean gender, String password, String status, Date birthDay) {
+
+
+
         this.name = name;
         this.address = address;
         this.username = username;
         this.role = role;
         this.gender = gender;
+        this.password = password;
         this.status = status;
         this.birthDay = birthDay;
     }
@@ -49,11 +53,11 @@ public class userdto {
         this.username = username;
     }
 
-    public String getRole() {
+    public Set<String> getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Set<String> role) {
         this.role = role;
     }
 

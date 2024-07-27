@@ -9,10 +9,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 // Product class
 // @Data
@@ -25,33 +27,39 @@ import lombok.Setter;
 @Builder
 @Data
 @Entity
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "schema_product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long product_id;
+    Long product_id;
     @Column(name = "name_product", nullable = false)
-    private String name;
+    String name;
     @Column(name = "product_type", nullable = false)
-    private String type;
+    String type;
     @Column(name = "product_size", nullable = false)
-    private Long size;
+    Long size;
     @Column(name = "product_weight", nullable = false)
-    private Long weight;
+    Long weight;
     @Column(name = "product_weight_unit", nullable = false)
-    private String weight_unit;
+    String weight_unit;
     @Column(name = "product_size_unit", nullable = false)
-    private String size_unit;
+    String size_unit;
     @Column(name = "expire_date_product", nullable = false)
-    private Date exp;
+    Date exp;
     @Column(name = "create_at", nullable = false, updatable = false)
-    private Instant create;
+    Instant create;
     @Column(name = "update_at", nullable = false, updatable = true)
-    private Instant update;
+    Instant update;
     @Column(name = "subtitle_product", nullable = false)
-    private String sub;
+    String sub;
     @Column(name = "unit_product", nullable = false)
-    private String unit;
+    String unit;
+    // Long customer_id;
+    // @ManyToOne
+    // @JsonIgnore
+    // @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
+    // public Customer customer;
 
     public Long getProduct_id() {
         return product_id;

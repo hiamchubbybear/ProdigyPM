@@ -10,13 +10,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @Setter
@@ -25,32 +25,32 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "schema_resources")
-@NonNull
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Resources {
     // ID of the product
     @Id
     @Column(name = "Resourceid")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long resourceid;
+     Long resourceid;
     // Name of the product
     @Column(name = "Resources_Name", nullable = true)
-    private String name;
+     String name;
     @Column(name = "Resources_Titles", nullable = true)
-    private String titles;
+     String titles;
     // Locale of the product
     @Column(name = "Resources_Locale", nullable = false)
-    private String locale;
+     String locale;
     // ID resources of the product
     @Column(name = "Resources_Company", nullable = true)
-    private String company;
+     String company;
     // Create date of the product
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "Create_At", nullable = false)
-    private Date create;
+     Date create;
     // Update date of the product
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "Update_At", nullable = false)
-    private Date update;
+     Date update;
     public Date now = new Date();
 
     public Long getResourceid() {

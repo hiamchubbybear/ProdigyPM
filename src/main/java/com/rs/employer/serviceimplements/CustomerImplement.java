@@ -15,6 +15,7 @@ import com.rs.employer.dto.userdto;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Customer;
+import com.rs.employer.model.Product;
 import com.rs.employer.repository.CustomerRepo;
 import com.rs.employer.service.CustomerService;
 
@@ -24,6 +25,7 @@ public class CustomerImplement implements CustomerService {
     @Autowired
     private CustomerRepo customerRepository;
     private Instant date;
+
     // ZoneId zone = ZoneId.of("Asia/HoChiMinh");
     // Add customer
     @Override
@@ -95,17 +97,6 @@ public class CustomerImplement implements CustomerService {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
 
-    // List customer dto by ID as user
-    public userdto getUserData(UUID id) {
-        if (customerRepository.existsById(id)) {
-            Customer customer = listCustomerById(id);
-            userdto userdto = new userdto(customer.getName(), customer.getAddress(),
-                    customer.getUsername(), customer.getRole(), customer.isGender(), customer.getStatus(),
-                    customer.getBirthDay());
-            return userdto;
-        } else
-            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
-    }
 
     // Register user
     public Customer registerUser(UUID id, String password, String login) {
@@ -136,4 +127,7 @@ public class CustomerImplement implements CustomerService {
             throw new AppException(ErrorCode.USERNAME_INVALID);
     }
 
+    public List<Product> findByName(String name) {
+        return customerRepository.findAllDepartment(name);
+    }
 }
