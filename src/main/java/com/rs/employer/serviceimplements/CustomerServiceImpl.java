@@ -11,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.rs.employer.dto.userdto;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Customer;
@@ -21,7 +20,7 @@ import com.rs.employer.service.CustomerService;
 
 // Service for customer
 @Service
-public class CustomerImplement implements CustomerService {
+public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerRepo customerRepository;
     private Instant date;

@@ -31,26 +31,26 @@ public class Resources {
     @Id
     @Column(name = "Resourceid")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     Long resourceid;
+    Long resourceid;
     // Name of the product
     @Column(name = "Resources_Name", nullable = true)
-     String name;
+    String name;
     @Column(name = "Resources_Titles", nullable = true)
-     String titles;
+    String titles;
     // Locale of the product
     @Column(name = "Resources_Locale", nullable = false)
-     String locale;
+    String locale;
     // ID resources of the product
     @Column(name = "Resources_Company", nullable = true)
-     String company;
+    String company;
     // Create date of the product
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "Create_At", nullable = false)
-     Date create;
+    Date create;
     // Update date of the product
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "Update_At", nullable = false)
-     Date update;
+    Date update;
     public Date now = new Date();
 
     public Long getResourceid() {

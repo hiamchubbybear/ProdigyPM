@@ -14,7 +14,7 @@ import com.rs.employer.repository.ResourcesRepo;
 import com.rs.employer.service.ResourcesService;
 
 @Service
-public class ResourcesImplements implements ResourcesService {
+public class ResourcesServiceImpl implements ResourcesService {
     @Autowired
     private ResourcesRepo repository;
 

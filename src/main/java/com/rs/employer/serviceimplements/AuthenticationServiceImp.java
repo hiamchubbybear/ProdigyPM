@@ -29,21 +29,18 @@ import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.repository.CustomerRepo;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class AuthenticationServiceImp {
     @Autowired
     private CustomerRepo repo;
-    @NonFinal
+    // @NonFinal
     public static String SIGNER_KEY = "UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
 
     public AuthenticationRespone authentication(AuthenticationDto authenticationDto) {

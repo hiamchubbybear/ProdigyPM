@@ -2,7 +2,6 @@ package com.rs.employer.model;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -24,6 +23,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+
 @Entity
 @Data
 @DynamicUpdate
@@ -52,17 +52,12 @@ public class Customer {
   @Column(name = "address", nullable = true, updatable = true)
   String address;
 
-  public Set<String> getRole() {
-    return role;
-  }
-
-  public void setRole(Set<String> role) {
-    this.role = role;
-  }
   // Role of the customer
-  @Column(name = "role_id", nullable = true, updatable = true)
+  @Column(name = "role", nullable = true, updatable = true)
   @ValidateRole
-  Set<String> role;
+  // Set<String> role;
+  String role;
+
   // Gender of the customer
   @Column(name = "gender", nullable = false, updatable = true)
   boolean gender;
@@ -85,23 +80,6 @@ public class Customer {
   // @JoinColumn
   // @JsonManagedReference
   // List<Product> products;
-  public Customer(Long userid, UUID uuid,
-      @NotNull @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username,
-      @Size(min = 8, message = "PASSWORD_INVALID") @NotBlank String password, String name, String address,
-      Set<String> role, boolean gender, String status, Instant create, Instant update, Date birthDay) {
-    this.userid = userid;
-    this.uuid = uuid;
-    this.username = username;
-    this.password = password;
-    this.name = name;
-    this.address = address;
-    this.role = role;
-    this.gender = gender;
-    this.status = status;
-    this.create = create;
-    this.update = update;
-    this.birthDay = birthDay;
-  }
 
   public Customer() {
   }
@@ -192,5 +170,31 @@ public class Customer {
 
   public void setBirthDay(Date birthDay) {
     this.birthDay = birthDay;
+  }
+
+  public Customer(Long userid, UUID uuid,
+      @NotNull @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username,
+      @Size(min = 8, message = "PASSWORD_INVALID") @NotBlank String password, String name, String address, String role,
+      boolean gender, String status, Instant create, Instant update, Date birthDay) {
+    this.userid = userid;
+    this.uuid = uuid;
+    this.username = username;
+    this.password = password;
+    this.name = name;
+    this.address = address;
+    this.role = role;
+    this.gender = gender;
+    this.status = status;
+    this.create = create;
+    this.update = update;
+    this.birthDay = birthDay;
+  }
+
+  public String getRole() {
+    return this.role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
   }
 }

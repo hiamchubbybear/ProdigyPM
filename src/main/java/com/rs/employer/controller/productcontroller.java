@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.model.Product;
-import com.rs.employer.serviceimplements.ProductImplement;
+import com.rs.employer.serviceimplements.ProductServiceImpl;
 
 //Controller for product
 @RestController
@@ -24,7 +24,7 @@ import com.rs.employer.serviceimplements.ProductImplement;
 @CrossOrigin
 public class productcontroller {
     @Autowired
-    private ProductImplement repo;
+    private ProductServiceImpl repo;
 
     // List product by ID
     @GetMapping(path = "/getbyid/{id}")

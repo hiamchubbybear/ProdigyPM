@@ -15,7 +15,7 @@ import com.rs.employer.service.ProductService;
 
 // Service implement for product
 @Service
-public class ProductImplement implements ProductService {
+public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
     Instant date;

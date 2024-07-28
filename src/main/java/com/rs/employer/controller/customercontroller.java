@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.model.Customer;
 import com.rs.employer.model.Product;
-import com.rs.employer.serviceimplements.CustomerImplement;
+import com.rs.employer.serviceimplements.CustomerServiceImpl;
 
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
@@ -28,7 +28,7 @@ import jakarta.websocket.server.PathParam;
 @CrossOrigin
 public class customercontroller {
     @Autowired
-    private CustomerImplement customerImplement;
+    private CustomerServiceImpl customerImplement;
 
     // List all customer in database
     @GetMapping(path = "/all")
