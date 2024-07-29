@@ -21,16 +21,17 @@ public class SecurityConfig {
 
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-                httpSecurity
-                                .authorizeHttpRequests(
-                                                request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT)
-                                                                .permitAll()
-                                                                .anyRequest().authenticated());
+                httpSecurity.authorizeHttpRequests(request -> request
+                                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT)
+                                .permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/customer/all")
+                                .hasAuthority("SCOPE_ADMIN")
+                                .anyRequest().authenticated());
                 httpSecurity.csrf(CsrfConfigurer -> CsrfConfigurer.disable());
                 httpSecurity.oauth2ResourceServer(
-                                oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())));
+                                oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
+                                                .decoder(jwtDecoder())));
                 return httpSecurity.build();
-
         }
 
         @Bean

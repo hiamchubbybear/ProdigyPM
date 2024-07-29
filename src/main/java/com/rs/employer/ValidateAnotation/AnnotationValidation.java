@@ -15,7 +15,7 @@ public class AnnotationValidation implements ConstraintValidator<ValidateRole, S
 
     @Override
     public boolean isValid(String ValidateCustomerType, ConstraintValidatorContext context) {
-        List<String> ValidateCustomerTypes = Arrays.asList("Admin", "User", "Manager", "Vendor");
+        List<String> ValidateCustomerTypes = Arrays.asList("ADMIN", "USER", "MANAGER", "VENDOR");
         return ValidateCustomerTypes.contains(ValidateCustomerType);
     }
 

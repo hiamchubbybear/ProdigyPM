@@ -4,11 +4,13 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.StringJoiner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -26,6 +28,7 @@ import com.rs.employer.dto.AuthenticationRespone.IntrospectRequest;
 import com.rs.employer.dto.AuthenticationRespone.IntrospectRespone;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
+import com.rs.employer.model.Customer;
 import com.rs.employer.repository.CustomerRepo;
 
 import lombok.AccessLevel;
@@ -52,7 +55,7 @@ public class AuthenticationServiceImp {
         if (!authenticated)
             throw new AppException(ErrorCode.USER_UNAUTHENTICATED);
         else {
-            var token = generateToken(authenticationDto.getUsername());
+            var token = generateToken(user);
             AuthenticationRespone aps = new AuthenticationRespone();
             aps.setToken(token);
             aps.setAuthenticated(true);
@@ -73,11 +76,15 @@ public class AuthenticationServiceImp {
         return respone;
     }
 
-    private String generateToken(String username) {
+    private String generateToken(Customer customer) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
-        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject(username)
+        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject(customer.getUsername())
                 .issuer("Chessy")
-                .issueTime(new Date()).expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
+                .issueTime(new Date())
+                .expirationTime(new Date(Instant.now()
+                        .plus(1, ChronoUnit.HOURS)
+                        .toEpochMilli()))
+                .claim("scope", buildScope(customer))
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject = new JWSObject(header, payload);
@@ -87,5 +94,13 @@ public class AuthenticationServiceImp {
         } catch (JOSEException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String buildScope(Customer customer) {
+        StringJoiner joiner = new StringJoiner(" ");
+        if (!CollectionUtils.isEmpty(customer.getRole())) {
+            customer.getRole().forEach(joiner::add);
+        }
+        return joiner.toString();
     }
 }

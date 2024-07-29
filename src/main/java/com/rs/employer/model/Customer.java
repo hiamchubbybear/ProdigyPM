@@ -2,6 +2,7 @@ package com.rs.employer.model;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -10,9 +11,10 @@ import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.rs.employer.ValidateAnotation.ValidateRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rs.employer.ValidateAnotation.ValidateStatus;
 
+import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -54,9 +56,18 @@ public class Customer {
 
   // Role of the customer
   @Column(name = "role", nullable = true, updatable = true)
-  @ValidateRole
-  // Set<String> role;
-  String role;
+
+  Set<String> role;
+
+  public Set<String> getRole() {
+    return this.role;
+  }
+
+  public void setRole(Set<String> role) {
+    this.role = role;
+  }
+
+  // String role;
 
   // Gender of the customer
   @Column(name = "gender", nullable = false, updatable = true)
@@ -70,8 +81,10 @@ public class Customer {
   @LastModifiedDate
   @Column(name = "update_at", nullable = false, updatable = true)
   Instant update;
+  @Nullable
   @JsonFormat(pattern = "yyyy-MM-dd")
   @Column(name = "birthday")
+  @JsonIgnore
   Date birthDay;
 
   // Long product_id;
@@ -174,8 +187,8 @@ public class Customer {
 
   public Customer(Long userid, UUID uuid,
       @NotNull @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username,
-      @Size(min = 8, message = "PASSWORD_INVALID") @NotBlank String password, String name, String address, String role,
-      boolean gender, String status, Instant create, Instant update, Date birthDay) {
+      @Size(min = 8, message = "PASSWORD_INVALID") @NotBlank String password, String name, String address,
+      Set<String> role, boolean gender, String status, Instant create, Instant update, Date birthDay) {
     this.userid = userid;
     this.uuid = uuid;
     this.username = username;
@@ -190,11 +203,11 @@ public class Customer {
     this.birthDay = birthDay;
   }
 
-  public String getRole() {
-    return this.role;
-  }
+  // public String getRole() {
+  // return this.role;
+  // }
 
-  public void setRole(String role) {
-    this.role = role;
-  }
+  // public void setRole(String role) {
+  // this.role = role;
+  // }
 }

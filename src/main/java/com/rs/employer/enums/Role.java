@@ -1,4 +1,4 @@
-package com.rs.employer.EnumLocation;
+package com.rs.employer.enums;
 
 public enum Role {
      ADMIN,

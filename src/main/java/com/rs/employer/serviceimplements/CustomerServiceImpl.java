@@ -1,6 +1,7 @@
 package com.rs.employer.serviceimplements;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.rs.employer.enums.Role;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Customer;
@@ -37,6 +39,9 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setPassword(passwordEncoder.encode(customer.getPassword()));
             customer.setCreate(date.now());
             customer.setUpdate(date.now());
+            HashSet<String> role = new HashSet<>();
+            role.add(Role.USER.name());
+            customer.setRole(role);
             // customer.setProducts(customerRepository.getAllProductDetail());
             return customerRepository.save(customer);
         }
@@ -50,6 +55,8 @@ public class CustomerServiceImpl implements CustomerService {
             Customer customer2 = customer1.get();
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
             if (customer2 != null) {
+                HashSet<String> role = new HashSet<>();
+                role.add(Role.ADMIN.name());
                 Customer customer3 = new Customer();
                 // Customer customer2 = userMapping.customerMapper(customer);
                 customer3.setUserid(customer.getUserid());
@@ -57,7 +64,7 @@ public class CustomerServiceImpl implements CustomerService {
                 customer3.setPassword(passwordEncoder.encode(customer.getPassword()));
                 customer3.setName(customer.getName());
                 customer3.setAddress(customer.getAddress());
-                customer3.setRole(customer.getRole());
+                customer3.setRole(role);
                 customer3.setGender(customer.isGender());
                 customer3.setStatus(customer.getStatus());
                 customer3.setUpdate(date.now());
@@ -95,7 +102,6 @@ public class CustomerServiceImpl implements CustomerService {
         } else
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
-
 
     // Register user
     public Customer registerUser(UUID id, String password, String login) {

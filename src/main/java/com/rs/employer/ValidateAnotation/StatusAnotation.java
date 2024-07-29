@@ -15,7 +15,7 @@ public class StatusAnotation implements ConstraintValidator<ValidateStatus, Stri
 
     @Override
     public boolean isValid(String ValidateCustomerType, ConstraintValidatorContext context) {
-        List<String> ValidateCustomerTypes = Arrays.asList("Active", "Inactive", "Suspend", "Offline");
+        List<String> ValidateCustomerTypes = Arrays.asList("ONLINE", "SUSPEND", "OFFLINE", "NONE");
         return ValidateCustomerTypes.contains(ValidateCustomerType);
     }
 

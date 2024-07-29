@@ -15,7 +15,7 @@ import jakarta.validation.Payload;
 @Constraint(validatedBy = AnnotationValidation.class)
 public @interface ValidateRole {
 
-	public String message() default "Invalid Role: It must be one in{\\\"Admin\\\", \\\"User\\\", \\\"Manager\\\", \\\"Vendor\\\"}";
+	public String message() default "Invalid Role: It must be one in{ ADMIN , USER , MANAGER , VENDOR }";
 
 	Class<?>[] groups() default {};
 
