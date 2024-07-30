@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -98,6 +100,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     // List customer by ID
     @Override
+    @PostAuthorize("returnObject.username == authentication.name")
     public Customer listCustomerById(UUID id) {
         Optional<Customer> eOptional = Optional.ofNullable(
                 customerRepository.findById(id)
@@ -107,6 +110,12 @@ public class CustomerServiceImpl implements CustomerService {
             return customer1;
         } else
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+    }
+
+    public Optional<Customer> getMyInfo() {
+        var user = SecurityContextHolder.getContext();
+        String name = user.getAuthentication().getName();
+        return customerRepository.findByUsername(name);
     }
 
     // Register user

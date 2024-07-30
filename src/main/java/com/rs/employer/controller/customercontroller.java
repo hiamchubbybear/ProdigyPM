@@ -1,9 +1,11 @@
 package com.rs.employer.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,11 +50,20 @@ public class customercontroller {
     // }
 
     // List customer by ID as administrator
+    @PreAuthorize("returnObject.username == authentication.name")
     @GetMapping(path = "/getbyid/{id}")
     public ApiRespone<Customer> getPaticipateUser(@PathVariable UUID id) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(customerImplement.listCustomerById(id));
         return apiRespone;
+    }
+
+    @GetMapping("/getMyInfo")
+    public ApiRespone<Optional<Customer>> getInfo() {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(customerImplement.getMyInfo());
+        return apiRespone;
+
     }
 
     // Delete customer by ID
@@ -71,6 +82,7 @@ public class customercontroller {
     }
 
     // Add customer
+    // @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/add")
     public ApiRespone<Customer> addCustomer(@RequestBody @Valid Customer customer) {
         ApiRespone<Customer> apirespone = new ApiRespone<Customer>();
