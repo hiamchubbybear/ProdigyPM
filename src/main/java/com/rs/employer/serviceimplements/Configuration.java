@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.util.HashSet;
 
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.rs.employer.enums.Role;
@@ -21,7 +20,6 @@ import lombok.experimental.FieldDefaults;
 public class Configuration {
     PasswordEncoder passwordEncoder;
 
-    @Bean
     ApplicationRunner applicationRunner(CustomerRepo repo) {
         return args -> {
             if (repo.findByUsername("ADMIN").isEmpty()) {
