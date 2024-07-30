@@ -20,12 +20,18 @@ import com.rs.employer.model.Product;
 import com.rs.employer.repository.CustomerRepo;
 import com.rs.employer.service.CustomerService;
 
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
+
 // Service for customer
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerRepo customerRepository;
     private Instant date;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     // ZoneId zone = ZoneId.of("Asia/HoChiMinh");
     // Add customer
@@ -35,7 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
                 || customerRepository.existsByUserid(customer.getUserid()))
             throw new AppException(ErrorCode.USEREXISTED_OR_USERIDEXISTED);
         else {
-            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
+            // PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
             customer.setPassword(passwordEncoder.encode(customer.getPassword()));
             customer.setCreate(date.now());
             customer.setUpdate(date.now());

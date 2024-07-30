@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.rs.employer.enums.Role;
@@ -17,11 +18,12 @@ import lombok.experimental.FieldDefaults;
 
 @org.springframework.context.annotation.Configuration
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PUBLIC, makeFinal = true)
 public class Configuration {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Bean
     ApplicationRunner applicationRunner(CustomerRepo repo) {
         return args -> {
             if (repo.findByUsername("ADMIN").isEmpty()) {
