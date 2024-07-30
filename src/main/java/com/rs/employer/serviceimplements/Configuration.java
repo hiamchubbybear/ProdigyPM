@@ -3,6 +3,7 @@ package com.rs.employer.serviceimplements;
 import java.time.Instant;
 import java.util.HashSet;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -18,6 +19,7 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Configuration {
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     ApplicationRunner applicationRunner(CustomerRepo repo) {
