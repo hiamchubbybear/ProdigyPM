@@ -1,5 +1,7 @@
 package com.rs.employer.globalexception;
 
+import java.nio.file.AccessDeniedException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,7 +17,7 @@ public class GlobleExceptionHandler {
         ApiRespone apiRespone = new ApiRespone();
         apiRespone.setCode(ec.getCode());
         apiRespone.setMessage(exception.getMessage());
-        return ResponseEntity.badRequest().body(apiRespone);
+        return ResponseEntity.status(ec.getStatusCode()).body(apiRespone);
     }
 
     @ExceptionHandler(value = Exception.class)
@@ -24,6 +26,16 @@ public class GlobleExceptionHandler {
         apiRespone.setCode(ErrorCode.UNCATEGORIZE_EXCEPTION.getCode());
         apiRespone.setMessage(ErrorCode.UNCATEGORIZE_EXCEPTION.getStatus());
         return ResponseEntity.badRequest().body(apiRespone);
+    }
+
+    @ExceptionHandler(value = AccessDeniedException.class)
+    ResponseEntity<ApiRespone> handlingDenyExcepion(AccessDeniedException exception) {
+        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setCode(errorCode.getCode());
+        apiRespone.setMessage(errorCode.getStatus());
+        return ResponseEntity.status(errorCode.getStatusCode()).body(
+                apiRespone);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)

@@ -17,18 +17,28 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-        public final String[] PUBLIC_ENDPOINT = {
+        private final String[] PUBLIC_ENDPOINT = {
                         "/api/customer/add",
                         "/auth/login",
-                        "/auth/token" };
-        public final String SIGNER_KEY = "UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
+                        "/auth/token",
+        };
+        private final String[] ALTERNATIVE_ENDPOINT = {
+                        "/api/customer/update"
+        };
+        private final String[] ADMIN_ENDPOINT = {
+                        "/api/customer/all",
+                        "/apoi/customer/getMyInfo"
+        };
+        private final String SIGNER_KEY = "UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
 
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
                 httpSecurity.authorizeHttpRequests(request -> request
                                 .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT)
                                 .permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/customer/all")
+                                .requestMatchers(HttpMethod.PUT, ALTERNATIVE_ENDPOINT)
+                                .permitAll()
+                                .requestMatchers(HttpMethod.GET, ADMIN_ENDPOINT)
                                 .hasAuthority("SCOPE_ADMIN")
                                 .anyRequest().authenticated());
                 httpSecurity.csrf(CsrfConfigurer -> CsrfConfigurer.disable());

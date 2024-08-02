@@ -50,7 +50,6 @@ public class customercontroller {
     // }
 
     // List customer by ID as administrator
-    @PreAuthorize("returnObject.username == authentication.name")
     @GetMapping(path = "/getbyid/{id}")
     public ApiRespone<Customer> getPaticipateUser(@PathVariable UUID id) {
         ApiRespone apiRespone = new ApiRespone<>();
@@ -68,8 +67,10 @@ public class customercontroller {
 
     // Delete customer by ID
     @DeleteMapping(path = "/delete/{id}")
-    public boolean deleteCustomer(@PathVariable UUID id) {
-        return customerImplement.deleteCustomerById(id);
+    public ApiRespone<Boolean> deleteCustomer(@PathVariable UUID id) {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(customerImplement.deleteCustomerById(id));
+        return apiRespone;
     }
 
     // Update customer by ID

@@ -26,7 +26,7 @@ public class Configuration {
     @Bean
     ApplicationRunner applicationRunner(CustomerRepo repo) {
         return args -> {
-            if (repo.findByUsername("ADMIN").isEmpty()) {
+            if (repo.findByUsername("admin").isEmpty()) {
                 HashSet role = new HashSet<>();
                 role.add(Role.ADMIN.name());
                 Customer admin = new Customer();

@@ -34,30 +34,30 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Customer {
   @Column(name = "user_id")
-  Long userid;
+  private Long userid;
   @Id
   @Column(name = "uuid")
   @UuidGenerator
-  UUID uuid;
+  private UUID uuid;
   @NotNull
   @Size(min = 3, max = 20, message = "USERNAME_INVALID")
   @Column(name = "username", nullable = false, updatable = false)
-  String username;
+  private String username;
   @Size(min = 8, message = "PASSWORD_INVALID")
   @NotBlank
   @Column(name = "password", nullable = false, updatable = true)
-  String password;
+  private String password;
   // Name of the customer
   @Column(name = "name", nullable = false, updatable = true)
-  String name;
+  private String name;
   // Address of the customer
   @Column(name = "address", nullable = true, updatable = true)
-  String address;
+  private String address;
 
   // Role of the customer
   @Column(name = "role", nullable = true, updatable = true)
 
-  Set<String> role;
+  private Set<String> role;
 
   public Set<String> getRole() {
     return this.role;
@@ -71,21 +71,21 @@ public class Customer {
 
   // Gender of the customer
   @Column(name = "gender", nullable = false, updatable = true)
-  boolean gender;
+  private boolean gender;
   @ValidateStatus
   @Column(name = "status")
-  String status;
+  private String status;
   // Birthday of the customer
   @Column(name = "create_at", nullable = false, updatable = false)
-  Instant create;
+  private Instant create;
   @LastModifiedDate
   @Column(name = "update_at", nullable = false, updatable = true)
-  Instant update;
+  private Instant update;
   @Nullable
   @JsonFormat(pattern = "yyyy-MM-dd")
   @Column(name = "birthday")
   @JsonIgnore
-  Date birthDay;
+  private Date birthDay;
 
   // Long product_id;
   // @OneToMany(mappedBy = "schema_customer", cascade = CascadeType.ALL)
