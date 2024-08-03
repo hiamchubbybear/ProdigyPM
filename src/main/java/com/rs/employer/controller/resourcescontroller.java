@@ -27,7 +27,7 @@ public class resourcescontroller {
     @Autowired
     public ResourcesServiceImpl rsservice;
 
-    @GetMapping(path = "/getall")
+    @GetMapping(path = "/all")
     public ApiRespone<List> resources() {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(rsservice.getAllProductByResourcesID());

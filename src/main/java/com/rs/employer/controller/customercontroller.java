@@ -40,16 +40,7 @@ public class customercontroller {
         apiRespone.setData(list);
         return apiRespone;
     }
-
-    // List customer by ID as user
-    // @GetMapping(path = "/userdto/{id}")
-    // public ApiRespone<Userdto> getUserData(@PathVariable(name = "id") UUID id) {
-    // ApiRespone apiRespone = new ApiRespone<>();
-    // apiRespone.setData(customerImplement.getUserData(id));
-    // return apiRespone;
-    // }
-
-    // List customer by ID as administrator
+   // List customer by ID as administrator
     @GetMapping(path = "/getbyid/{id}")
     public ApiRespone<Customer> getPaticipateUser(@PathVariable UUID id) {
         ApiRespone apiRespone = new ApiRespone<>();
@@ -83,28 +74,12 @@ public class customercontroller {
     }
 
     // Add customer
-    // @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/add")
     public ApiRespone<Customer> addCustomer(@RequestBody @Valid Customer customer) {
         ApiRespone<Customer> apirespone = new ApiRespone<Customer>();
         apirespone.setData(customerImplement.addCustomer(customer));
         return apirespone;
     }
-
-    // Register customer
-    @PutMapping(path = "/register")
-    public Customer registerCustomer(UUID id, String password, String login) {
-        return customerImplement.registerUser(id, password, login);
-    }
-
-    @PutMapping(path = "/pwd")
-    public ApiRespone<Customer> udpatePassword(@PathVariable UUID uuid, @RequestBody String password) {
-        Customer apiCustomer = customerImplement.updatePassword(uuid, password);
-        ApiRespone<Customer> cusApiRespone = new ApiRespone<>();
-        cusApiRespone.setData(apiCustomer);
-        return cusApiRespone;
-    }
-
     // Hello world
     @GetMapping(path = "/hello")
     public ApiRespone<String> hello() {
@@ -112,18 +87,4 @@ public class customercontroller {
         apiRespone.setData("HelloWorld");
         return apiRespone;
     }
-
-    // @GetMapping(path = "/product")
-    // public ApiRespone<List<Product>> helo() {
-    // ApiRespone apiRespone = new ApiRespone<>();
-    // apiRespone.setData(customerImplement.getAll());
-    // return apiRespone;
-    // }
-    @GetMapping("/birth/{name}")
-    public ApiRespone<Product> birthDayList(@PathParam("name") String name) {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(customerImplement.findByName(name));
-        return apiRespone;
-    }
-
 }
