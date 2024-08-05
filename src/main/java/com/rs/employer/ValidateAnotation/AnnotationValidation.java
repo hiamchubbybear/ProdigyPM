@@ -7,15 +7,16 @@ package com.rs.employer.ValidateAnotation;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class AnnotationValidation implements ConstraintValidator<ValidateRole, String> {
+public class AnnotationValidation implements ConstraintValidator<ValidateRole, Set> {
 
     @Override
-    public boolean isValid(String ValidateCustomerType, ConstraintValidatorContext context) {
-        List<String> ValidateCustomerTypes = Arrays.asList("ADMIN", "USER", "MANAGER", "VENDOR");
+    public boolean isValid(Set ValidateCustomerType, ConstraintValidatorContext context) {
+        List<String> ValidateCustomerTypes = Arrays.asList("ADMIN", "USER", "SUPPLIER", "VENDOR");
         return ValidateCustomerTypes.contains(ValidateCustomerType);
     }
 

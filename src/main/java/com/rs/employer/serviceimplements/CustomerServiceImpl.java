@@ -36,9 +36,10 @@ public class CustomerServiceImpl implements CustomerService {
     PasswordEncoder passwordEncoder;
 
     // ZoneId zone = ZoneId.of("Asia/HoChiMinh");
-    // Add customer
+    // Add customertomertoom
     @Override
-    public Customer addCustomer(Customer customer) {
+    public Customer addCustomer(Customer customer, String role) {
+        HashSet<String> role1 = new HashSet<>();
         if (customerRepository.existsByUsername(customer.getUsername())
                 || customerRepository.existsByUserid(customer.getUserid()))
             throw new AppException(ErrorCode.USEREXISTED_OR_USERIDEXISTED);
@@ -47,9 +48,8 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setPassword(passwordEncoder.encode(customer.getPassword()));
             customer.setCreate(date.now());
             customer.setUpdate(date.now());
-            HashSet<String> role = new HashSet<>();
-            role.add(Role.USER.name());
-            customer.setRole(role);
+            role1.add(role);
+            customer.setRole(role1);
             // customer.setProducts(customerRepository.getAllProductDetail());
             return customerRepository.save(customer);
         }

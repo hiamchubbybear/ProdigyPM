@@ -24,7 +24,8 @@ public class SecurityConfig {
                         "/api/resources/all",
                         "/api/resources/getbyid/**",
                         "/auth/login",
-                        "/auth/token"
+                        "/auth/token",
+                        "/api/customer/getMyInfo"
         };
         private final String[] VENDOR_ENDPOINT = {
                         "/api/product/add",
@@ -57,7 +58,7 @@ public class SecurityConfig {
                                 .requestMatchers(VENDOR_ENDPOINT)
                                 .hasAnyAuthority("SCOPE_VENDOR", "SCOPE_ADMIN")
                                 .requestMatchers(SUPPLIER_ENDPOINT)
-                                .hasAuthority("SCOPE_SUPPLIER")
+                                .hasAnyAuthority("SCOPE_SUPPLIER", "SCOPE_ADMIN")
                                 .requestMatchers(ADMIN_ENDPOINT)
                                 .hasAuthority("SCOPE_ADMIN")
                                 .anyRequest().authenticated());

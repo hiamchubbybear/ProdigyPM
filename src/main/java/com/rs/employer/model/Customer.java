@@ -56,7 +56,6 @@ public class Customer {
 
   // Role of the customer
   @Column(name = "role", nullable = true, updatable = true)
-
   private Set<String> role;
 
   public Set<String> getRole() {
@@ -67,15 +66,11 @@ public class Customer {
     this.role = role;
   }
 
-  // String role;
-
-  // Gender of the customer
   @Column(name = "gender", nullable = false, updatable = true)
   private boolean gender;
   @ValidateStatus
   @Column(name = "status")
   private String status;
-  // Birthday of the customer
   @Column(name = "create_at", nullable = false, updatable = false)
   private Instant create;
   @LastModifiedDate
@@ -86,13 +81,6 @@ public class Customer {
   @Column(name = "birthday")
   @JsonIgnore
   private Date birthDay;
-
-  // Long product_id;
-  // @OneToMany(mappedBy = "schema_customer", cascade = CascadeType.ALL)
-  // @JsonIgnore
-  // @JoinColumn
-  // @JsonManagedReference
-  // List<Product> products;
 
   public Customer() {
   }

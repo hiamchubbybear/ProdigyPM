@@ -1,5 +1,6 @@
 package com.rs.employer.serviceimplements;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ import com.rs.employer.service.ResourcesService;
 public class ResourcesServiceImpl implements ResourcesService {
     @Autowired
     private ResourcesRepo repository;
-
+    private Instant date;
     @Autowired
     private ProductRepository repo;
 
@@ -28,6 +29,8 @@ public class ResourcesServiceImpl implements ResourcesService {
 
     @Override
     public Resources addProductResources(Resources product) {
+        product.setCreate(date.now());
+        product.setUpdate(date.now());
         return repository.save(product);
     }
 
@@ -42,7 +45,7 @@ public class ResourcesServiceImpl implements ResourcesService {
             product1.setLocale(product.getLocale());
             product1.setResourceid(pID);
             product1.setCreate(product.getCreate());
-            product1.setUpdate(product.getUpdate());
+            product1.setUpdate(date.now());
             return "Succed";
         }
     }
@@ -57,10 +60,10 @@ public class ResourcesServiceImpl implements ResourcesService {
             throw new AppException(ErrorCode.USER_NOTFOUND);
     }
 
-     public Resources getProductResourcesByID(Long rID) {
-         Optional<Resources> eOptional = repository.findById(rID);
-         Resources product = eOptional.get();
-         return product;
-     }
+    public Resources getProductResourcesByID(Long rID) {
+        Optional<Resources> eOptional = repository.findById(rID);
+        Resources product = eOptional.get();
+        return product;
+    }
 
 }

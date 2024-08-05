@@ -1,6 +1,6 @@
 package com.rs.employer.model;
 
-import java.util.Date;
+import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -10,22 +10,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
 
-@Data
-@Setter
-@Getter
-@NoArgsConstructor
-@Builder
 @Entity
 @Table(name = "schema_resources")
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Resources {
     // ID of the product
     @Id
@@ -45,13 +32,29 @@ public class Resources {
     String company;
     // Create date of the product
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    @Column(name = "Create_At", nullable = false)
-    Date create;
+    @Column(name = "Create_At")
+    Instant create;
+
+    public Instant getCreate() {
+        return this.create;
+    }
+
+    public void setCreate(Instant create) {
+        this.create = create;
+    }
+
     // Update date of the product
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    @Column(name = "Update_At", nullable = false)
-    Date update;
-    public Date now = new Date();
+    @Column(name = "Update_At")
+    Instant update;
+
+    public Instant getUpdate() {
+        return this.update;
+    }
+
+    public void setUpdate(Instant update) {
+        this.update = update;
+    };
 
     public Long getResourceid() {
         return resourceid;
@@ -93,32 +96,8 @@ public class Resources {
         this.company = company;
     }
 
-    public Date getCreate() {
-        return create;
-    }
-
-    public void setCreate(Date create) {
-        this.create = create;
-    }
-
-    public Date getUpdate() {
-        return update;
-    }
-
-    public void setUpdate(Date update) {
-        this.update = update;
-    }
-
-    public Date getNow() {
-        return now;
-    }
-
-    public void setNow(Date now) {
-        this.now = now;
-    }
-
-    public Resources(Long resourceid, String name, String titles, String locale, String company, Date create,
-            Date update, Date now) {
+    public Resources(Long resourceid, String name, String titles, String locale, String company, Instant create,
+            Instant update) {
         this.resourceid = resourceid;
         this.name = name;
         this.titles = titles;
@@ -126,7 +105,6 @@ public class Resources {
         this.company = company;
         this.create = create;
         this.update = update;
-        this.now = now;
     }
 
 }
