@@ -1,10 +1,4 @@
-package com.rs.employer.dto.AuthenticationRespone;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+package com.rs.employer.dto.Respone;
 
 public class IntrospectRespone {
     boolean valid;
@@ -16,4 +10,12 @@ public class IntrospectRespone {
     public void setValid(boolean valid) {
         this.valid = valid;
     }
+
+    public IntrospectRespone(boolean valid) {
+        this.valid = valid;
+    }
+
+    public IntrospectRespone() {
+    }
+
 }

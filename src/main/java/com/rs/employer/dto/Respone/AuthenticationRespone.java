@@ -1,19 +1,9 @@
-package com.rs.employer.dto.AuthenticationRespone;
+package com.rs.employer.dto.Respone;
 
-
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.experimental.FieldDefaults;
-@Data
-@Builder
-@Getter
-@FieldDefaults(level = AccessLevel.PRIVATE , makeFinal = false )
 public class AuthenticationRespone {
     private String token;
-    private boolean authenticated;  
-    
+    private boolean authenticated;
+
     public AuthenticationRespone() {
     }
 

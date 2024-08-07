@@ -1,9 +1,9 @@
-package com.rs.employer.dto;
+package com.rs.employer.dto.Respone;
 
 import java.util.Date;
 import java.util.Set;
 
-public class userdto {
+public class UserRepsone {
 
     private String name;
     private String address;
@@ -14,7 +14,7 @@ public class userdto {
     private String status;
     private Date birthDay;
 
-    public userdto(String name, String address, String username, Set<String> role, boolean gender, String password, String status, Date birthDay) {
+    public UserRepsone(String name, String address, String username, Set<String> role, boolean gender, String password, String status, Date birthDay) {
 
         this.name = name;
         this.address = address;

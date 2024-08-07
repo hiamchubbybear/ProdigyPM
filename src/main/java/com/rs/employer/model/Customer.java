@@ -56,14 +56,14 @@ public class Customer {
 
   // Role of the customer
   @Column(name = "role", nullable = true, updatable = true)
-  private Set<String> role;
+  private Set<Role> roles;
 
-  public Set<String> getRole() {
-    return this.role;
+  public Set<Role> getRole() {
+    return this.roles;
   }
 
-  public void setRole(Set<String> role) {
-    this.role = role;
+  public void setRole(Set<Role> role) {
+    this.roles = role;
   }
 
   @Column(name = "gender", nullable = false, updatable = true)
@@ -176,14 +176,14 @@ public class Customer {
   public Customer(Long userid, UUID uuid,
       @NotNull @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username,
       @Size(min = 8, message = "PASSWORD_INVALID") @NotBlank String password, String name, String address,
-      Set<String> role, boolean gender, String status, Instant create, Instant update, Date birthDay) {
+      Set<Role> role, boolean gender, String status, Instant create, Instant update, Date birthDay) {
     this.userid = userid;
     this.uuid = uuid;
     this.username = username;
     this.password = password;
     this.name = name;
     this.address = address;
-    this.role = role;
+    this.roles = role;
     this.gender = gender;
     this.status = status;
     this.create = create;

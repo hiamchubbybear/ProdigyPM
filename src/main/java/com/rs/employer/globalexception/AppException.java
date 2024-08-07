@@ -1,7 +1,5 @@
 package com.rs.employer.globalexception;
 
-import com.rs.employer.dto.AuthenticationRespone.AuthenticationRespone;
-
 public class AppException extends IllegalStateException {
     public AppException(ErrorCode errorCode) {
         super(errorCode.getStatus());

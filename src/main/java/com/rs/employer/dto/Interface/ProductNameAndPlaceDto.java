@@ -1,4 +1,4 @@
-package com.rs.employer.dto;
+package com.rs.employer.dto.Interface;
 
 public interface ProductNameAndPlaceDto {
     Long getProductID();

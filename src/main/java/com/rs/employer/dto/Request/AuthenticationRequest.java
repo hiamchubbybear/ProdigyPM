@@ -1,4 +1,4 @@
-package com.rs.employer.dto;
+package com.rs.employer.dto.Request;
 
 import com.rs.employer.ValidateAnotation.ValidateRole;
 
@@ -19,7 +19,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class AuthenticationDto {
+public class AuthenticationRequest {
     @NotNull
     @Id
     public String username;
@@ -28,13 +28,13 @@ public class AuthenticationDto {
     @ValidateRole
     public String role;
 
-    public AuthenticationDto(String username, String password, String role) {
+    public AuthenticationRequest(String username, String password, String role) {
         this.username = username;
         this.password = password;
         this.role = role;
     }
 
-    public AuthenticationDto() {
+    public AuthenticationRequest() {
     }
 
     public String getUsername() {

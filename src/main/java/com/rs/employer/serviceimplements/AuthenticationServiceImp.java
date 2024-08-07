@@ -22,10 +22,10 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import com.rs.employer.dto.AuthenticationDto;
-import com.rs.employer.dto.AuthenticationRespone.AuthenticationRespone;
-import com.rs.employer.dto.AuthenticationRespone.IntrospectRequest;
-import com.rs.employer.dto.AuthenticationRespone.IntrospectRespone;
+import com.rs.employer.dto.Request.AuthenticationRequest;
+import com.rs.employer.dto.Request.IntrospectRequest;
+import com.rs.employer.dto.Respone.AuthenticationRespone;
+import com.rs.employer.dto.Respone.IntrospectRespone;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Customer;
@@ -46,7 +46,7 @@ public class AuthenticationServiceImp {
     // @NonFinal
     public static String SIGNER_KEY = "UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
 
-    public AuthenticationRespone authentication(AuthenticationDto authenticationDto) {
+    public AuthenticationRespone authentication(AuthenticationRequest authenticationDto) {
         var user = repo.findByUsername(authenticationDto.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -99,7 +99,7 @@ public class AuthenticationServiceImp {
     private String buildScope(Customer customer) {
         StringJoiner joiner = new StringJoiner(" ");
         if (!CollectionUtils.isEmpty(customer.getRole())) {
-            customer.getRole().forEach(joiner::add);
+            // customer.getRole().forEach(joiner::add);
         }
         return joiner.toString();
     }

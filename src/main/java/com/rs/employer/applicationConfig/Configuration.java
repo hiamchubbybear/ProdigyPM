@@ -1,4 +1,4 @@
-package com.rs.employer.serviceimplements;
+package com.rs.employer.applicationConfig;
 
 import java.time.Instant;
 import java.util.HashSet;

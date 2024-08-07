@@ -49,7 +49,7 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setCreate(date.now());
             customer.setUpdate(date.now());
             role1.add(role);
-            customer.setRole(role1);
+            // customer.setRole(role1);
             // customer.setProducts(customerRepository.getAllProductDetail());
             return customerRepository.save(customer);
         }
@@ -72,7 +72,7 @@ public class CustomerServiceImpl implements CustomerService {
                 customer3.setPassword(passwordEncoder.encode(customer.getPassword()));
                 customer3.setName(customer.getName());
                 customer3.setAddress(customer.getAddress());
-                customer3.setRole(role);
+                //t  customer3.setRole(role);
                 customer3.setGender(customer.isGender());
                 customer3.setStatus(customer.getStatus());
                 customer3.setUpdate(date.now());
