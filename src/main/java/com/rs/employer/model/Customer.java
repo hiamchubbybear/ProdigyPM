@@ -18,6 +18,7 @@ import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -56,6 +57,7 @@ public class Customer {
 
   // Role of the customer
   @Column(name = "role", nullable = true, updatable = true)
+  @ManyToMany
   private Set<Role> roles;
 
   public Set<Role> getRole() {

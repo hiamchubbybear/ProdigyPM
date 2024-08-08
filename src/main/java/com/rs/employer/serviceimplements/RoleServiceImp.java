@@ -3,6 +3,7 @@ package com.rs.employer.serviceimplements;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
@@ -10,6 +11,7 @@ import com.rs.employer.model.Role;
 import com.rs.employer.repository.RoleRepository;
 import com.rs.employer.service.RoleService;
 
+@Service
 public class RoleServiceImp implements RoleService {
     @Autowired
     RoleRepository repo;

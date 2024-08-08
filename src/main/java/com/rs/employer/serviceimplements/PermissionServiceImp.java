@@ -3,13 +3,14 @@ package com.rs.employer.serviceimplements;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Permission;
 import com.rs.employer.repository.PermissionRepository;
 import com.rs.employer.service.PermissionService;
-
+@Service
 public class PermissionServiceImp implements PermissionService {
     @Autowired
     PermissionRepository repo;

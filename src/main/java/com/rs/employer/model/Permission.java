@@ -18,6 +18,9 @@ public class Permission {
         return this.name;
     }
 
+    public Permission() {
+    }
+
     public void setName(String name) {
         this.name = name;
     }

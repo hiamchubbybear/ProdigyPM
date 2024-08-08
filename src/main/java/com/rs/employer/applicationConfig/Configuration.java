@@ -38,7 +38,7 @@ public class Configuration {
                 admin.setGender(true);
                 admin.setName("Chessy");
                 admin.setPassword(passwordEncoder.encode("160304"));
-                admin.setRole(role);
+                // admin.setRole(role);
                 admin.setStatus("ONLINE");
                 repo.save(admin);
             }

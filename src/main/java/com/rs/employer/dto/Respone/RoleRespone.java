@@ -1,29 +1,19 @@
-package com.rs.employer.model;
+package com.rs.employer.dto.Respone;
 
-import java.util.Set;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-
-@Entity
-public class Role {
-    @Id
+public class RoleRespone {
     private String name;
     private String description;
-    @ManyToMany
-    Set<Permission> permission;
 
-    public Role(String name, String description) {
+    public RoleRespone(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    public Role() {
+    public RoleRespone() {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
@@ -31,11 +21,10 @@ public class Role {
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
-
 }

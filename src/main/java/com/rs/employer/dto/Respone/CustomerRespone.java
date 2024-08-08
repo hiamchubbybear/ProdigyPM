@@ -8,25 +8,12 @@ public class CustomerRespone {
     private String name;
     private String address;
     private String username;
-    private Set<String> role;
+    private Set<RoleRespone> role;
     private boolean gender;
     private String password;
     private String status;
     private Date birthDay;
 
-    public CustomerRespone(String name, String address, String username, Set<String> role, boolean gender, String password, String status, Date birthDay) {
-
-        this.name = name;
-        this.address = address;
-        this.username = username;
-        this.role = role;
-        this.gender = gender;
-        this.password = password;
-        this.status = status;
-        this.birthDay = birthDay;
-    }
-
-    // Getters and Setters
     public String getName() {
         return name;
     }
@@ -51,11 +38,11 @@ public class CustomerRespone {
         this.username = username;
     }
 
-    public Set<String> getRole() {
+    public Set<RoleRespone> getRole() {
         return role;
     }
 
-    public void setRole(Set<String> role) {
+    public void setRole(Set<RoleRespone> role) {
         this.role = role;
     }
 
@@ -88,6 +75,21 @@ public class CustomerRespone {
     }
 
     public void setBirthDay(Date birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public CustomerRespone() {
+    }
+
+    public CustomerRespone(String name, String address, String username, Set<RoleRespone> role, boolean gender,
+            String password, String status, Date birthDay) {
+        this.name = name;
+        this.address = address;
+        this.username = username;
+        this.role = role;
+        this.gender = gender;
+        this.password = password;
+        this.status = status;
         this.birthDay = birthDay;
     }
 
