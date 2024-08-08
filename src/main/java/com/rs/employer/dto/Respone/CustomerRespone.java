@@ -1,10 +1,10 @@
 package com.rs.employer.dto.Respone;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.Set;
 
 public class CustomerRespone {
-
     private String name;
     private String address;
     private String username;
@@ -13,6 +13,24 @@ public class CustomerRespone {
     private String password;
     private String status;
     private Date birthDay;
+    private Instant create;
+    private Instant update;
+
+    public Instant getCreate() {
+        return this.create;
+    }
+
+    public void setCreate(Instant create) {
+        this.create = create;
+    }
+
+    public Instant getUpdate() {
+        return this.update;
+    }
+
+    public void setUpdate(Instant update) {
+        this.update = update;
+    };
 
     public String getName() {
         return name;
@@ -82,7 +100,7 @@ public class CustomerRespone {
     }
 
     public CustomerRespone(String name, String address, String username, Set<RoleRespone> role, boolean gender,
-            String password, String status, Date birthDay) {
+            String password, String status, Date birthDay, Instant create, Instant update) {
         this.name = name;
         this.address = address;
         this.username = username;
@@ -91,6 +109,8 @@ public class CustomerRespone {
         this.password = password;
         this.status = status;
         this.birthDay = birthDay;
+        this.create = create;
+        this.update = update;
     }
 
 }

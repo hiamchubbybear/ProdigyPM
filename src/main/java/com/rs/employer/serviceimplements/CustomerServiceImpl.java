@@ -14,9 +14,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.rs.employer.dto.Request.CustomerRequest;
+import com.rs.employer.dto.Respone.CustomerRespone;
 import com.rs.employer.enums.Role;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
+import com.rs.employer.mapper.CustomerMapper;
 import com.rs.employer.model.Customer;
 import com.rs.employer.model.Product;
 import com.rs.employer.repository.CustomerRepo;
@@ -34,29 +37,28 @@ public class CustomerServiceImpl implements CustomerService {
     private Instant date;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    CustomerMapper mapper;
 
     // ZoneId zone = ZoneId.of("Asia/HoChiMinh");
     // Add customertomertoom
     @Override
-    public Customer addCustomer(Customer customer, String role) {
+    public Customer addCustomer(CustomerRequest customer, String role) {
         HashSet<String> role1 = new HashSet<>();
-        if (customerRepository.existsByUsername(customer.getUsername())
-                || customerRepository.existsByUserid(customer.getUserid()))
+        if (customerRepository.existsByUsername(customer.getUsername()))
             throw new AppException(ErrorCode.USEREXISTED_OR_USERIDEXISTED);
         else {
             // PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
             customer.setPassword(passwordEncoder.encode(customer.getPassword()));
-            customer.setCreate(date.now());
-            customer.setUpdate(date.now());
-            role1.add(role);
-            // customer.setRole(role1);
-            // customer.setProducts(customerRepository.getAllProductDetail());
-            return customerRepository.save(customer);
+            Customer customer1 = mapper.toCustomer(customer);
+            customer1.setCreate(date.now());
+            customer1.setUpdate(date.now());
+            return customerRepository.save(customer1);
         }
     }
 
     @Override
-    public Customer updateCustomer(UUID id, Customer customer) {
+    public Customer updateCustomer(UUID id, CustomerRequest customer) {
         Optional<Customer> customer1 = customerRepository.findById(id);
         if (customer1.isPresent()) {
             customerRepository.deleteById(id);
@@ -65,32 +67,21 @@ public class CustomerServiceImpl implements CustomerService {
             if (customer2 != null) {
                 HashSet<String> role = new HashSet<>();
                 role.add(Role.ADMIN.name());
-                Customer customer3 = new Customer();
-                // Customer customer2 = userMapping.customerMapper(customer);
-                customer3.setUserid(customer.getUserid());
-                customer3.setUsername(customer.getUsername());
-                customer3.setPassword(passwordEncoder.encode(customer.getPassword()));
-                customer3.setName(customer.getName());
-                customer3.setAddress(customer.getAddress());
-                //t  customer3.setRole(role);
-                customer3.setGender(customer.isGender());
-                customer3.setStatus(customer.getStatus());
-                customer3.setUpdate(date.now());
+                Customer customer3 = mapper.toCustomer(customer);
                 customer3.setCreate(customer2.getCreate());
-                customer3.setBirthDay(customer.getBirthDay());
+                customer3.setUpdate(date.now());
                 return customerRepository.save(customer3);
             }
         }
         throw new AppException(ErrorCode.USER_NOTFOUND);
     }
 
-    // Delete customer by ID
     @Override
     public Boolean deleteCustomerById(UUID id) {
         if (customerRepository.existsById(id)) {
             Optional<Customer> eOptional = customerRepository.findById(id);
             Customer customer1 = eOptional.get();
-            if (customer1.getUserid() != null) {
+            if (customer1.getUuid() != null) {
                 customerRepository.deleteById(id);
                 return true;
             }
@@ -101,12 +92,12 @@ public class CustomerServiceImpl implements CustomerService {
     // List customer by ID
     @Override
     @PostAuthorize("returnObject.username == authentication.name")
-    public Customer listCustomerById(UUID id) {
+    public CustomerRespone listCustomerById(UUID id) {
         Optional<Customer> eOptional = Optional.ofNullable(
                 customerRepository.findById(id)
                         .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND)));
-        Customer customer1 = eOptional.get();
-        if (customer1.getUserid() != null) {
+        CustomerRespone customer1 = mapper.toCustomerRespone(eOptional.get());
+        if (customer1 != null) {
             return customer1;
         } else
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
@@ -132,7 +123,7 @@ public class CustomerServiceImpl implements CustomerService {
     // List all customer
     @Override
     public List listAllCustomer() {
-        return customerRepository.findAll(Sort.by("userid").ascending());
+        return customerRepository.findAll(Sort.by("create").ascending());
     }
 
     @Override
@@ -142,6 +133,7 @@ public class CustomerServiceImpl implements CustomerService {
             Customer customer1 = eCustomer.get();
             customer1.setPassword(password);
             customer1.setUpdate(date.now());
+            customer1.setCreate(customer1.getCreate());
             return customerRepository.save(customer1);
         } else
             throw new AppException(ErrorCode.USERNAME_INVALID);

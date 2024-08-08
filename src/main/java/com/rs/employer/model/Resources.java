@@ -2,8 +2,6 @@ package com.rs.employer.model;
 
 import java.time.Instant;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,27 +10,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "schema_resources")
+@Table(name = "resources")
 public class Resources {
     // ID of the product
     @Id
     @Column(name = "Resourceid")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long resourceid;
-    // Name of the product
-    @Column(name = "Resources_Name", nullable = true)
     String name;
-    @Column(name = "Resources_Titles", nullable = true)
     String titles;
-    // Locale of the product
-    @Column(name = "Resources_Locale", nullable = false)
     String locale;
-    // ID resources of the product
-    @Column(name = "Resources_Company", nullable = true)
     String company;
-    // Create date of the product
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    @Column(name = "Create_At")
+    @Column(name = "create_at", nullable = true)
     Instant create;
 
     public Instant getCreate() {
@@ -43,9 +32,11 @@ public class Resources {
         this.create = create;
     }
 
+    public Resources() {
+    }
+
     // Update date of the product
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    @Column(name = "Update_At")
+    @Column(name = "update_at", nullable = true)
     Instant update;
 
     public Instant getUpdate() {

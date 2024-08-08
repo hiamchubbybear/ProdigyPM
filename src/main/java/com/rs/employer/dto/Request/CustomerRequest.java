@@ -1,21 +1,39 @@
-package com.rs.employer.dto.Respone;
+package com.rs.employer.dto.Request;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.Set;
 
-public class UserRepsone {
-
+public class CustomerRequest {
     private String name;
     private String address;
     private String username;
-    private Set<String> role;
+    private Set<RoleRequest> role;
     private boolean gender;
     private String password;
     private String status;
     private Date birthDay;
+    private Instant create;
+    private Instant update;
 
-    public UserRepsone(String name, String address, String username, Set<String> role, boolean gender, String password, String status, Date birthDay) {
+    public Instant getCreate() {
+        return this.create;
+    }
 
+    public void setCreate(Instant create) {
+        this.create = create;
+    }
+
+    public Instant getUpdate() {
+        return this.update;
+    }
+
+    public void setUpdate(Instant update) {
+        this.update = update;
+    }
+
+    public CustomerRequest(String name, String address, String username, Set<RoleRequest> role, boolean gender,
+            String password, String status, Date birthDay, Instant create, Instant update) {
         this.name = name;
         this.address = address;
         this.username = username;
@@ -24,9 +42,10 @@ public class UserRepsone {
         this.password = password;
         this.status = status;
         this.birthDay = birthDay;
+        this.create = create;
+        this.update = update;
     }
 
-    // Getters and Setters
     public String getName() {
         return name;
     }
@@ -51,11 +70,11 @@ public class UserRepsone {
         this.username = username;
     }
 
-    public Set<String> getRole() {
+    public Set<RoleRequest> getRole() {
         return role;
     }
 
-    public void setRole(Set<String> role) {
+    public void setRole(Set<RoleRequest> role) {
         this.role = role;
     }
 
@@ -88,6 +107,22 @@ public class UserRepsone {
     }
 
     public void setBirthDay(Date birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public CustomerRequest() {
+    }
+
+    public CustomerRequest(String name, String address, String username, Set<RoleRequest> role, boolean gender,
+            String password, String status, Date birthDay) {
+
+        this.name = name;
+        this.address = address;
+        this.username = username;
+        this.role = role;
+        this.gender = gender;
+        this.password = password;
+        this.status = status;
         this.birthDay = birthDay;
     }
 

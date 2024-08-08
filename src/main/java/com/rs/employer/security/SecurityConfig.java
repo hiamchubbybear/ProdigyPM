@@ -28,12 +28,12 @@ public class SecurityConfig {
                         "/api/customer/getMyInfo",
                         "/api/permission/all",
                         "/api/permission/add",
-                        "/api/permission/delete",
+                        "/api/permission/delete/**",
                         "/api/permission/update",
                         "/api/role/all",
                         "/api/role/add",
-                        "/api/role/delete",
-                        "/api/role/update"
+                        "/api/role/delete/**",
+                        "/api/role/update",
         };
         private final String[] VENDOR_ENDPOINT = {
                         "/api/product/add",
@@ -62,13 +62,15 @@ public class SecurityConfig {
                                 .requestMatchers(PUBLIC_ENDPOINT)
                                 .permitAll()
                                 .requestMatchers(USER_ENDPOINT)
-                                .hasAnyAuthority("SCOPE_USER", "SCOPE_ADMIN")
+                                .permitAll()// .hasAnyAuthority("SCOPE_USER", "SCOPE_ADMIN")
                                 .requestMatchers(VENDOR_ENDPOINT)
-                                .hasAnyAuthority("SCOPE_VENDOR", "SCOPE_ADMIN")
+                                .permitAll()// .hasAnyAuthority("SCOPE_VENDOR", "SCOPE_ADMIN")
                                 .requestMatchers(SUPPLIER_ENDPOINT)
-                                .hasAnyAuthority("SCOPE_SUPPLIER", "SCOPE_ADMIN")
+                                .permitAll()
+                                // .hasAnyAuthority("SCOPE_SUPPLIER", "SCOPE_ADMIN")
                                 .requestMatchers(ADMIN_ENDPOINT)
-                                .hasAuthority("SCOPE_ADMIN")
+                                .permitAll()
+                                // .hasAuthority("SCOPE_ADMIN")
                                 .anyRequest().authenticated());
                 httpSecurity.csrf(CsrfConfigurer -> CsrfConfigurer.disable());
                 httpSecurity.oauth2ResourceServer(

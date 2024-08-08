@@ -3,21 +3,18 @@ package com.rs.employer.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.stereotype.Service;
-
+import com.rs.employer.dto.Request.ProductRequest;
 import com.rs.employer.model.Product;
 
-// Service interface for product
-@Service
 public interface ProductService {
     // List all product
     public List<Product> getAllProduct();
 
     // Add product
-    public Product addProduct(Product product);
+    public Product addProduct(ProductRequest product);
 
     // Update product by ID
-    public String updateProduct(Long id, Product product);
+    public Product updateProduct(Long id, ProductRequest product);
 
     // Delete product by ID
     public Boolean deleteProduct(Long id);

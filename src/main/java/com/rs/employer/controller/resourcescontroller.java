@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
+import com.rs.employer.dto.Request.ResourcesRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Resources;
 import com.rs.employer.serviceimplements.ResourcesServiceImpl;
 
 @RestController
-@RequestMapping(path = "/api/resouces")
+@RequestMapping(path = "/api/resources")
 @CrossOrigin
 public class resourcescontroller {
 
@@ -28,21 +29,21 @@ public class resourcescontroller {
     public ResourcesServiceImpl rsservice;
 
     @GetMapping(path = "/all")
-    public ApiRespone<List> resources() {
+    public ApiRespone<List<Resources>> resources() {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(rsservice.getAllProductByResourcesID());
         return apiRespone;
     }
 
     @PostMapping(path = "/add")
-    public ApiRespone<Resources> addresource(@RequestBody Resources product) {
+    public ApiRespone<Resources> addresource(@RequestBody ResourcesRequest product) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(rsservice.addProductResources(product));
         return apiRespone;
     }
 
     @PutMapping(path = "/update/{id}")
-    public ApiRespone<Resources> updateresouces(@RequestBody Resources product) {
+    public ApiRespone<Resources> updateresouces(@RequestBody ResourcesRequest product) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(rsservice.updateProductResources(product.getResourceid(), product));
         return apiRespone;

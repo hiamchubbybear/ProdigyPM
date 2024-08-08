@@ -1,8 +1,7 @@
 package com.rs.employer.globalexception;
 
-import java.nio.file.AccessDeniedException;
-
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -58,15 +57,15 @@ public class GlobleExceptionHandler {
     // return ResponseEntity.badRequest().body(apiRespone);
     // }
     // RuntimException --
-    @ExceptionHandler(value = NullPointerException.class)
-    ResponseEntity<ApiRespone> nullRespone(NullPointerException exception) {
+    // @ExceptionHandler(value = NullPointerException.class)
+    // ResponseEntity<ApiRespone> nullRespone(NullPointerException exception) {
 
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setCode(1002);
-        apiRespone.setMessage(exception.getMessage());
-        apiRespone.setData(false);
-        return ResponseEntity.badRequest().body(apiRespone);
-    }
+    // ApiRespone apiRespone = new ApiRespone<>();
+    // apiRespone.setCode(1002);
+    // apiRespone.setMessage(exception.getMessage());
+    // apiRespone.setData(false);
+    // return ResponseEntity.badRequest().body(apiRespone);
+    // }
 
     @ExceptionHandler(value = RuntimeException.class)
     ResponseEntity<ApiRespone> runtimeRespone(AppException exception) {

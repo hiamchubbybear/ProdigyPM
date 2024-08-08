@@ -7,8 +7,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rs.employer.dto.Request.ResourcesRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
+import com.rs.employer.mapper.ResourcesMapper;
 import com.rs.employer.model.Resources;
 import com.rs.employer.repository.ProductRepository;
 import com.rs.employer.repository.ResourcesRepo;
@@ -21,6 +23,8 @@ public class ResourcesServiceImpl implements ResourcesService {
     private Instant date;
     @Autowired
     private ProductRepository repo;
+    @Autowired
+    ResourcesMapper mapper;
 
     @Override
     public List<Resources> getAllProductByResourcesID() {
@@ -28,14 +32,15 @@ public class ResourcesServiceImpl implements ResourcesService {
     }
 
     @Override
-    public Resources addProductResources(Resources product) {
-        product.setCreate(date.now());
-        product.setUpdate(date.now());
-        return repository.save(product);
+    public Resources addProductResources(ResourcesRequest request) {
+        Resources resources = mapper.toResources(request);
+        resources.setCreate(date.now());
+        resources.setUpdate(date.now());
+        return repository.save(resources);
     }
 
     @Override
-    public String updateProductResources(Long pID, Resources product) {
+    public String updateProductResources(Long pID, ResourcesRequest product) {
         Optional<Resources> productList = repository.findById(pID);
         Resources product1 = productList.get();
         if (product1.equals(pID)) {

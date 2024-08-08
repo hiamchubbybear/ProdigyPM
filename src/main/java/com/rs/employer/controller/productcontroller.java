@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
+import com.rs.employer.dto.Request.ProductRequest;
 import com.rs.employer.model.Product;
 import com.rs.employer.serviceimplements.ProductServiceImpl;
 
@@ -45,7 +46,7 @@ public class productcontroller {
 
     // Add product
     @PostMapping(path = "/add")
-    public ApiRespone<Boolean> addProduct(@RequestBody Product product) {
+    public ApiRespone<Boolean> addProduct(@RequestBody ProductRequest product) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(repo.addProduct(product));
         return apiRespone;
@@ -62,7 +63,7 @@ public class productcontroller {
     // Update product by ID
     @PutMapping(path = "/update/{id}")
     public ApiRespone<String> changeProduct(@PathVariable(name = "id", required = true) Long ID,
-            @RequestBody Product product) {
+            @RequestBody ProductRequest product) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(repo.updateProduct(ID, product));
         return apiRespone;

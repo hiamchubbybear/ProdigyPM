@@ -17,6 +17,8 @@ import com.rs.employer.ValidateAnotation.ValidateStatus;
 import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
@@ -31,12 +33,11 @@ import lombok.experimental.FieldDefaults;
 @Data
 @DynamicUpdate
 @DynamicInsert
-@Table(name = "schema_customer")
+@Table(name = "customer")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Customer {
-  @Column(name = "user_id")
-  private Long userid;
   @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "uuid")
   @UuidGenerator
   private UUID uuid;
@@ -85,14 +86,6 @@ public class Customer {
   private Date birthDay;
 
   public Customer() {
-  }
-
-  public Long getUserid() {
-    return userid;
-  }
-
-  public void setUserid(Long userid) {
-    this.userid = userid;
   }
 
   public UUID getUuid() {
@@ -175,11 +168,10 @@ public class Customer {
     this.birthDay = birthDay;
   }
 
-  public Customer(Long userid, UUID uuid,
+  public Customer(UUID uuid,
       @NotNull @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username,
       @Size(min = 8, message = "PASSWORD_INVALID") @NotBlank String password, String name, String address,
       Set<Role> role, boolean gender, String status, Instant create, Instant update, Date birthDay) {
-    this.userid = userid;
     this.uuid = uuid;
     this.username = username;
     this.password = password;

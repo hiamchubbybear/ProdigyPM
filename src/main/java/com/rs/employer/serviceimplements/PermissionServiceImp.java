@@ -5,27 +5,35 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rs.employer.dto.Request.PermissionRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
+import com.rs.employer.mapper.PermissionMapper;
 import com.rs.employer.model.Permission;
 import com.rs.employer.repository.PermissionRepository;
 import com.rs.employer.service.PermissionService;
+
 @Service
 public class PermissionServiceImp implements PermissionService {
     @Autowired
     PermissionRepository repo;
+    @Autowired
+    PermissionMapper mapper;
 
     @Override
-    public Permission addPermission(Permission permission) {
-        if (repo.existsById(permission.getName())) {
+    public Permission addPermission(PermissionRequest request) {
+        if (repo.existsById(request.getName())) {
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
-        } else
+        } else {
+            Permission permission = mapper.toPermission(request);
             return repo.save(permission);
+        }
     }
 
     @Override
-    public Permission updatePermission(Permission permission) {
-        if (repo.existsById(permission.getName())) {
+    public Permission updatePermission(PermissionRequest request) {
+        if (repo.existsById(request.getName())) {
+            Permission permission = mapper.toPermission(request);
             return repo.save(permission);
         }
         throw new AppException(ErrorCode.RUNTIME_ERROR);

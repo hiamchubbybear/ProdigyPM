@@ -5,16 +5,18 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.rs.employer.dto.Request.CustomerRequest;
+import com.rs.employer.dto.Respone.CustomerRespone;
 import com.rs.employer.model.Customer;
 
 // Service interface for customer
 @Service
 public interface CustomerService {
     // Add customer
-    public Customer addCustomer(Customer customer, String role);
+    public Customer addCustomer(CustomerRequest customer, String role);
 
     // List customer by ID
-    public Customer listCustomerById(UUID id);
+    public CustomerRespone listCustomerById(UUID id);
 
     // Delete customer by ID
     public Boolean deleteCustomerById(UUID id);
@@ -23,7 +25,7 @@ public interface CustomerService {
     public List listAllCustomer();
 
     // Update customer by ID
-    public Customer updateCustomer(UUID id, Customer customer);
+    public Customer updateCustomer(UUID id, CustomerRequest customer);
 
     // List customer by ID as user
     // public List<userdto> getUserData(Long ID);

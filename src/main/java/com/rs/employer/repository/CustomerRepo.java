@@ -19,8 +19,6 @@ import com.rs.employer.model.Product;
 public interface CustomerRepo extends JpaRepository<Customer, UUID> {
         boolean existsByUsername(String username);
 
-        boolean existsByUserid(Long userid);
-
         Optional<Customer> findByUsername(String username);
 
         // @Query("SELECT birthDay from schema_customer DESC ")

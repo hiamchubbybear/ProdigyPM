@@ -31,7 +31,7 @@ public class Configuration {
                 role.add(Role.ADMIN.name());
                 Customer admin = new Customer();
                 admin.setUsername("admin");
-                admin.setUserid((long) 1);
+
                 admin.setAddress("Hue");
                 admin.setCreate(Instant.now());
                 admin.setUpdate(Instant.now());

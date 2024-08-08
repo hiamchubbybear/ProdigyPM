@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
+import com.rs.employer.dto.Request.CustomerRequest;
 import com.rs.employer.model.Customer;
 import com.rs.employer.serviceimplements.CustomerServiceImpl;
 
@@ -66,15 +67,15 @@ public class customercontroller {
     // Update customer by ID
     @PutMapping(path = "/update/{id}")
     public ApiRespone<Customer> updatCustomer(@PathVariable UUID id,
-            @RequestBody Customer customer) {
+            @RequestBody CustomerRequest request) {
         ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(customerImplement.updateCustomer(id, customer));
+        apiRespone.setData(customerImplement.updateCustomer(id, request));
         return apiRespone;
     }
 
     // Add customer
     @PostMapping(path = "/add")
-    public ApiRespone<Customer> addCustomer(@RequestBody @Valid Customer customer, @RequestParam String role) {
+    public ApiRespone<Customer> addCustomer(@RequestBody @Valid CustomerRequest customer, @RequestParam String role) {
         ApiRespone<Customer> apirespone = new ApiRespone<Customer>();
         apirespone.setData(customerImplement.addCustomer(customer, role));
         return apirespone;
