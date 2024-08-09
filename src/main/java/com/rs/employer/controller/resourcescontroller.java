@@ -45,7 +45,7 @@ public class resourcescontroller {
     @PutMapping(path = "/update/{id}")
     public ApiRespone<Resources> updateresouces(@RequestBody ResourcesRequest product) {
         ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(rsservice.updateProductResources(product.getResourceid(), product));
+        apiRespone.setData(rsservice.updateProductResources(product));
         return apiRespone;
     }
 

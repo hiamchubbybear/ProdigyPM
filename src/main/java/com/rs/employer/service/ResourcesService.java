@@ -10,7 +10,7 @@ public interface ResourcesService {
 
     public Resources addProductResources(ResourcesRequest product);
 
-    public String updateProductResources(Long id, ResourcesRequest product);
+    public Resources updateProductResources(ResourcesRequest product);
 
     public Boolean deleteProductResources(Long id);
 }

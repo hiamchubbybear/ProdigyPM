@@ -53,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product updateProduct(Long ID, ProductRequest request) {
         if (!productRepository.existsById(ID)) {
-            throw new NullPointerException("User is not exist ");
+            throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
         } else {
             Product product = mapper.toProduct(request);
             return productRepository.save(product);

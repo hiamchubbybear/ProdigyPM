@@ -12,18 +12,13 @@ public class Role {
     private String name;
     private String description;
     @ManyToMany
-    Set<Permission> permission;
-
-    public Role(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
+    private Set<Permission> permissions;
 
     public Role() {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
@@ -31,11 +26,25 @@ public class Role {
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Set<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
+    public Role(String name, String description, Set<Permission> permissions) {
+        this.name = name;
+        this.description = description;
+        this.permissions = permissions;
     }
 
 }

@@ -68,7 +68,6 @@ public class CustomerServiceImpl implements CustomerService {
                 HashSet<String> role = new HashSet<>();
                 role.add(Role.ADMIN.name());
                 Customer customer3 = mapper.toCustomer(customer);
-                customer3.setCreate(customer2.getCreate());
                 customer3.setUpdate(date.now());
                 return customerRepository.save(customer3);
             }

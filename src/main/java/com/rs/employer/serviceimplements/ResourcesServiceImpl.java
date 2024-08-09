@@ -40,18 +40,13 @@ public class ResourcesServiceImpl implements ResourcesService {
     }
 
     @Override
-    public String updateProductResources(Long pID, ResourcesRequest product) {
-        Optional<Resources> productList = repository.findById(pID);
-        Resources product1 = productList.get();
-        if (product1.equals(pID)) {
-            throw new AppException(ErrorCode.USER_NOTFOUND);
+    public Resources updateProductResources(ResourcesRequest request) {
+        if (!repo.existsById(request.getResourceid())) {
+            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         } else {
-            product1.setTitles(product.getTitles());
-            product1.setLocale(product.getLocale());
-            product1.setResourceid(pID);
-            product1.setCreate(product.getCreate());
-            product1.setUpdate(date.now());
-            return "Succed";
+            Resources resources = mapper.toResources(request);
+            resources.setUpdate(date.now());
+            return repository.save(resources);
         }
     }
 
@@ -62,7 +57,7 @@ public class ResourcesServiceImpl implements ResourcesService {
             repository.deleteById(id);
             return true;
         } else
-            throw new AppException(ErrorCode.USER_NOTFOUND);
+            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
 
     public Resources getProductResourcesByID(Long rID) {

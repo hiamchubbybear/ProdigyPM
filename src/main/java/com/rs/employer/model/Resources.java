@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 public class Resources {
     // ID of the product
     @Id
-    @Column(name = "Resourceid")
+    @Column(name = "resource_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long resourceid;
     String name;
