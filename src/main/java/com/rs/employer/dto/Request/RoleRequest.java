@@ -7,17 +7,12 @@ public class RoleRequest {
     private String description;
     private Set<String> permissions;
 
+    public RoleRequest() {
+    }
+
     public RoleRequest(String name, String description, Set<String> permissions) {
         this.name = name;
         this.description = description;
-        this.permissions = permissions;
-    }
-
-    public Set<String> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(Set<String> permissions) {
         this.permissions = permissions;
     }
 
@@ -37,9 +32,11 @@ public class RoleRequest {
         this.description = description;
     }
 
-    public RoleRequest(String name, String description) {
-        this.name = name;
-        this.description = description;
+    public Set<String> getPermissions() {
+        return permissions;
     }
 
+    public void setPermissions(Set<String> permissions) {
+        this.permissions = permissions;
+    }
 }

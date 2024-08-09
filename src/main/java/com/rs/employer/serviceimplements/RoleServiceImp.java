@@ -3,6 +3,7 @@ package com.rs.employer.serviceimplements;
 import java.util.HashSet;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dto.Request.RoleRequest;
@@ -17,21 +18,24 @@ import com.rs.employer.service.RoleService;
 
 @Service
 public class RoleServiceImp implements RoleService {
+    @Autowired
     RoleRepository roleRepository;
+    @Autowired
     PermissionRepository permissionRepository;
+    @Autowired
     RoleMapper mapper;
 
     @Override
     public RoleRespone addRole(RoleRequest request) {
-        if (roleRepository.existsById(request.getName()))
-            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
-        else {
-            var role = mapper.toRole(request);
-            var permission = permissionRepository.findAllById(request.getPermissions());
-            role.setPermissions(new HashSet<>(permission));
-            role = roleRepository.save(role);
-            return mapper.toRoleRespone(role);
-        }
+        // if (roleRepository.existsById(request.getName()))
+        // throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+        // else {
+        var role = mapper.toRole(request);
+        var permission = permissionRepository.findAllById(request.getPermissions());
+        role.setPermissions(new HashSet<>(permission));
+        role = roleRepository.save(role);
+        return mapper.toRoleRespone(role);
+        // }
     }
 
     @Override
