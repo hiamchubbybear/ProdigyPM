@@ -10,19 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dto.Request.CustomerRequest;
 import com.rs.employer.dto.Respone.CustomerRespone;
-import com.rs.employer.enums.Role;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.CustomerMapper;
 import com.rs.employer.model.Customer;
 import com.rs.employer.model.Product;
 import com.rs.employer.repository.CustomerRepo;
+import com.rs.employer.repository.RoleRepository;
 import com.rs.employer.service.CustomerService;
 
 import lombok.AccessLevel;
@@ -34,6 +33,8 @@ import lombok.experimental.FieldDefaults;
 public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerRepo customerRepository;
+    @Autowired
+    private RoleRepository roleRepository;
     private Instant date;
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -43,16 +44,17 @@ public class CustomerServiceImpl implements CustomerService {
     // ZoneId zone = ZoneId.of("Asia/HoChiMinh");
     // Add customertomertoom
     @Override
-    public Customer addCustomer(CustomerRequest customer, String role) {
-        HashSet<String> role1 = new HashSet<>();
+    public Customer addCustomer(CustomerRequest customer) {
         if (customerRepository.existsByUsername(customer.getUsername()))
             throw new AppException(ErrorCode.USEREXISTED_OR_USERIDEXISTED);
         else {
             // PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
+            var role = roleRepository.findAllById(customer.getRole());
             customer.setPassword(passwordEncoder.encode(customer.getPassword()));
             Customer customer1 = mapper.toCustomer(customer);
             customer1.setCreate(date.now());
             customer1.setUpdate(date.now());
+            customer1.setRoles(new HashSet<>(role));
             return customerRepository.save(customer1);
         }
     }
@@ -63,12 +65,13 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer1.isPresent()) {
             customerRepository.deleteById(id);
             Customer customer2 = customer1.get();
-            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
+
             if (customer2 != null) {
-                HashSet<String> role = new HashSet<>();
-                role.add(Role.ADMIN.name());
+                var roles = roleRepository.findAllById(customer.getRole());
                 Customer customer3 = mapper.toCustomer(customer);
                 customer3.setUpdate(date.now());
+                customer3.setRoles(new HashSet<>(roles));
+                customer3.setPassword(passwordEncoder.encode(customer.getPassword()));
                 return customerRepository.save(customer3);
             }
         }

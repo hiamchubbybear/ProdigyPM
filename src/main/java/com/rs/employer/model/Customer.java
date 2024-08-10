@@ -49,26 +49,12 @@ public class Customer {
   @NotBlank
   @Column(name = "password", nullable = false, updatable = true)
   private String password;
-  // Name of the customer
   @Column(name = "name", nullable = false, updatable = true)
   private String name;
-  // Address of the customer
   @Column(name = "address", nullable = true, updatable = true)
   private String address;
-
-  // Role of the customer
-  @Column(name = "role", nullable = true, updatable = true)
   @ManyToMany
   private Set<Role> roles;
-
-  public Set<Role> getRole() {
-    return this.roles;
-  }
-
-  public void setRole(Set<Role> role) {
-    this.roles = role;
-  }
-
   @Column(name = "gender", nullable = false, updatable = true)
   private boolean gender;
   @ValidateStatus
@@ -171,13 +157,13 @@ public class Customer {
   public Customer(UUID uuid,
       @NotNull @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username,
       @Size(min = 8, message = "PASSWORD_INVALID") @NotBlank String password, String name, String address,
-      Set<Role> role, boolean gender, String status, Instant create, Instant update, Date birthDay) {
+      Set<Role> roles, boolean gender, String status, Instant create, Instant update, Date birthDay) {
     this.uuid = uuid;
     this.username = username;
     this.password = password;
     this.name = name;
     this.address = address;
-    this.roles = role;
+    this.roles = roles;
     this.gender = gender;
     this.status = status;
     this.create = create;
@@ -185,11 +171,11 @@ public class Customer {
     this.birthDay = birthDay;
   }
 
-  // public String getRole() {
-  // return this.role;
-  // }
+  public Set<Role> getRoles() {
+    return this.roles;
+  }
 
-  // public void setRole(String role) {
-  // this.role = role;
-  // }
+  public void setRoles(Set<Role> roles) {
+    this.roles = roles;
+  }
 }

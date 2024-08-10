@@ -8,7 +8,7 @@ public class CustomerRequest {
     private String name;
     private String address;
     private String username;
-    private Set<RoleRequest> role;
+    private Set<String> roles;
     private boolean gender;
     private String password;
     private String status;
@@ -37,7 +37,7 @@ public class CustomerRequest {
         this.name = name;
         this.address = address;
         this.username = username;
-        this.role = role;
+        this.roles = roles;
         this.gender = gender;
         this.password = password;
         this.status = status;
@@ -70,12 +70,12 @@ public class CustomerRequest {
         this.username = username;
     }
 
-    public Set<RoleRequest> getRole() {
-        return role;
+    public Set<String> getRole() {
+        return roles;
     }
 
-    public void setRole(Set<RoleRequest> role) {
-        this.role = role;
+    public void setRole(Set<String> role) {
+        this.roles = role;
     }
 
     public boolean isGender() {
@@ -113,13 +113,13 @@ public class CustomerRequest {
     public CustomerRequest() {
     }
 
-    public CustomerRequest(String name, String address, String username, Set<RoleRequest> role, boolean gender,
+    public CustomerRequest(String name, String address, String username, Set<String> role, boolean gender,
             String password, String status, Date birthDay) {
 
         this.name = name;
         this.address = address;
         this.username = username;
-        this.role = role;
+        this.roles = role;
         this.gender = gender;
         this.password = password;
         this.status = status;

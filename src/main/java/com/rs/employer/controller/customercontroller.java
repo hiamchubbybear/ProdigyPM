@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
@@ -75,9 +74,9 @@ public class customercontroller {
 
     // Add customer
     @PostMapping(path = "/add")
-    public ApiRespone<Customer> addCustomer(@RequestBody @Valid CustomerRequest customer, @RequestParam String role) {
+    public ApiRespone<Customer> addCustomer(@RequestBody @Valid CustomerRequest customer) {
         ApiRespone<Customer> apirespone = new ApiRespone<Customer>();
-        apirespone.setData(customerImplement.addCustomer(customer, role));
+        apirespone.setData(customerImplement.addCustomer(customer));
         return apirespone;
     }
 

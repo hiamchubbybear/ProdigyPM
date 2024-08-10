@@ -13,7 +13,7 @@ import com.rs.employer.model.Customer;
 @Service
 public interface CustomerService {
     // Add customer
-    public Customer addCustomer(CustomerRequest customer, String role);
+    public Customer addCustomer(CustomerRequest customer);
 
     // List customer by ID
     public CustomerRespone listCustomerById(UUID id);

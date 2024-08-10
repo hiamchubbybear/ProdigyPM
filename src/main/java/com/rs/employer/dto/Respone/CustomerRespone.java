@@ -8,7 +8,7 @@ public class CustomerRespone {
     private String name;
     private String address;
     private String username;
-    private Set<RoleRespone> role;
+    private Set<RoleRespone> roles;
     private boolean gender;
     private String password;
     private String status;
@@ -57,11 +57,11 @@ public class CustomerRespone {
     }
 
     public Set<RoleRespone> getRole() {
-        return role;
+        return roles;
     }
 
     public void setRole(Set<RoleRespone> role) {
-        this.role = role;
+        this.roles = role;
     }
 
     public boolean isGender() {
@@ -104,7 +104,7 @@ public class CustomerRespone {
         this.name = name;
         this.address = address;
         this.username = username;
-        this.role = role;
+        this.roles = role;
         this.gender = gender;
         this.password = password;
         this.status = status;
