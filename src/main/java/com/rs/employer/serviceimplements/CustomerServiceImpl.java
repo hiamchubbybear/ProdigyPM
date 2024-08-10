@@ -63,17 +63,13 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer updateCustomer(UUID id, CustomerRequest customer) {
         Optional<Customer> customer1 = customerRepository.findById(id);
         if (customer1.isPresent()) {
-            customerRepository.deleteById(id);
-            Customer customer2 = customer1.get();
-
-            if (customer2 != null) {
-                var roles = roleRepository.findAllById(customer.getRole());
-                Customer customer3 = mapper.toCustomer(customer);
-                customer3.setUpdate(date.now());
-                customer3.setRoles(new HashSet<>(roles));
-                customer3.setPassword(passwordEncoder.encode(customer.getPassword()));
-                return customerRepository.save(customer3);
-            }
+            
+            var roles = roleRepository.findAllById(customer.getRole());
+            Customer customer3 = mapper.toCustomer(customer);
+            customer3.setUpdate(date.now());
+            customer3.setRoles(new HashSet<>(roles));
+            customer3.setPassword(passwordEncoder.encode(customer.getPassword()));
+            return customerRepository.save(customer3);
         }
         throw new AppException(ErrorCode.USER_NOTFOUND);
     }
