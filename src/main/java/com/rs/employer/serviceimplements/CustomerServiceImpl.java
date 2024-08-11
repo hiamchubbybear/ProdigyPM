@@ -63,7 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer updateCustomer(UUID id, CustomerRequest customer) {
         Optional<Customer> customer1 = customerRepository.findById(id);
         if (customer1.isPresent()) {
-            
+
             var roles = roleRepository.findAllById(customer.getRole());
             Customer customer3 = mapper.toCustomer(customer);
             customer3.setUpdate(date.now());

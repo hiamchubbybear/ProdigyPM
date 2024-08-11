@@ -1,8 +1,10 @@
 package com.rs.employer.dto.Respone;
 
 import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class CustomerRespone {
     private String name;
@@ -12,10 +14,10 @@ public class CustomerRespone {
     private boolean gender;
     private String password;
     private String status;
-    private Date birthDay;
     private Instant create;
     private Instant update;
-
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dob;
     public Instant getCreate() {
         return this.create;
     }
@@ -88,19 +90,19 @@ public class CustomerRespone {
         this.status = status;
     }
 
-    public Date getBirthDay() {
-        return birthDay;
+    public LocalDate getDob() {
+        return dob;
     }
 
-    public void setBirthDay(Date birthDay) {
-        this.birthDay = birthDay;
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
     }
 
     public CustomerRespone() {
     }
 
     public CustomerRespone(String name, String address, String username, Set<RoleRespone> role, boolean gender,
-            String password, String status, Date birthDay, Instant create, Instant update) {
+            String password, String status, LocalDate dob, Instant create, Instant update) {
         this.name = name;
         this.address = address;
         this.username = username;
@@ -108,7 +110,7 @@ public class CustomerRespone {
         this.gender = gender;
         this.password = password;
         this.status = status;
-        this.birthDay = birthDay;
+        this.dob = dob;
         this.create = create;
         this.update = update;
     }

@@ -12,17 +12,12 @@ import com.nimbusds.jose.JOSEException;
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.AuthenticationRequest;
 import com.rs.employer.dto.Request.IntrospectRequest;
+import com.rs.employer.dto.Request.LogoutRequest;
 import com.rs.employer.dto.Respone.AuthenticationRespone;
 import com.rs.employer.serviceimplements.AuthenticationServiceImp;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Authentication {
      @Autowired
      private AuthenticationServiceImp authen;
@@ -45,4 +40,11 @@ public class Authentication {
           return apiRespone;
      }
 
+     @PostMapping("/logout")
+     public ApiRespone<Void> logout(@RequestBody LogoutRequest request) throws JOSEException, ParseException {
+          authen.Logout(request);
+          ApiRespone apiRespone = new ApiRespone<>();
+          apiRespone.setCode(1000);
+          return apiRespone;
+     }
 }

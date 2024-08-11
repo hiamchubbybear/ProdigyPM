@@ -1,4 +1,4 @@
-package com.rs.employer.ValidateAnotation;
+package com.rs.employer.Validator.Status;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

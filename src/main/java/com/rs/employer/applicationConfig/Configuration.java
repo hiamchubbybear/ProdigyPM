@@ -1,6 +1,7 @@
 package com.rs.employer.applicationConfig;
 
 import java.time.Instant;
+import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
@@ -26,10 +27,12 @@ public class Configuration {
         return args -> {
             if (repo.findByUsername("admin").isEmpty()) {
 
-                // HashSet role = new HashSet<String>();
-                // role.add("ADMIN");
+                HashSet role = new HashSet<String>();
+                role.add("ADMIN");
                 Customer admin = new Customer();
+
                 admin.setUsername("admin");
+                // admin.setUsername("admin");
                 admin.setAddress("Hue");
                 admin.setCreate(Instant.now());
                 admin.setUpdate(Instant.now());
