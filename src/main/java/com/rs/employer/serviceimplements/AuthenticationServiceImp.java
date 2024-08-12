@@ -75,6 +75,12 @@ public class AuthenticationServiceImp {
         var token = request.getToken();
         IntrospectRespone respone = new IntrospectRespone();
         verifiedToken(request.getToken());
+        try {
+            verifiedToken(token);
+        } catch (AppException e) {
+            respone.setValid(false);
+            return respone;
+        }
         respone.setValid(true);
         return respone;
     }
@@ -117,8 +123,9 @@ public class AuthenticationServiceImp {
         Date expireDate = signedJWT.getJWTClaimsSet().getExpirationTime();
         if (!(verified && expireDate.after(new Date())))
             throw new AppException(ErrorCode.USER_UNAUTHENTICATED);
-        else
-            return signedJWT;
+        if (!(invalidRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID())))
+            throw new AppException(ErrorCode.USER_UNAUTHENTICATED);
+        return signedJWT;
     }
 
     private String buildScope(Customer customer) {

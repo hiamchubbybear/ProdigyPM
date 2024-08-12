@@ -7,5 +7,5 @@ import com.rs.employer.model.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, String> {
-
+    Role findByName(String name);
 }
