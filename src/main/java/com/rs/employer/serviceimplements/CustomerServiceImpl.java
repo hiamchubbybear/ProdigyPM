@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,10 +27,12 @@ import com.rs.employer.service.CustomerService;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 // Service for customer
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Slf4j
 public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerRepo customerRepository;
@@ -102,7 +105,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public Optional<Customer> getMyInfo() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
         var user = SecurityContextHolder.getContext();
+        System.out.printf("The role of the jwt code : {}" + authentication.getAuthorities());
         String name = user.getAuthentication().getName();
         return customerRepository.findByUsername(name);
     }
@@ -120,6 +125,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     // List all customer
     @Override
+    // @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
+    @PreAuthorize("hasRole('SCOPE_ADMIN')")
     public List listAllCustomer() {
         return customerRepository.findAll(Sort.by("create").ascending());
     }

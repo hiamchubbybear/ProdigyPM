@@ -132,7 +132,7 @@ public class AuthenticationServiceImp {
         StringJoiner joiner = new StringJoiner(" ");
         if (!CollectionUtils.isEmpty(customer.getRoles())) {
             customer.getRoles().forEach(role -> {
-                joiner.add("ROLE_" + role.getName());
+                joiner.add(role.getName());
                 if (!CollectionUtils.isEmpty(role.getPermissions()))
                     role.getPermissions().forEach(permission -> joiner.add(permission.getName()));
 

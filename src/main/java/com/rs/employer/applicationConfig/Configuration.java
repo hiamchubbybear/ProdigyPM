@@ -59,9 +59,7 @@ public class Configuration {
                 // roles.add(roleToAdd);
 
                 // role.ifPresent(role1::add);
-                Permission permission = new Permission("ADMIN_ROLE", "Permission crud to all ");
-                // Permission permission2 = new Permission("ADMIN_ROLE", "Permission crud to all
-                // ");
+                Permission permission = new Permission("PERMIT_ALL", "Permission crud to all ");
                 permissionRepository.save(permission);
                 Role role = new Role();
                 role.setName("ADMIN");
@@ -73,7 +71,6 @@ public class Configuration {
                 Set<Role> role1 = new HashSet<>();
                 role1.add(roleRepository.findByName("ADMIN"));
                 Customer admin = new Customer();
-                admin.setUsername("admin");
                 admin.setUsername("admin");
                 admin.setAddress("Hue");
                 admin.setCreate(Instant.now());

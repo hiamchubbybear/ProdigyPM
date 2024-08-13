@@ -21,10 +21,13 @@ import com.rs.employer.model.Customer;
 import com.rs.employer.serviceimplements.CustomerServiceImpl;
 
 import jakarta.validation.Valid;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 //Controller for customer
 @RequestMapping(path = "/api/customer")
 @RestController
+@Slf4j
 @CrossOrigin
 public class customercontroller {
     @Autowired
@@ -54,7 +57,7 @@ public class customercontroller {
         return apiRespone;
 
     }
-
+    
     // Delete customer by ID
     @DeleteMapping(path = "/delete/{id}")
     public ApiRespone<Boolean> deleteCustomer(@PathVariable UUID id) {

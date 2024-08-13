@@ -11,7 +11,7 @@ public enum ErrorCode {
     UNCATEGORIZE_EXCEPTION(999, "Uncategorize Exception", HttpStatus.INTERNAL_SERVER_ERROR),
     USER_UNAUTHENTICATED(1000, "User authentication failed", HttpStatus.UNAUTHORIZED),
     USERNAME_EXISTED(1001, "Username existed", HttpStatus.NOT_FOUND),
-    UNAUTHORIZED(1008, "You don't have permission to access", HttpStatus.FORBIDDEN),
+    UNAUTHORIZED(401, "You don't have permission to access", HttpStatus.FORBIDDEN),
     PRODUCT_NOTFOUND(1006, "Product not found", HttpStatus.NOT_FOUND),
     PRODUCT_EXISTED(1007, "Product existed", HttpStatus.BAD_REQUEST),
     RUNTIME_ERROR(1005, "Run time error", HttpStatus.TOO_MANY_REQUESTS),
