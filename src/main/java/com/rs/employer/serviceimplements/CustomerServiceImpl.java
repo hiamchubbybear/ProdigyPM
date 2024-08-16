@@ -63,6 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_UPDATE_USER') or hasAuthority('SCOPE_PERMIT_ALL')")
     public Customer updateCustomer(UUID id, CustomerRequest customer) {
         Optional<Customer> customer1 = customerRepository.findById(id);
         if (customer1.isPresent()) {
@@ -78,6 +79,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_DELETE_MS')")
     public Boolean deleteCustomerById(UUID id) {
         if (customerRepository.existsById(id)) {
             Optional<Customer> eOptional = customerRepository.findById(id);
@@ -125,13 +127,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     // List all customer
     @Override
-    // @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
-    @PreAuthorize("hasRole('SCOPE_ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List listAllCustomer() {
         return customerRepository.findAll(Sort.by("create").ascending());
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_UPDATE_USER')")
+    @PostAuthorize("returnObject.username == authentication.name")
     public Customer updatePassword(UUID id, String password) {
         Optional<Customer> eCustomer = customerRepository.findById(id);
         if (eCustomer != null) {
@@ -144,6 +147,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new AppException(ErrorCode.USERNAME_INVALID);
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Product> findByName(String name) {
         return customerRepository.findAllDepartment(name);
     }

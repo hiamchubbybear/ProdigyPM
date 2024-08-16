@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dto.Request.ResourcesRequest;
@@ -27,11 +28,13 @@ public class ResourcesServiceImpl implements ResourcesService {
     ResourcesMapper mapper;
 
     @Override
+
     public List<Resources> getAllProductByResourcesID() {
         return repository.findAll();
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_ADD_RESOURCES')")
     public Resources addProductResources(ResourcesRequest request) {
         Resources resources = mapper.toResources(request);
         resources.setCreate(date.now());
@@ -40,6 +43,7 @@ public class ResourcesServiceImpl implements ResourcesService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_UPDATE_RESOURCES')")
     public Resources updateProductResources(ResourcesRequest request) {
         if (!repo.existsById(request.getResourceid())) {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
@@ -51,6 +55,7 @@ public class ResourcesServiceImpl implements ResourcesService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_DELETE_RESOURCES')")
     public Boolean deleteProductResources(Long id) {
         Optional<Resources> resourcesList = repository.findById(id);
         if (resourcesList.isPresent()) {
@@ -60,10 +65,10 @@ public class ResourcesServiceImpl implements ResourcesService {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_GET_RESOURCES')")
     public Resources getProductResourcesByID(Long rID) {
         Optional<Resources> eOptional = repository.findById(rID);
         Resources product = eOptional.get();
         return product;
     }
-
 }

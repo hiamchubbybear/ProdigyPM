@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.rs.employer.enums.PermissionEnum;
 import com.rs.employer.model.Customer;
 import com.rs.employer.model.Permission;
 import com.rs.employer.model.Role;
@@ -36,7 +37,13 @@ public class Configuration {
     @Primary
     ApplicationRunner createAdmin() {
         return args -> {
-
+            for (PermissionEnum permissionEnum : PermissionEnum.values()) {
+                if (!permissionRepository.existsByName(permissionEnum.name())) {
+                    Permission permission = new Permission(permissionEnum.name(),
+                            permissionEnum.name().replace("SCOPE_", "") + " permission");
+                    permissionRepository.save(permission);
+                }
+            }
         };
     }
 
@@ -60,6 +67,7 @@ public class Configuration {
 
                 // role.ifPresent(role1::add);
                 Permission permission = new Permission("PERMIT_ALL", "Permission crud to all ");
+
                 permissionRepository.save(permission);
                 Role role = new Role();
                 role.setName("ADMIN");

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dto.Request.ProductRequest;
@@ -16,6 +17,7 @@ import com.rs.employer.repository.ProductRepository;
 import com.rs.employer.service.ProductService;
 
 // Service implement for product
+
 @Service
 public class ProductServiceImpl implements ProductService {
     @Autowired
@@ -30,6 +32,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public Product addProduct(ProductRequest request) {
         if (!productRepository.existsById(request.getProduct_id())) {
             request.setCreate(date.now());
@@ -40,6 +43,7 @@ public class ProductServiceImpl implements ProductService {
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_DELETE_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     @Override
     public Boolean deleteProduct(Long ID) {
         if (!productRepository.existsById(ID))
@@ -50,6 +54,7 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_UPDATE_PRODUCT') or hasAuthority('SCOPE_PERMIT_ALL')")
     @Override
     public Product updateProduct(Long ID, ProductRequest request) {
         if (!productRepository.existsById(ID)) {

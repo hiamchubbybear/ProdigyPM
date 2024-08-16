@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dto.Request.RoleRequest;
@@ -26,6 +27,7 @@ public class RoleServiceImp implements RoleService {
     RoleMapper mapper;
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public RoleRespone addRole(RoleRequest request) {
         // if (roleRepository.existsById(request.getName()))
         // throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
@@ -39,6 +41,7 @@ public class RoleServiceImp implements RoleService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public RoleRespone updateRole(RoleRequest request) {
         if (roleRepository.existsById(request.getName())) {
             Role role = mapper.toRole(request);
@@ -49,6 +52,7 @@ public class RoleServiceImp implements RoleService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public Boolean deleteRole(String request) {
         if (roleRepository.existsById(request)) {
             roleRepository.deleteById(request);
@@ -58,6 +62,7 @@ public class RoleServiceImp implements RoleService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Role> allRole() {
         List<Role> list = roleRepository.findAll();
         return list;

@@ -3,6 +3,7 @@ package com.rs.employer.serviceimplements;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dto.Request.PermissionRequest;
@@ -21,6 +22,7 @@ public class PermissionServiceImp implements PermissionService {
     PermissionMapper mapper;
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public Permission addPermission(PermissionRequest request) {
         if (repo.existsById(request.getName())) {
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
@@ -31,6 +33,7 @@ public class PermissionServiceImp implements PermissionService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public Permission updatePermission(PermissionRequest request) {
         if (repo.existsById(request.getName())) {
             Permission permission = mapper.toPermission(request);
@@ -40,6 +43,7 @@ public class PermissionServiceImp implements PermissionService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public Boolean deletePermission(String permission) {
         if (repo.existsById(permission)) {
             repo.deleteById(permission);
@@ -50,6 +54,7 @@ public class PermissionServiceImp implements PermissionService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Permission> allPermission() {
         List<Permission> list = repo.findAll();
         return list;
