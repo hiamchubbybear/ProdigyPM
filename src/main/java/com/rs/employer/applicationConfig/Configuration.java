@@ -44,6 +44,7 @@ public class Configuration {
                     permissionRepository.save(permission);
                 }
             }
+
         };
     }
 
