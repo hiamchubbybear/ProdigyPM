@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import com.rs.employer.dao.ProductRepository;
 import com.rs.employer.dto.Request.ProductRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.ProductMapper;
 import com.rs.employer.model.Product;
-import com.rs.employer.repository.ProductRepository;
 import com.rs.employer.service.ProductService;
 
 // Service implement for product

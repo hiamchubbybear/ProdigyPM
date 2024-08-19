@@ -1,4 +1,4 @@
-package com.rs.employer.repository;
+package com.rs.employer.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

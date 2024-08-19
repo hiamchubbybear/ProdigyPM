@@ -14,15 +14,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.rs.employer.dao.CartRepository;
+import com.rs.employer.dao.CustomerRepo;
+import com.rs.employer.dao.RoleRepository;
 import com.rs.employer.dto.Request.CustomerRequest;
 import com.rs.employer.dto.Respone.CustomerRespone;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.CustomerMapper;
+import com.rs.employer.model.Cart;
 import com.rs.employer.model.Customer;
 import com.rs.employer.model.Product;
-import com.rs.employer.repository.CustomerRepo;
-import com.rs.employer.repository.RoleRepository;
 import com.rs.employer.service.CustomerService;
 
 import lombok.AccessLevel;
@@ -38,7 +40,9 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepo customerRepository;
     @Autowired
     private RoleRepository roleRepository;
-    private Instant date;
+    @Autowired
+    CartRepository cartRepository;
+    Instant now = Instant.now();
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
@@ -48,18 +52,33 @@ public class CustomerServiceImpl implements CustomerService {
     // Add customertomertoom
     @Override
     public Customer addCustomer(CustomerRequest customer) {
+
         if (customerRepository.existsByUsername(customer.getUsername()))
             throw new AppException(ErrorCode.USEREXISTED_OR_USERIDEXISTED);
         else {
             // PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
             var role = roleRepository.findAllById(customer.getRole());
             customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+            if (!cartRepository.existsByOwner(customer.getUsername()))
+                createCart(customer);
             Customer customer1 = mapper.toCustomer(customer);
-            customer1.setCreate(date.now());
-            customer1.setUpdate(date.now());
+            customer1.setCreate(now);
+            customer1.setUpdate(now);
             customer1.setRoles(new HashSet<>(role));
+            customer1.setCart(cartRepository.findByOwner(customer.getUsername()));
             return customerRepository.save(customer1);
         }
+    }
+
+    private Cart createCart(CustomerRequest customer) {
+        // var user = customerRepository.findByUsername(customer.getUsername());
+        // if (user.isPresent()) {
+        // Customer customer1 = user.get();
+        Cart cart = new Cart(now, customer.getUsername(), now);
+        return cartRepository.save(cart);
+
+        // } else
+        // throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
 
     @Override
@@ -70,7 +89,7 @@ public class CustomerServiceImpl implements CustomerService {
 
             var roles = roleRepository.findAllById(customer.getRole());
             Customer customer3 = mapper.toCustomer(customer);
-            customer3.setUpdate(date.now());
+            customer3.setUpdate(now);
             customer3.setRoles(new HashSet<>(roles));
             customer3.setPassword(passwordEncoder.encode(customer.getPassword()));
             return customerRepository.save(customer3);
@@ -140,7 +159,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (eCustomer != null) {
             Customer customer1 = eCustomer.get();
             customer1.setPassword(password);
-            customer1.setUpdate(date.now());
+            customer1.setUpdate(now);
             customer1.setCreate(customer1.getCreate());
             return customerRepository.save(customer1);
         } else

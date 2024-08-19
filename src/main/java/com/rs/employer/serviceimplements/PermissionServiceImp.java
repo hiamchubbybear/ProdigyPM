@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import com.rs.employer.dao.PermissionRepository;
 import com.rs.employer.dto.Request.PermissionRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.PermissionMapper;
 import com.rs.employer.model.Permission;
-import com.rs.employer.repository.PermissionRepository;
 import com.rs.employer.service.PermissionService;
 
 @Service

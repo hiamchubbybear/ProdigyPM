@@ -10,13 +10,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.rs.employer.dao.CustomerRepo;
+import com.rs.employer.dao.PermissionRepository;
+import com.rs.employer.dao.RoleRepository;
 import com.rs.employer.enums.PermissionEnum;
 import com.rs.employer.model.Customer;
 import com.rs.employer.model.Permission;
 import com.rs.employer.model.Role;
-import com.rs.employer.repository.CustomerRepo;
-import com.rs.employer.repository.PermissionRepository;
-import com.rs.employer.repository.RoleRepository;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +56,7 @@ public class Configuration {
     @Bean
     ApplicationRunner applicationRunner(CustomerRepo repo) {
         return args -> {
-            if (repo.findByUsername("admin").isEmpty()) {
+            if (repo.findByUsername("admin") == null) {
                 // HashSet<Role> role = new HashSet<>();
                 // role.forEach(role -> role.setName("ADMIN"););
 

@@ -1,4 +1,4 @@
-package com.rs.employer.repository;
+package com.rs.employer.dao;
 
 import java.util.List;
 import java.util.Optional;

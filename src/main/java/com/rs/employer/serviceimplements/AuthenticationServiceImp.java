@@ -23,6 +23,8 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import com.rs.employer.dao.CustomerRepo;
+import com.rs.employer.dao.InvalidRepository;
 import com.rs.employer.dto.Request.AuthenticationRequest;
 import com.rs.employer.dto.Request.IntrospectRequest;
 import com.rs.employer.dto.Request.LogoutRequest;
@@ -32,8 +34,6 @@ import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Customer;
 import com.rs.employer.model.Invalid;
-import com.rs.employer.repository.CustomerRepo;
-import com.rs.employer.repository.InvalidRepository;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

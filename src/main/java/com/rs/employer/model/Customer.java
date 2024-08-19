@@ -15,12 +15,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rs.employer.Validator.DateOfBirth.DobValidator;
 import com.rs.employer.Validator.Status.ValidateStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -69,6 +72,10 @@ public class Customer {
   @JsonIgnore
   private LocalDate dob;
 
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "cart", referencedColumnName = "id")
+  private Cart cart;
+
   public Customer(UUID uuid, @NotNull @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username,
       @Size(min = 8, message = "PASSWORD_INVALID") @NotBlank String password, String name, String address,
       Set<Role> roles, boolean gender, String status, Instant create, Instant update, LocalDate dob) {
@@ -103,6 +110,23 @@ public class Customer {
 
   public String getPassword() {
     return password;
+  }
+
+  public Customer(UUID uuid, @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username,
+      @Size(min = 8, message = "PASSWORD_INVALID") String password, String name, String address, Set<Role> roles,
+      boolean gender, String status, Instant create, Instant update, LocalDate dob, Cart cart) {
+    this.uuid = uuid;
+    this.username = username;
+    this.password = password;
+    this.name = name;
+    this.address = address;
+    this.roles = roles;
+    this.gender = gender;
+    this.status = status;
+    this.create = create;
+    this.update = update;
+    this.dob = dob;
+    this.cart = cart;
   }
 
   public void setPassword(String password) {
@@ -174,6 +198,14 @@ public class Customer {
   }
 
   public Customer() {
+  }
+
+  public Cart getCart() {
+    return cart;
+  }
+
+  public void setCart(Cart cart) {
+    this.cart = cart;
   }
 
 }

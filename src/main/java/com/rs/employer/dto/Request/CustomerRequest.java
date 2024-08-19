@@ -16,8 +16,32 @@ public class CustomerRequest {
     private String status;
     private Instant create;
     private Instant update;
+    private Long cart_id;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dob;
+
+    public CustomerRequest(String name, String address, String username, Set<String> roles, boolean gender,
+            String password, String status, Instant create, Instant update, Long cart_id, LocalDate dob) {
+        this.name = name;
+        this.address = address;
+        this.username = username;
+        this.roles = roles;
+        this.gender = gender;
+        this.password = password;
+        this.status = status;
+        this.create = create;
+        this.update = update;
+        this.cart_id = cart_id;
+        this.dob = dob;
+    }
+
+    public Long getCart_id() {
+        return cart_id;
+    }
+
+    public void setCart_id(Long cart_id) {
+        this.cart_id = cart_id;
+    }
 
     public Instant getCreate() {
         return this.create;

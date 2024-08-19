@@ -28,7 +28,7 @@ import lombok.experimental.FieldDefaults;
 @Data
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "schema_product")
+@Table(name = "product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,7 +60,7 @@ public class Product {
     // @JsonIgnore
     // @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
     // public Customer customer;
-
+    
     public Long getProduct_id() {
         return product_id;
     }

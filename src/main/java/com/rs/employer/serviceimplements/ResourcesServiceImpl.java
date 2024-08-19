@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import com.rs.employer.dao.ProductRepository;
+import com.rs.employer.dao.ResourcesRepo;
 import com.rs.employer.dto.Request.ResourcesRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.ResourcesMapper;
 import com.rs.employer.model.Resources;
-import com.rs.employer.repository.ProductRepository;
-import com.rs.employer.repository.ResourcesRepo;
 import com.rs.employer.service.ResourcesService;
 
 @Service
