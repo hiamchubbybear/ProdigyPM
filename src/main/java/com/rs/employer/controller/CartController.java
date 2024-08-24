@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
+import com.rs.employer.dto.Request.ProductCartRequest;
 import com.rs.employer.model.Cart;
 import com.rs.employer.serviceimplements.CartServiceImpl;
+import com.rs.employer.serviceimplements.ProductServiceImpl;
 
 //Controller for cart
 @RestController
@@ -25,7 +27,8 @@ import com.rs.employer.serviceimplements.CartServiceImpl;
 public class CartController {
     @Autowired
     private CartServiceImpl repo;
-
+    @Autowired
+    ProductServiceImpl service;
     // List cart by ID
     @GetMapping(path = "/getbyid/{id}")
     public ApiRespone<Optional<Cart>> getUserById(@PathVariable(name = "id") Long ID) {
@@ -65,6 +68,12 @@ public class CartController {
             @RequestBody Cart cart) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(repo.updateCart(ID, cart));
+        return apiRespone;
+    }
+    @PostMapping(path = "/products")
+    public ApiRespone<Cart> addProducts(@RequestBody ProductCartRequest request ) {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(service.addProductToCart(request));
         return apiRespone;
     }
 }

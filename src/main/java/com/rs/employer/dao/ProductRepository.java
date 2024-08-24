@@ -8,4 +8,5 @@ import com.rs.employer.model.Product;
 // Database JPA repository for Product
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
+    // Product findByProductId(Long productid);
 }

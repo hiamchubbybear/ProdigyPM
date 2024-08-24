@@ -20,8 +20,8 @@ import lombok.experimental.FieldDefaults;
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    Long id;
+    @Column(name = "cart_id")
+    Long cart_id;
     @Column(nullable = true, name = "create_At")
     Instant create;
     String owner;
@@ -32,7 +32,9 @@ public class Cart {
     Customer customer;
     @OneToMany(mappedBy = "carts")
     @JsonIgnore
+    // @JoinTable(name = "cart_product")
     Set<Product> products;
+
     public Cart(Instant create, String owner, Instant update) {
 
         this.create = create;
@@ -42,11 +44,11 @@ public class Cart {
     }
 
     public Long getId() {
-        return id;
+        return cart_id;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.cart_id = id;
     }
 
     public Instant getCreate() {
@@ -66,7 +68,7 @@ public class Cart {
     }
 
     public Cart(Long id, Instant create, Instant update) {
-        this.id = id;
+        this.cart_id = id;
         this.create = create;
         this.update = update;
     }
@@ -99,7 +101,7 @@ public class Cart {
     }
 
     public Cart(Long id, Instant create, String owner, Instant update, Customer customer, Set<Product> products) {
-        this.id = id;
+        this.cart_id = id;
         this.create = create;
         this.owner = owner;
         this.update = update;
