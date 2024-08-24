@@ -8,9 +8,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +25,6 @@ import lombok.experimental.FieldDefaults;
 // @NoArgsConstructor
 @Getter
 @Setter
-@Builder
 @Data
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -55,12 +55,15 @@ public class Product {
     String sub;
     @Column(name = "unit_product", nullable = false)
     String unit;
+    @ManyToOne
+    @JoinColumn(name="id", nullable=false)
+    private Cart carts;
     // Long customer_id;
     // @ManyToOne
     // @JsonIgnore
     // @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
     // public Customer customer;
-    
+
     public Long getProduct_id() {
         return product_id;
     }
@@ -174,6 +177,23 @@ public class Product {
         this.update = update;
         this.sub = sub;
         this.unit = unit;
+    }
+
+    public Product(Long product_id, String name, String type, Long size, Long weight, String weight_unit,
+            String size_unit, Date exp, Instant create, Instant update, String sub, String unit, Cart carts) {
+        this.product_id = product_id;
+        this.name = name;
+        this.type = type;
+        this.size = size;
+        this.weight = weight;
+        this.weight_unit = weight_unit;
+        this.size_unit = size_unit;
+        this.exp = exp;
+        this.create = create;
+        this.update = update;
+        this.sub = sub;
+        this.unit = unit;
+        this.carts = carts;
     }
 
 }

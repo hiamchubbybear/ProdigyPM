@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dao.CartRepository;
+import com.rs.employer.dao.ProductRepository;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Cart;
@@ -19,6 +20,9 @@ public class CartServiceImpl {
     @Autowired
     private CartRepository cartRepository;
     Instant date;
+    @Autowired
+    private ProductRepository productRepository;
+
 
     @Autowired
 
@@ -30,6 +34,8 @@ public class CartServiceImpl {
         if (!cartRepository.existsById(request.getId())) {
             request.setCreate(date.now());
             request.setUpdate(date.now());
+            // Set<Product> products = new HashSet<Product>(productRepository.findAllBy());
+            // request.setProducts(products);
             return cartRepository.save(request);
         } else
             throw new AppException(ErrorCode.PRODUCT_EXISTED);

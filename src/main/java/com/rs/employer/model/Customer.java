@@ -15,13 +15,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rs.employer.Validator.DateOfBirth.DobValidator;
 import com.rs.employer.Validator.Status.ValidateStatus;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -72,8 +70,8 @@ public class Customer {
   @JsonIgnore
   private LocalDate dob;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "cart", referencedColumnName = "id")
+  @OneToOne
+//   @JoinColumn(name = "cart", referencedColumnName = "id")
   private Cart cart;
 
   public Customer(UUID uuid, @NotNull @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username,

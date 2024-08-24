@@ -56,7 +56,7 @@ public class Configuration {
     @Bean
     ApplicationRunner applicationRunner(CustomerRepo repo) {
         return args -> {
-            if (repo.findByUsername("admin") == null) {
+        if (!repo.findByUsername("admin").isPresent()) {
                 // HashSet<Role> role = new HashSet<>();
                 // role.forEach(role -> role.setName("ADMIN"););
 

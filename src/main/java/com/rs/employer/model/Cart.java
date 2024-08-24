@@ -1,13 +1,17 @@
 package com.rs.employer.model;
 
 import java.time.Instant;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
@@ -16,24 +20,27 @@ import lombok.experimental.FieldDefaults;
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     Long id;
     @Column(nullable = true, name = "create_At")
     Instant create;
     String owner;
     @Column(nullable = true, name = "update_At")
     Instant update;
-    // @OneToOne(mappedBy = "cart")
-    // Customer customer;
-
+    @OneToOne(mappedBy = "cart")
+    @JsonIgnore
+    Customer customer;
+    @OneToMany(mappedBy = "carts")
+    @JsonIgnore
+    Set<Product> products;
     public Cart(Instant create, String owner, Instant update) {
 
         this.create = create;
         this.owner = owner;
         this.update = update;
-        // this.customer = customer;
+        this.customer = customer;
     }
 
-    @ManyToMany
     public Long getId() {
         return id;
     }
@@ -73,6 +80,31 @@ public class Cart {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
+
+    public Cart(Long id, Instant create, String owner, Instant update, Customer customer, Set<Product> products) {
+        this.id = id;
+        this.create = create;
+        this.owner = owner;
+        this.update = update;
+        this.customer = customer;
+        this.products = products;
     }
 
 }

@@ -20,7 +20,7 @@ public interface CustomerRepo extends JpaRepository<Customer, UUID> {
         boolean existsByUsername(String username);
 
         Optional<Customer> findByUsername(String username);
-
+        
         // @Query("SELECT birthDay from schema_customer DESC ")
         // List<Customer> listByBirthday();
         // @Query("SELECT e FROM Product e WHERE e.name = :name" ,nativeQuery= true)
