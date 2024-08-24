@@ -8,6 +8,6 @@ import com.rs.employer.model.Cart;
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
     Cart findByOwner(String owner);
-
+    Cart findByCart_Id(Long id);
     Boolean existsByOwner(String owner);
 }

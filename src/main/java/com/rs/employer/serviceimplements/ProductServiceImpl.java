@@ -62,12 +62,15 @@ public class ProductServiceImpl implements ProductService {
     }
     public Cart addProductToCart(ProductCartRequest request) {
         var data = SecurityContextHolder.getContext().getAuthentication().getName();
-        Cart cart = new Cart();
+        Cart cart = cartRepository.findByCartId(request.getCart_id());
         Set<Long> ids = new HashSet<>(Arrays.asList(request.getCart_id()));
+        for (Long long1 : ids) {
+            log.info("Here are this log to print : " +long1.toString());
+        }
         Set<Product> product1 = new HashSet<>();
         product1.addAll(productRepository.findAllById(ids));
         cart.setProducts(product1);
-        // log.info(product1.toString());   
+        // log.info(product1.toString());
         return cartRepository.save(cart);
 
     }
