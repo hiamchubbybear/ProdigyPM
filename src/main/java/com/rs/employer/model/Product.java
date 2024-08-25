@@ -3,14 +3,12 @@ package com.rs.employer.model;
 import java.time.Instant;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -57,15 +55,13 @@ public class Product {
     String sub;
     @Column(name = "unit_product", nullable = false)
     String unit;
-    @ManyToOne
-    @JsonIgnore
+    @OneToMany(mappedBy ="products")
     private Cart carts;
     // Long customer_id;
     // @ManyToOne
     // @JsonIgnore
     // @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
     // public Customer customer;
-
     public Long getProduct_id() {
         return product_id;
     }

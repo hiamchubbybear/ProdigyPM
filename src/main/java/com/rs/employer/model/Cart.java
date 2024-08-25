@@ -10,18 +10,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.experimental.FieldDefaults;
 
 @Entity(name = "cart")
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id")
-    Long cart_id;
+    Long cartid;
     @Column(nullable = true, name = "create_At")
     Instant create;
     String owner;
@@ -30,7 +34,8 @@ public class Cart {
     @OneToOne(mappedBy = "cart")
     @JsonIgnore
     Customer customer;
-    @OneToMany(mappedBy = "carts")
+    @ManyToOne
+    @JoinColumn(name="product_id", nullable=true , updatable = true)
     @JsonIgnore
     // @JoinTable(name = "cart_product")
     Set<Product> products;
@@ -44,11 +49,11 @@ public class Cart {
     }
 
     public Long getId() {
-        return cart_id;
+        return cartid;
     }
 
     public void setId(Long id) {
-        this.cart_id = id;
+        this.cartid = id;
     }
 
     public Instant getCreate() {
@@ -68,7 +73,7 @@ public class Cart {
     }
 
     public Cart(Long id, Instant create, Instant update) {
-        this.cart_id = id;
+        this.cartid = id;
         this.create = create;
         this.update = update;
     }
@@ -101,7 +106,7 @@ public class Cart {
     }
 
     public Cart(Long id, Instant create, String owner, Instant update, Customer customer, Set<Product> products) {
-        this.cart_id = id;
+        this.cartid = id;
         this.create = create;
         this.owner = owner;
         this.update = update;

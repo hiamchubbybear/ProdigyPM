@@ -3,9 +3,6 @@ package com.rs.employer.dto.Request;
 import java.time.Instant;
 import java.util.Date;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-
 // Product class
 // @Data
 // // @Setter
@@ -13,13 +10,12 @@ import jakarta.persistence.GenerationType;
 // @AllArgsConstructor
 // @NoArgsConstructor
 public class ProductRequest {
-    @GeneratedValue(strategy = GenerationType.AUTO)
     Long product_id;
     String name;
     String type;
     Long size;
     Long weight;
-    String weight_unit;
+String weight_unit;
     String size_unit;
     Date exp;
     Instant create;
