@@ -8,7 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -32,7 +33,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id" , nullable = true)
-    Long product_id;
+    Long productid;
     @Column(name = "name_product", nullable = false)
     String name;
     @Column(name = "product_type", nullable = false)
@@ -55,19 +56,20 @@ public class Product {
     String sub;
     @Column(name = "unit_product", nullable = false)
     String unit;
-    @OneToMany(mappedBy ="products")
-    private Cart carts;
+    @ManyToOne
+    @JoinColumn(name="cart_id", nullable=true , updatable = true)
+    Cart carts;
     // Long customer_id;
     // @ManyToOne
     // @JsonIgnore
     // @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
     // public Customer customer;
     public Long getProduct_id() {
-        return product_id;
+        return productid;
     }
 
     public void setProduct_id(Long product_id) {
-        this.product_id = product_id;
+        this.productid = product_id;
     }
 
     public String getName() {
@@ -160,10 +162,15 @@ public class Product {
 
     public Product() {
     }
-
+    public void setCart( Cart cart) {
+        this.carts = cart;
+    }
+    public Cart getCart(){
+        return carts;
+    }
     public Product(Long product_id, String name, String type, Long size, Long weight, String weight_unit,
             String size_unit, Date exp, Instant create, Instant update, String sub, String unit) {
-        this.product_id = product_id;
+        this.productid = product_id;
         this.name = name;
         this.type = type;
         this.size = size;
@@ -179,7 +186,7 @@ public class Product {
 
     public Product(Long product_id, String name, String type, Long size, Long weight, String weight_unit,
             String size_unit, Date exp, Instant create, Instant update, String sub, String unit, Cart carts) {
-        this.product_id = product_id;
+        this.productid = product_id;
         this.name = name;
         this.type = type;
         this.size = size;
@@ -193,5 +200,9 @@ public class Product {
         this.unit = unit;
         this.carts = carts;
     }
+
+
+
+
 
 }

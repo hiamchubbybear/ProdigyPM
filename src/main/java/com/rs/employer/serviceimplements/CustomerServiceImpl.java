@@ -74,7 +74,7 @@ public class CustomerServiceImpl implements CustomerService {
         // var user = customerRepository.findByUsername(customer.getUsername());
         // if (user.isPresent()) {
         // Customer customer1 = user.get();
-        Cart cart = new Cart(now, customer.getUsername(), now);
+        Cart cart = new Cart(now , now , customer.getUsername() );
         return cartRepository.save(cart);
 
         // } else

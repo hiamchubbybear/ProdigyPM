@@ -1,6 +1,7 @@
 package com.rs.employer.serviceimplements;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -62,9 +63,16 @@ public class ProductServiceImpl implements ProductService {
     public Cart addProductToCart(ProductCartRequest request) {
         var data = SecurityContextHolder.getContext().getAuthentication().getName();
         Cart cart = cartRepository.findByCartid(request.getCart_id());
-        Set<Product> product1 = new HashSet<>();
-        product1.addAll(productRepository.findAllById(request.getProducts_id()));
-        cart.setProducts(product1);
+        Set<Product> ads = new HashSet<>();
+        List<Long> ids = new ArrayList<>();
+        for (Long long1 : request.getProducts_id()) {
+            System.out.println(long1);
+            ids.add(long1);
+        }
+        // request.getProducts_id().forEach(o -> System.out.println(o));
+        ads.addAll(productRepository.findAllById(ids));
+        cart.setProducts(ads);
+
         // log.info(product1.toString());
         return cartRepository.save(cart);
 

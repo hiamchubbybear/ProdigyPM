@@ -10,17 +10,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.experimental.FieldDefaults;
 
 @Entity(name = "cart")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Builder
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +30,10 @@ public class Cart {
     @OneToOne(mappedBy = "cart")
     @JsonIgnore
     Customer customer;
-    @ManyToOne
-    @JoinColumn(name="product_id", nullable=true , updatable = true)
-    @JsonIgnore
-    // @JoinTable(name = "cart_product")
+    @OneToMany(mappedBy = "carts")
     Set<Product> products;
 
-    public Cart(Instant create, String owner, Instant update) {
+    public Cart(Instant create, String owner, Instant update , Customer customer) {
 
         this.create = create;
         this.owner = owner;
@@ -72,10 +65,10 @@ public class Cart {
         this.update = update;
     }
 
-    public Cart(Long id, Instant create, Instant update) {
-        this.cartid = id;
+    public Cart( Instant create, Instant update ,String owner) {
         this.create = create;
         this.update = update;
+        this.owner = owner;
     }
 
     public Cart() {
@@ -97,6 +90,11 @@ public class Cart {
         this.customer = customer;
     }
 
+
+    public void setCartid(Long cartid) {
+        this.cartid = cartid;
+    }
+
     public Set<Product> getProducts() {
         return products;
     }
@@ -105,13 +103,14 @@ public class Cart {
         this.products = products;
     }
 
-    public Cart(Long id, Instant create, String owner, Instant update, Customer customer, Set<Product> products) {
-        this.cartid = id;
+    public Cart(Long cartid, Instant create, String owner, Instant update, Customer customer, Set<Product> products) {
+        this.cartid = cartid;
         this.create = create;
         this.owner = owner;
         this.update = update;
         this.customer = customer;
         this.products = products;
     }
+
 
 }

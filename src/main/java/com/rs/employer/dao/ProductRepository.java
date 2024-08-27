@@ -9,4 +9,6 @@ import com.rs.employer.model.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     // Product findByProductId(Long productid);
+    // Set<Product> findAllByProductid();
+    // Set<Product>
 }
