@@ -10,7 +10,7 @@ import com.rs.employer.model.Product;
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
     ProductRespone toProductRespone(ProductRequest request);
-    @Mapping(ignore = true , target = "cart")
+    @Mapping(ignore = true , target = "carts")
     Product toProduct(ProductRequest request);
 
 }

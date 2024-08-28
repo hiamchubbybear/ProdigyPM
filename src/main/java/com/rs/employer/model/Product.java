@@ -2,63 +2,66 @@ package com.rs.employer.model;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-
-// Product class
 // @Data
 // // @Setter
 // // @Getter
 // @AllArgsConstructor
 // @NoArgsConstructor
-@Getter
-@Setter
-@Data
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id" , nullable = true)
+    @Column(name = "product_id" )
     Long productid;
     @Column(name = "name_product", nullable = false)
     String name;
-    @Column(name = "product_type", nullable = false)
+    @Column(name = "product_type")
     String type;
-    @Column(name = "product_size", nullable = false)
+    @Column(name = "product_size")
     Long size;
-    @Column(name = "product_weight", nullable = false)
+    @Column(name = "product_weight")
     Long weight;
-    @Column(name = "product_weight_unit", nullable = false)
+    @Column(name = "product_weight_unit")
     String weight_unit;
-    @Column(name = "product_size_unit", nullable = false)
+    @Column(name = "product_size_unit")
     String size_unit;
-    @Column(name = "expire_date_product", nullable = false)
+    @Column(name = "expire_date_product")
     Date exp;
     @Column(name = "create_at", nullable = false, updatable = false)
     Instant create;
     @Column(name = "update_at", nullable = false, updatable = true)
     Instant update;
-    @Column(name = "subtitle_product", nullable = false)
+    @Column(name = "subtitle_product")
     String sub;
     @Column(name = "unit_product", nullable = false)
     String unit;
-    @ManyToOne
-    @JoinColumn(name="cart_id", nullable=true , updatable = true)
-    Cart carts;
+    @ManyToMany
+    @JsonIgnore
+    Set<Cart> carts;
+
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
+    }
+
     // Long customer_id;
     // @ManyToOne
     // @JsonIgnore
@@ -75,20 +78,12 @@ public class Product {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public Long getSize() {
+
         return size;
     }
 
@@ -162,12 +157,6 @@ public class Product {
 
     public Product() {
     }
-    public void setCart( Cart cart) {
-        this.carts = cart;
-    }
-    public Cart getCart(){
-        return carts;
-    }
     public Product(Long product_id, String name, String type, Long size, Long weight, String weight_unit,
             String size_unit, Date exp, Instant create, Instant update, String sub, String unit) {
         this.productid = product_id;
@@ -184,9 +173,10 @@ public class Product {
         this.unit = unit;
     }
 
-    public Product(Long product_id, String name, String type, Long size, Long weight, String weight_unit,
-            String size_unit, Date exp, Instant create, Instant update, String sub, String unit, Cart carts) {
-        this.productid = product_id;
+
+    public Product(Long productid, String name, String type, Long size, Long weight, String weight_unit,
+            String size_unit, Date exp, Instant create, Instant update, String sub, String unit, Set<Cart> carts) {
+        this.productid = productid;
         this.name = name;
         this.type = type;
         this.size = size;
@@ -201,8 +191,13 @@ public class Product {
         this.carts = carts;
     }
 
+    public String getType() {
+        return type;
+    }
 
-
+    public void setType(String type) {
+        this.type = type;
+    }
 
 
 }

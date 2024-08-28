@@ -19,6 +19,7 @@ public class CustomerRequest {
     private Long cart_id;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dob;
+    
 
     public CustomerRequest(String name, String address, String username, Set<String> roles, boolean gender,
             String password, String status, Instant create, Instant update, Long cart_id, LocalDate dob) {

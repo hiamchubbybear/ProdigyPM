@@ -10,7 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -30,7 +30,7 @@ public class Cart {
     @OneToOne(mappedBy = "cart")
     @JsonIgnore
     Customer customer;
-    @OneToMany(mappedBy = "carts")
+    @ManyToMany
     Set<Product> products;
 
     public Cart(Instant create, String owner, Instant update , Customer customer) {
@@ -95,13 +95,6 @@ public class Cart {
         this.cartid = cartid;
     }
 
-    public Set<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(Set<Product> products) {
-        this.products = products;
-    }
 
     public Cart(Long cartid, Instant create, String owner, Instant update, Customer customer, Set<Product> products) {
         this.cartid = cartid;
@@ -109,6 +102,18 @@ public class Cart {
         this.owner = owner;
         this.update = update;
         this.customer = customer;
+        this.products = products;
+    }
+
+    public Long getCartid() {
+        return cartid;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
         this.products = products;
     }
 
