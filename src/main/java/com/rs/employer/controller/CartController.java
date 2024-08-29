@@ -18,6 +18,7 @@ import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.ProductCartRequest;
 import com.rs.employer.model.Cart;
 import com.rs.employer.serviceimplements.CartServiceImpl;
+import com.rs.employer.serviceimplements.ProductCartServiceImp;
 import com.rs.employer.serviceimplements.ProductServiceImpl;
 
 //Controller for cart
@@ -27,6 +28,8 @@ import com.rs.employer.serviceimplements.ProductServiceImpl;
 public class CartController {
     @Autowired
     private CartServiceImpl repo;
+    @Autowired
+    ProductCartServiceImp pcRepository;
     @Autowired
     ProductServiceImpl service;
     // List cart by ID
@@ -73,7 +76,7 @@ public class CartController {
     @PostMapping(path = "/products")
     public ApiRespone<Cart> addProducts(@RequestBody ProductCartRequest request ) {
         ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(service.addProductToCart(request));
+        apiRespone.setData(pcRepository.addProductToCart(request));
         return apiRespone;
     }
 }

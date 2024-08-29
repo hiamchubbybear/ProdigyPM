@@ -15,6 +15,8 @@ public enum ErrorCode {
     PRODUCT_NOTFOUND(1006, "Product not found", HttpStatus.NOT_FOUND),
     PRODUCT_EXISTED(1007, "Product existed", HttpStatus.BAD_REQUEST),
     RUNTIME_ERROR(1005, "Run time error", HttpStatus.TOO_MANY_REQUESTS),
+    PRODUCT_EXISTED_CART(1009, "Product added into cart", HttpStatus.NOT_ACCEPTABLE),
+    CART_NOT_FOUNT(1010, "Cart not exists or can't be find ", HttpStatus.NOT_ACCEPTABLE),
     USEREXISTED_OR_USERIDEXISTED(1008, "Userid  existed or Username existed", HttpStatus.BAD_REQUEST);
 
     private int code;

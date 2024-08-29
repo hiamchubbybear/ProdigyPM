@@ -38,7 +38,7 @@ public class CartServiceImpl {
             // request.setProducts(products);
             return cartRepository.save(request);
         } else
-            throw new AppException(ErrorCode.PRODUCT_EXISTED);
+            throw new AppException(ErrorCode.CART_NOT_FOUNT);
     }
 
     // @PreAuthorize("hasAuthority('SCOPE_DELETE_PRODUCT')or
@@ -46,7 +46,7 @@ public class CartServiceImpl {
 
     public Boolean deleteCart(Long ID) {
         if (!cartRepository.existsById(ID))
-            throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
+            throw new AppException(ErrorCode.CART_NOT_FOUNT);
         else {
             cartRepository.deleteById(ID);
             return true;
@@ -55,7 +55,7 @@ public class CartServiceImpl {
 
     public Cart updateCart(Long ID, Cart request) {
         if (!cartRepository.existsById(ID)) {
-            throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
+            throw new AppException(ErrorCode.CART_NOT_FOUNT);
         } else {
             return cartRepository.save(request);
         }
@@ -66,7 +66,7 @@ public class CartServiceImpl {
         if (cartRepository.existsById(ID))
             return cartRepository.findById(ID);
         else
-            throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
+            throw new AppException(ErrorCode.CART_NOT_FOUNT);
     }
 
 }

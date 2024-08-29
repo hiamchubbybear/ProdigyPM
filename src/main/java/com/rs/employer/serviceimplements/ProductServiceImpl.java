@@ -1,26 +1,19 @@
 package com.rs.employer.serviceimplements;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.rs.employer.dao.CartRepository;
 import com.rs.employer.dao.CustomerRepo;
 import com.rs.employer.dao.ProductRepository;
-import com.rs.employer.dto.Request.ProductCartRequest;
 import com.rs.employer.dto.Request.ProductRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.ProductMapper;
-import com.rs.employer.model.Cart;
 import com.rs.employer.model.Product;
 import com.rs.employer.service.ProductService;
 
@@ -36,11 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
-    @Autowired
-    CartRepository cartRepository;
-    @Autowired
-    CustomerRepo customerRepository;
-    Instant date;
+    Instant now = Instant.now();
     @Autowired
     ProductMapper mapper;
 
@@ -52,31 +41,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public Product addProduct(ProductRequest request) {
-        if (!productRepository.existsById(request.getProduct_id())) {
-            request.setCreate(date.now());
-            request.setUpdate(date.now());
+        if (!productRepository.existsByName(request.getName())) {
+            request.setCreate(now);
+            request.setUpdate(now);
             Product product = mapper.toProduct(request);
             return productRepository.save(product);
         } else
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
     }
-    public Cart addProductToCart(ProductCartRequest request) {
-        var data = SecurityContextHolder.getContext().getAuthentication().getName();
-        Cart cart = cartRepository.findByCartid(request.getCart_id());
-        Set<Product> ads = new HashSet<>();
-        List<Long> ids = new ArrayList<>();
-        for (Long long1 : request.getProducts_id()) {
-            System.out.println(long1);
-            ids.add(long1);
-        }
-        // request.getProducts_id().forEach(o -> System.out.println(o));
-        ads.addAll(productRepository.findAllById(ids));
-        cart.setProducts(ads);
 
-        // log.info(product1.toString());
-        return cartRepository.save(cart);
-
-    }
     @PreAuthorize("hasAuthority('SCOPE_DELETE_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     @Override
     public Boolean deleteProduct(Long ID) {

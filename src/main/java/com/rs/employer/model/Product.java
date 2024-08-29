@@ -25,7 +25,7 @@ import lombok.experimental.FieldDefaults;
 @Table(name = "product")
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "product_id" )
     Long productid;
     @Column(name = "name_product", nullable = false)

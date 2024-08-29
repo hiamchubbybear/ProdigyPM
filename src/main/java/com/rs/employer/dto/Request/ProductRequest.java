@@ -10,7 +10,6 @@ import java.util.Date;
 // @AllArgsConstructor
 // @NoArgsConstructor
 public class ProductRequest {
-    Long product_id;
     String name;
     String type;
     Long size;
@@ -22,9 +21,8 @@ String weight_unit;
     Instant update;
     String sub;
 
-    public ProductRequest(Long product_id, String name, String type, Long size, Long weight, String weight_unit,
+    public ProductRequest( String name, String type, Long size, Long weight, String weight_unit,
             String size_unit, Date exp, Instant create, Instant update, String sub, String unit) {
-        this.product_id = product_id;
         this.name = name;
         this.type = type;
         this.size = size;
@@ -42,14 +40,6 @@ String weight_unit;
     }
 
     String unit;
-
-    public Long getProduct_id() {
-        return product_id;
-    }
-
-    public void setProduct_id(Long product_id) {
-        this.product_id = product_id;
-    }
 
     public String getName() {
         return name;
