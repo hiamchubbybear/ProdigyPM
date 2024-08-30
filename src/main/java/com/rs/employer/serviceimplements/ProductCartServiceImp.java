@@ -36,10 +36,15 @@ public class ProductCartServiceImp {
         Cart cart = cartRepository.findByCartid(request.getCart_id());
         Set<Product> ads = new HashSet<>();
         List<Long> ids = new ArrayList<>();
-        request.getProducts_id().forEach(System.out::println);
+        List<Long> pds = new ArrayList<>();
+        pds.addAll(cartRepository.findProductsByCartId(request.getCart_id()));
+        for (Long long1 : pds) {
+            System.err.println(long1);
+        }
+        // request.getProducts_id().forEach(System.out::println);
         for (Long long1 : request.getProducts_id()) {
+            if(pds.contains(long1)) throw new AppException(ErrorCode.PRODUCT_EXISTED);
             ids.add(long1);
-            if(productRepository.existsById(long1))  throw new AppException(ErrorCode.PRODUCT_EXISTED_CART);
         }
 
         ads.addAll(productRepository.findAllById(ids) );
