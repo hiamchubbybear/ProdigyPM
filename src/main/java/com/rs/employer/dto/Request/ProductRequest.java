@@ -12,9 +12,10 @@ import java.util.Date;
 public class ProductRequest {
     String name;
     String type;
+    int quantity;
     Long size;
     Long weight;
-String weight_unit;
+    String weight_unit;
     String size_unit;
     Date exp;
     Instant create;
@@ -31,8 +32,8 @@ String weight_unit;
         this.size_unit = size_unit;
         this.exp = exp;
         this.create = create;
-        this.update = update;
         this.sub = sub;
+        this.update = update;
         this.unit = unit;
     }
 
@@ -126,6 +127,30 @@ String weight_unit;
     }
 
     public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public ProductRequest(String name, String type, int quantity, Long size, Long weight, String weight_unit,
+            String size_unit, Date exp, Instant create, Instant update, String sub, String unit) {
+        this.name = name;
+        this.type = type;
+        this.quantity = quantity;
+        this.size = size;
+        this.weight = weight;
+        this.weight_unit = weight_unit;
+        this.size_unit = size_unit;
+        this.exp = exp;
+        this.create = create;
+        this.update = update;
+        this.sub = sub;
         this.unit = unit;
     }
 

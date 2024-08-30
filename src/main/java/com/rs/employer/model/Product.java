@@ -34,6 +34,7 @@ public class Product {
     String type;
     @Column(name = "product_size")
     Long size;
+    int quantity;
     @Column(name = "product_weight")
     Long weight;
     @Column(name = "product_weight_unit")
@@ -131,6 +132,24 @@ public class Product {
         this.create = create;
     }
 
+    public Product(Long productid, String name, String type, Long size, int quantity, Long weight, String weight_unit,
+            String size_unit, Date exp, Instant create, Instant update, String sub, String unit, Set<Cart> carts) {
+        this.productid = productid;
+        this.name = name;
+        this.type = type;
+        this.size = size;
+        this.quantity = quantity;
+        this.weight = weight;
+        this.weight_unit = weight_unit;
+        this.size_unit = size_unit;
+        this.exp = exp;
+        this.create = create;
+        this.update = update;
+        this.sub = sub;
+        this.unit = unit;
+        this.carts = carts;
+    }
+
     public Instant getUpdate() {
         return update;
     }
@@ -197,6 +216,22 @@ public class Product {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Long getProductid() {
+        return productid;
+    }
+
+    public void setProductid(Long productid) {
+        this.productid = productid;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
 

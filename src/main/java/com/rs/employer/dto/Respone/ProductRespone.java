@@ -3,12 +3,6 @@ package com.rs.employer.dto.Respone;
 import java.time.Instant;
 import java.util.Date;
 
-// Product class
-// @Data
-// // @Setter
-// // @Getter
-// @AllArgsConstructor
-// @NoArgsConstructor
 public class ProductRespone {
     Long product_id;
     String name;
@@ -21,7 +15,7 @@ public class ProductRespone {
     Instant create;
     Instant update;
     String sub;
-    
+
     public ProductRespone(Long product_id, String name, String type, Long size, Long weight, String weight_unit,
             String size_unit, Date exp, Instant create, Instant update, String sub, String unit) {
         this.product_id = product_id;

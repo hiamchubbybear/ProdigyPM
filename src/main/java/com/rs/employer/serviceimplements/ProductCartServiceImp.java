@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dao.CartRepository;
 import com.rs.employer.dao.CustomerRepo;
 import com.rs.employer.dao.ProductRepository;
 import com.rs.employer.dto.Request.ProductCartRequest;
+import com.rs.employer.dto.Request.ProductCartRequestOne;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.ProductMapper;
@@ -32,7 +32,7 @@ public class ProductCartServiceImp {
     ProductMapper mapper;
 
     public Cart addProductToCart(ProductCartRequest request) {
-        var data = SecurityContextHolder.getContext().getAuthentication().getName();
+        // var data = SecurityContextHolder.getContext().getAuthentication().getName();
         Cart cart = cartRepository.findByCartid(request.getCart_id());
         Set<Product> ads = new HashSet<>();
         List<Long> ids = new ArrayList<>();
@@ -50,6 +50,11 @@ public class ProductCartServiceImp {
         ads.addAll(productRepository.findAllById(ids) );
         cart.setProducts(ads);
         return cartRepository.save(cart);
+    }
+    public Cart addOneProductToCart(ProductCartRequestOne request) {
+        Cart cart = cartRepository.findByCartid(request.getCart_id());
+
+        return cartRepository.save(entity);
     }
     public Cart deleteProductFromCart(ProductCartRequest request ) {
         Cart cart = cartRepository.findByCartid(request.getCart_id());
