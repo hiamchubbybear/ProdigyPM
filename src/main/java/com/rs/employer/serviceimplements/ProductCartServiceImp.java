@@ -53,8 +53,7 @@ public class ProductCartServiceImp {
     }
     public Cart addOneProductToCart(ProductCartRequestOne request) {
         Cart cart = cartRepository.findByCartid(request.getCart_id());
-
-        return cartRepository.save(entity);
+        return cartRepository.save(cart);
     }
     public Cart deleteProductFromCart(ProductCartRequest request ) {
         Cart cart = cartRepository.findByCartid(request.getCart_id());

@@ -1,237 +1,127 @@
 package com.rs.employer.model;
 
+import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-// @Data
-// // @Setter
-// // @Getter
-// @AllArgsConstructor
-// @NoArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "product")
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "product_id" )
-    Long productid;
-    @Column(name = "name_product", nullable = false)
-    String name;
-    @Column(name = "product_type")
-    String type;
-    @Column(name = "product_size")
-    Long size;
-    int quantity;
-    @Column(name = "product_weight")
-    Long weight;
-    @Column(name = "product_weight_unit")
-    String weight_unit;
-    @Column(name = "product_size_unit")
-    String size_unit;
-    @Column(name = "expire_date_product")
-    Date exp;
-    @Column(name = "create_at", nullable = false, updatable = false)
-    Instant create;
-    @Column(name = "update_at", nullable = false, updatable = true)
-    Instant update;
-    @Column(name = "subtitle_product")
-    String sub;
-    @Column(name = "unit_product", nullable = false)
-    String unit;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String brand;
+    private BigDecimal price;
+    private int inventory;
+    private String description;
+    @ManyToOne( cascade= CascadeType.ALL )
+    @JoinColumn(name = "category_id     ")
+    private Category category;
+    private Instant createAt;
+    private Instant updateAt;
+    @OneToMany(mappedBy = "products" , targetEntity = Image.class)
+    private List<Image> images;
     @ManyToMany
     @JsonIgnore
     Set<Cart> carts;
-
-    public Set<Cart> getCarts() {
-        return carts;
+    public Long getId() {
+        return id;
     }
-
-    public void setCarts(Set<Cart> carts) {
-        this.carts = carts;
+    public void setId(Long id) {
+        this.id = id;
     }
-
-    // Long customer_id;
-    // @ManyToOne
-    // @JsonIgnore
-    // @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
-    // public Customer customer;
-    public Long getProduct_id() {
-        return productid;
-    }
-
-    public void setProduct_id(Long product_id) {
-        this.productid = product_id;
-    }
-
     public String getName() {
         return name;
     }
     public void setName(String name) {
         this.name = name;
     }
-
-    public Long getSize() {
-
-        return size;
+    public String getBrand() {
+        return brand;
     }
-
-    public void setSize(Long size) {
-        this.size = size;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
-
-    public Long getWeight() {
-        return weight;
+    public BigDecimal getPrice() {
+        return price;
     }
-
-    public void setWeight(Long weight) {
-        this.weight = weight;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
-
-    public String getWeight_unit() {
-        return weight_unit;
+    public int getInventory() {
+        return inventory;
     }
-
-    public void setWeight_unit(String weight_unit) {
-        this.weight_unit = weight_unit;
+    public void setInventory(int inventory) {
+        this.inventory = inventory;
     }
-
-    public String getSize_unit() {
-        return size_unit;
+    public String getDescription() {
+        return description;
     }
-
-    public void setSize_unit(String size_unit) {
-        this.size_unit = size_unit;
+    public void setDescription(String description) {
+        this.description = description;
     }
-
-    public Date getExp() {
-        return exp;
+    public Category getCategory() {
+        return category;
     }
-
-    public void setExp(Date exp) {
-        this.exp = exp;
+    public void setCategory(Category category) {
+        this.category = category;
     }
-
-    public Instant getCreate() {
-        return create;
+    public Instant getCreateAt() {
+        return createAt;
     }
-
-    public void setCreate(Instant create) {
-        this.create = create;
+    public void setCreateAt(Instant createAt) {
+        this.createAt = createAt;
     }
-
-    public Product(Long productid, String name, String type, Long size, int quantity, Long weight, String weight_unit,
-            String size_unit, Date exp, Instant create, Instant update, String sub, String unit, Set<Cart> carts) {
-        this.productid = productid;
-        this.name = name;
-        this.type = type;
-        this.size = size;
-        this.quantity = quantity;
-        this.weight = weight;
-        this.weight_unit = weight_unit;
-        this.size_unit = size_unit;
-        this.exp = exp;
-        this.create = create;
-        this.update = update;
-        this.sub = sub;
-        this.unit = unit;
+    public Instant getUpdateAt() {
+        return updateAt;
+    }
+    public void setUpdateAt(Instant updateAt) {
+        this.updateAt = updateAt;
+    }
+    public List<Image> getImages() {
+        return images;
+    }
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+    public void setCarts(Set<Cart> carts) {
         this.carts = carts;
     }
-
-    public Instant getUpdate() {
-        return update;
-    }
-
-    public void setUpdate(Instant update) {
-        this.update = update;
-    }
-
-    public String getSub() {
-        return sub;
-    }
-
-    public void setSub(String sub) {
-        this.sub = sub;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
     public Product() {
     }
-    public Product(Long product_id, String name, String type, Long size, Long weight, String weight_unit,
-            String size_unit, Date exp, Instant create, Instant update, String sub, String unit) {
-        this.productid = product_id;
+    public Product(Long id, String name, String brand, BigDecimal price, int inventory, String description,
+            Category category, Instant createAt, Instant updateAt, List<Image> images, Set<Cart> carts) {
+        this.id = id;
         this.name = name;
-        this.type = type;
-        this.size = size;
-        this.weight = weight;
-        this.weight_unit = weight_unit;
-        this.size_unit = size_unit;
-        this.exp = exp;
-        this.create = create;
-        this.update = update;
-        this.sub = sub;
-        this.unit = unit;
-    }
-
-
-    public Product(Long productid, String name, String type, Long size, Long weight, String weight_unit,
-            String size_unit, Date exp, Instant create, Instant update, String sub, String unit, Set<Cart> carts) {
-        this.productid = productid;
-        this.name = name;
-        this.type = type;
-        this.size = size;
-        this.weight = weight;
-        this.weight_unit = weight_unit;
-        this.size_unit = size_unit;
-        this.exp = exp;
-        this.create = create;
-        this.update = update;
-        this.sub = sub;
-        this.unit = unit;
+        this.brand = brand;
+        this.price = price;
+        this.inventory = inventory;
+        this.description = description;
+        this.category = category;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
+        this.images = images;
         this.carts = carts;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Long getProductid() {
-        return productid;
-    }
-
-    public void setProductid(Long productid) {
-        this.productid = productid;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
 
