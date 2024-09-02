@@ -1,4 +1,4 @@
-package com.rs.employer.controller;
+package com.rs.employer.controller.model;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.CustomerRequest;
 import com.rs.employer.model.Customer;
-import com.rs.employer.serviceimplements.CustomerServiceImpl;
+import com.rs.employer.serviceimplements.CustomerService;
 
 import jakarta.validation.Valid;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 //Controller for customer
@@ -31,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin
 public class customercontroller {
     @Autowired
-    private CustomerServiceImpl customerImplement;
+    private CustomerService customerImplement;
 
     // List all customer in database
     @GetMapping(path = "/all")
@@ -57,7 +56,7 @@ public class customercontroller {
         return apiRespone;
 
     }
-    
+
     // Delete customer by ID
     @DeleteMapping(path = "/delete/{id}")
     public ApiRespone<Boolean> deleteCustomer(@PathVariable UUID id) {

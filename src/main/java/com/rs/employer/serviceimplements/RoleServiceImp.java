@@ -15,10 +15,10 @@ import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.RoleMapper;
 import com.rs.employer.model.Role;
-import com.rs.employer.service.RoleService;
+import com.rs.employer.service.IRoleService;
 
 @Service
-public class RoleServiceImp implements RoleService {
+public class RoleServiceImp implements IRoleService {
     @Autowired
     RoleRepository roleRepository;
     @Autowired

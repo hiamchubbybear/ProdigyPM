@@ -8,7 +8,7 @@ import com.rs.employer.dto.Request.PermissionRequest;
 import com.rs.employer.model.Permission;
 
 @Service
-public interface PermissionService {
+public interface IPermissionService {
     public Permission addPermission(PermissionRequest permission);
 
     public Permission updatePermission(PermissionRequest permission);

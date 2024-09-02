@@ -11,7 +11,7 @@ import com.rs.employer.model.Customer;
 
 // Service interface for customer
 @Service
-public interface CustomerService {
+public interface ICustomerService {
     // Add customer
     public Customer addCustomer(CustomerRequest customer);
 

@@ -3,7 +3,6 @@ package com.rs.employer.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,15 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.ProductRequest;
 import com.rs.employer.model.Product;
-import com.rs.employer.serviceimplements.ProductServiceImpl;
+import com.rs.employer.serviceimplements.ProductService;
 
-//Controller for product
+
 @RestController
 @RequestMapping(path = "/api/product")
 @CrossOrigin
 public class productcontroller {
-    @Autowired
-    private ProductServiceImpl repo;
+    private ProductService repo;
 
     // List product by ID
     @GetMapping(path = "/getbyid/{id}")
@@ -34,6 +32,7 @@ public class productcontroller {
         apiRespone.setData(repo.getProduct(ID));
         return apiRespone;
     }
+
 
     // List all product in database
     @GetMapping(path = "/all")
@@ -56,7 +55,8 @@ public class productcontroller {
     @DeleteMapping(path = "/delete/{id}")
     public ApiRespone<Boolean> deleteProductByID(@PathVariable(name = "id") Long ID) {
         ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(repo.deleteProduct(ID));
+        repo.deleteProduct(ID);
+        apiRespone.setData(true);
         return apiRespone;
     }
 
@@ -66,6 +66,12 @@ public class productcontroller {
             @RequestBody ProductRequest product) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(repo.updateProduct(ID, product));
+        return apiRespone;
+    }
+    @GetMapping(path = "/getbycategory/{id}")
+    public ApiRespone<List<Product>> getProductByCategory(@PathVariable(name = "id") Long ID) {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(repo.getProductByCategory(ID));
         return apiRespone;
     }
 }

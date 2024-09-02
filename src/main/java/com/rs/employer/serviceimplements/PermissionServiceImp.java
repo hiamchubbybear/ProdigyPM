@@ -12,10 +12,10 @@ import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.PermissionMapper;
 import com.rs.employer.model.Permission;
-import com.rs.employer.service.PermissionService;
+import com.rs.employer.service.IPermissionService;
 
 @Service
-public class PermissionServiceImp implements PermissionService {
+public class PermissionServiceImp implements IPermissionService {
     @Autowired
     PermissionRepository repo;
     @Autowired

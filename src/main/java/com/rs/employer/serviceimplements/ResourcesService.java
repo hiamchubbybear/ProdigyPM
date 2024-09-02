@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +14,13 @@ import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.ResourcesMapper;
 import com.rs.employer.model.Resources;
-import com.rs.employer.service.ResourcesService;
+import com.rs.employer.service.IResourcesService;
 
 @Service
-public class ResourcesServiceImpl implements ResourcesService {
-    @Autowired
+public class ResourcesService implements IResourcesService {
     private ResourcesRepo repository;
     private Instant date;
-    @Autowired
     private ProductRepository repo;
-    @Autowired
     ResourcesMapper mapper;
 
     @Override

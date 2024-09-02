@@ -18,7 +18,7 @@ import com.rs.employer.dto.Request.ResourcesRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Resources;
-import com.rs.employer.serviceimplements.ResourcesServiceImpl;
+import com.rs.employer.serviceimplements.ResourcesService;
 
 @RestController
 @RequestMapping(path = "/api/resources")
@@ -26,7 +26,7 @@ import com.rs.employer.serviceimplements.ResourcesServiceImpl;
 public class resourcescontroller {
 
     @Autowired
-    public ResourcesServiceImpl rsservice;
+    public ResourcesService rsservice;
 
     @GetMapping(path = "/all")
     public ApiRespone<List<Resources>> resources() {

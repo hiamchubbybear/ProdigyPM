@@ -25,7 +25,7 @@ import com.rs.employer.mapper.CustomerMapper;
 import com.rs.employer.model.Cart;
 import com.rs.employer.model.Customer;
 import com.rs.employer.model.Product;
-import com.rs.employer.service.CustomerService;
+import com.rs.employer.service.ICustomerService;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
-public class CustomerServiceImpl implements CustomerService {
+public class CustomerService implements ICustomerService {
     @Autowired
     private CustomerRepo customerRepository;
     @Autowired
@@ -149,6 +149,10 @@ public class CustomerServiceImpl implements CustomerService {
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List listAllCustomer() {
         return customerRepository.findAll(Sort.by("create").ascending());
+    }
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
+    public List listAllSortByKey(String key) {
+        return customerRepository.findAll(Sort.by(key).ascending());
     }
 
     @Override

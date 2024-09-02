@@ -1,4 +1,4 @@
-package com.rs.employer.controller;
+package com.rs.employer.controller.auth;
 
 import java.text.ParseException;
 
@@ -14,13 +14,13 @@ import com.rs.employer.dto.Request.AuthenticationRequest;
 import com.rs.employer.dto.Request.IntrospectRequest;
 import com.rs.employer.dto.Request.LogoutRequest;
 import com.rs.employer.dto.Respone.AuthenticationRespone;
-import com.rs.employer.serviceimplements.AuthenticationServiceImp;
+import com.rs.employer.serviceimplements.AuthenticationService;
 
 @RestController
 @RequestMapping("/auth")
 public class Authentication {
      @Autowired
-     private AuthenticationServiceImp authen;
+     private AuthenticationService authen;
 
      @PostMapping("/login")
      public ApiRespone<AuthenticationRespone> postMethodName(@RequestBody AuthenticationRequest authenticated) {

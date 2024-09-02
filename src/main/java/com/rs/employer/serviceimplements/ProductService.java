@@ -8,14 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import com.rs.employer.dao.CustomerRepo;
 import com.rs.employer.dao.ProductRepository;
 import com.rs.employer.dto.Request.ProductRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.ProductMapper;
 import com.rs.employer.model.Product;
-import com.rs.employer.service.ProductService;
+import com.rs.employer.service.IProductService;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -26,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE )
-public class ProductServiceImpl implements ProductService {
+public class ProductService implements IProductService {
     @Autowired
     private ProductRepository productRepository;
     Instant now = Instant.now();
@@ -42,8 +41,8 @@ public class ProductServiceImpl implements ProductService {
     @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public Product addProduct(ProductRequest request) {
         if (!productRepository.existsByName(request.getName())) {
-            request.setCreate(now);
-            request.setUpdate(now);
+            request.setCreateAt(now);
+            request.setUpdateAt(now);
             Product product = mapper.toProduct(request);
             return productRepository.save(product);
         } else
@@ -52,14 +51,11 @@ public class ProductServiceImpl implements ProductService {
 
     @PreAuthorize("hasAuthority('SCOPE_DELETE_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     @Override
-    public Boolean deleteProduct(Long ID) {
-        if (!productRepository.existsById(ID))
-            throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
-        else {
-            productRepository.deleteById(ID);
-            return true;
+    public void deleteProduct(Long ID) {
+            productRepository.findById(ID).ifPresentOrElse(product -> productRepository.delete(product) , () -> {
+                throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
+            });
         }
-    }
 
     @PreAuthorize("hasAuthority('SCOPE_UPDATE_PRODUCT') or hasAuthority('SCOPE_PERMIT_ALL')")
     @Override
@@ -79,6 +75,47 @@ public class ProductServiceImpl implements ProductService {
             return productRepository.findById(ID);
         else
             throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
+    }
+
+    @Override
+    public List<Product> getProductByCategory(String name) {
+        return productRepository.findByCategoryName(name);
+    }
+
+    @Override
+    public List<Product> getProductByBrand(Long id) {
+
+        throw new UnsupportedOperationException("Unimplemented method 'getProductByBrand'");
+    }
+
+    @Override
+    public List<Product> getProductByName(String name) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getProductByName'");
+    }
+
+    @Override
+    public List<Product> getProductByBrandAndCategory(Long brandId, Long categoryId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getProductByBrandAndCategory'");
+    }
+
+    @Override
+    public List<Product> getProductByBrandAndInventory(Long brandId, int inventory) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getProductByBrandAndInventory'");
+    }
+
+    @Override
+    public List<Product> getProductByBraindAndName(Long brandId, String name) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getProductByBraindAndName'");
+    }
+
+    @Override
+    public Long countProductByBrandAndName(Long brandId, String name) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'countProductByBrandAndName'");
     }
 
 }

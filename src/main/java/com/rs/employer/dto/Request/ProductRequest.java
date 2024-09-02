@@ -1,7 +1,13 @@
 package com.rs.employer.dto.Request;
 
+import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import com.rs.employer.model.Image;
+
+import jakarta.persistence.OneToMany;
 
 // Product class
 // @Data
@@ -10,148 +16,111 @@ import java.util.Date;
 // @AllArgsConstructor
 // @NoArgsConstructor
 public class ProductRequest {
-    String name;
-    String type;
-    int quantity;
-    Long size;
-    Long weight;
-    String weight_unit;
-    String size_unit;
-    Date exp;
-    Instant create;
-    Instant update;
-    String sub;
-
-    public ProductRequest( String name, String type, Long size, Long weight, String weight_unit,
-            String size_unit, Date exp, Instant create, Instant update, String sub, String unit) {
-        this.name = name;
-        this.type = type;
-        this.size = size;
-        this.weight = weight;
-        this.weight_unit = weight_unit;
-        this.size_unit = size_unit;
-        this.exp = exp;
-        this.create = create;
-        this.sub = sub;
-        this.update = update;
-        this.unit = unit;
+    private Long id;
+    private String name;
+    private String brand;
+    private BigDecimal price;
+    private int inventory;
+    private String description;
+    private String cateId;
+    @OneToMany(mappedBy = "products" , targetEntity = Image.class)
+    private List<Long> images;
+    Instant createAt;
+    Instant updateAt;
+    Set<Long> carts;
+    public Long getId() {
+        return id;
     }
 
-    public ProductRequest() {
+    public void setId(Long id) {
+        this.id = id;
     }
-
-    String unit;
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getType() {
-        return type;
+    public String getBrand() {
+        return brand;
+    }
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+    public BigDecimal getPrice() {
+        return price;
+    }
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+    public int getInventory() {
+        return inventory;
+    }
+    public void setInventory(int inventory) {
+        this.inventory = inventory;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public String getCate_id() {
+        return cateId;
+    }
+    public void setCate_id(String cate_id) {
+        this.cateId = cate_id;
+    }
+    public List<Long> getImages() {
+        return images;
+    }
+    public void setImages(List<Long> images) {
+    this.images = images;
+    }
+    public Set<Long> getCarts() {
+        return carts;
+    }
+    public void setCarts(Set<Long> carts) {
+        this.carts = carts;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public String getCateId() {
+        return cateId;
     }
 
-    public Long getSize() {
-        return size;
+    public void setCateId(String cateId) {
+        this.cateId = cateId;
     }
 
-    public void setSize(Long size) {
-        this.size = size;
+    public Instant getCreateAt() {
+        return createAt;
     }
 
-    public Long getWeight() {
-        return weight;
+    public void setCreateAt(Instant createAt) {
+        this.createAt = createAt;
     }
 
-    public void setWeight(Long weight) {
-        this.weight = weight;
+    public Instant getUpdateAt() {
+        return updateAt;
     }
 
-    public String getWeight_unit() {
-        return weight_unit;
+    public void setUpdateAt(Instant updateAt) {
+        this.updateAt = updateAt;
     }
 
-    public void setWeight_unit(String weight_unit) {
-        this.weight_unit = weight_unit;
-    }
-
-    public String getSize_unit() {
-        return size_unit;
-    }
-
-    public void setSize_unit(String size_unit) {
-        this.size_unit = size_unit;
-    }
-
-    public Date getExp() {
-        return exp;
-    }
-
-    public void setExp(Date exp) {
-        this.exp = exp;
-    }
-
-    public Instant getCreate() {
-        return create;
-    }
-
-    public void setCreate(Instant create) {
-        this.create = create;
-    }
-
-    public Instant getUpdate() {
-        return update;
-    }
-
-    public void setUpdate(Instant update) {
-        this.update = update;
-    }
-
-    public String getSub() {
-        return sub;
-    }
-
-    public void setSub(String sub) {
-        this.sub = sub;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public ProductRequest(String name, String type, int quantity, Long size, Long weight, String weight_unit,
-            String size_unit, Date exp, Instant create, Instant update, String sub, String unit) {
+    public ProductRequest(Long id, String name, String brand, BigDecimal price, int inventory, String description,
+            String cateId, List<Long> images, Instant createAt, Instant updateAt, Set<Long> carts) {
+        this.id = id;
         this.name = name;
-        this.type = type;
-        this.quantity = quantity;
-        this.size = size;
-        this.weight = weight;
-        this.weight_unit = weight_unit;
-        this.size_unit = size_unit;
-        this.exp = exp;
-        this.create = create;
-        this.update = update;
-        this.sub = sub;
-        this.unit = unit;
+        this.brand = brand;
+        this.price = price;
+        this.inventory = inventory;
+        this.description = description;
+        this.cateId = cateId;
+        this.images = images;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
+        this.carts = carts;
     }
 
 }

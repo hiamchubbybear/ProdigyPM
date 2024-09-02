@@ -1,4 +1,4 @@
-package com.rs.employer.controller;
+package com.rs.employer.controller.auth;
 
 import java.util.List;
 

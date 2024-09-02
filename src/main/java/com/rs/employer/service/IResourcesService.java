@@ -5,7 +5,7 @@ import java.util.List;
 import com.rs.employer.dto.Request.ResourcesRequest;
 import com.rs.employer.model.Resources;
 
-public interface ResourcesService {
+public interface IResourcesService {
     public List<Resources> getAllProductByResourcesID();
 
     public Resources addProductResources(ResourcesRequest product);

@@ -9,7 +9,7 @@ import com.rs.employer.dto.Respone.RoleRespone;
 import com.rs.employer.model.Role;
 
 @Service
-public interface RoleService {
+public interface IRoleService {
     public RoleRespone addRole(RoleRequest role);
 
     public RoleRespone updateRole(RoleRequest role);

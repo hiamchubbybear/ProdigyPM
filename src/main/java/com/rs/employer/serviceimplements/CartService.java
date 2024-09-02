@@ -16,7 +16,7 @@ import com.rs.employer.model.Cart;
 // Service implement for cart
 
 @Service
-public class CartServiceImpl {
+public class CartService {
     @Autowired
     private CartRepository cartRepository;
     Instant date;

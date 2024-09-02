@@ -3,7 +3,6 @@ package com.rs.employer.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,21 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.ProductCartRequest;
 import com.rs.employer.model.Cart;
-import com.rs.employer.serviceimplements.CartServiceImpl;
+import com.rs.employer.serviceimplements.CartService;
 import com.rs.employer.serviceimplements.ProductCartServiceImp;
-import com.rs.employer.serviceimplements.ProductServiceImpl;
+import com.rs.employer.serviceimplements.ProductService;
+
 
 //Controller for cart
 @RestController
 @RequestMapping(path = "/api/cart")
 @CrossOrigin
 public class CartController {
-    @Autowired
-    private CartServiceImpl repo;
-    @Autowired
-    ProductCartServiceImp pcRepository;
-    @Autowired
-    ProductServiceImpl service;
+    private CartService repo;
+    private ProductCartServiceImp pcRepository;
+    private ProductService service;
     // List cart by ID
     @GetMapping(path = "/getbyid/{id}")
     public ApiRespone<Optional<Cart>> getUserById(@PathVariable(name = "id") Long ID) {
