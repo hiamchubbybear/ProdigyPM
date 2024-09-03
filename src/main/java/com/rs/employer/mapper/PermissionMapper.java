@@ -2,7 +2,7 @@ package com.rs.employer.mapper;
 
 import org.mapstruct.Mapper;
 
-import com.rs.employer.dto.Request.PermissionRequest;
+import com.rs.employer.dto.Request.Auth.PermissionRequest;
 import com.rs.employer.dto.Respone.PermissionRespone;
 import com.rs.employer.model.Permission;
 

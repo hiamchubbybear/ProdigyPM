@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.rs.employer.dao.ProductRepository;
 import com.rs.employer.dao.ResourcesRepo;
-import com.rs.employer.dto.Request.ResourcesRequest;
+import com.rs.employer.dto.Request.Resources.ResourcesRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.ResourcesMapper;

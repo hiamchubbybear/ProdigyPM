@@ -1,13 +1,8 @@
 package com.rs.employer.service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-
-import javax.swing.RepaintManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +10,12 @@ import com.rs.employer.dao.CategoryRepository;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Category;
-import com.rs.employer.model.Customer;
 @Service
 public class CategoryService implements ICategoryService {
     @Autowired
     CategoryRepository repo;
     @Override
-    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
+    // @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public Category addCategory(Category request) {
         if (repo.existsById(request.getId())) {
             return repo.save(request);

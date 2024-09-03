@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
-import com.rs.employer.dto.Request.ProductRequest;
+import com.rs.employer.dto.Request.Product.ProductRequest;
 import com.rs.employer.model.Product;
 import com.rs.employer.serviceimplements.ProductService;
 

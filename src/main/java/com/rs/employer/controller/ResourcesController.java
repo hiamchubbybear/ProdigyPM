@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
-import com.rs.employer.dto.Request.ResourcesRequest;
+import com.rs.employer.dto.Request.Resources.ResourcesRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Resources;
@@ -23,7 +23,7 @@ import com.rs.employer.serviceimplements.ResourcesService;
 @RestController
 @RequestMapping(path = "/api/resources")
 @CrossOrigin
-public class resourcescontroller {
+public class ResourcesController {
 
     @Autowired
     public ResourcesService rsservice;

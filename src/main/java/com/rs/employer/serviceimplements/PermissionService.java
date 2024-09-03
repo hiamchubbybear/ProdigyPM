@@ -7,7 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dao.PermissionRepository;
-import com.rs.employer.dto.Request.PermissionRequest;
+import com.rs.employer.dto.Request.Auth.PermissionRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.PermissionMapper;

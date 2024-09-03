@@ -3,7 +3,7 @@ package com.rs.employer.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.rs.employer.dto.Request.CustomerRequest;
+import com.rs.employer.dto.Request.User.CustomerRequest;
 import com.rs.employer.dto.Respone.CustomerRespone;
 import com.rs.employer.model.Customer;
 

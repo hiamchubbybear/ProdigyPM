@@ -1,4 +1,4 @@
-package com.rs.employer.dto.Request;
+package com.rs.employer.dto.Request.Auth;
 
 public class IntrospectRequest {
     private String token;
@@ -17,5 +17,5 @@ public class IntrospectRequest {
 
     public IntrospectRequest() {
     }
-    
+
 }

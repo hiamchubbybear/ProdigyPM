@@ -2,7 +2,7 @@ package com.rs.employer.service;
 
 import java.util.List;
 
-import com.rs.employer.dto.Request.ResourcesRequest;
+import com.rs.employer.dto.Request.Resources.ResourcesRequest;
 import com.rs.employer.model.Resources;
 
 public interface IResourcesService {

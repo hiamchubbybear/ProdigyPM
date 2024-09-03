@@ -1,4 +1,4 @@
-package com.rs.employer.dto.Request;
+package com.rs.employer.dto.Request.Auth;
 
 public class AuthenticationRequest {
     public String username;

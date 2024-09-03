@@ -1,4 +1,4 @@
-package com.rs.employer.dto.Request;
+package com.rs.employer.dto.Request.Product;
 
 public class ProductCartRequestOne {
     Long cart_id;

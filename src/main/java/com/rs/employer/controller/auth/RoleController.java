@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
-import com.rs.employer.dto.Request.RoleRequest;
+import com.rs.employer.dto.Request.Auth.RoleRequest;
 import com.rs.employer.model.Role;
 import com.rs.employer.serviceimplements.RoleService;
 @RestController

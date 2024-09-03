@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import com.rs.employer.dao.CartRepository;
 import com.rs.employer.dao.CustomerRepo;
 import com.rs.employer.dao.RoleRepository;
-import com.rs.employer.dto.Request.CustomerRequest;
+import com.rs.employer.dto.Request.User.CustomerRequest;
 import com.rs.employer.dto.Respone.CustomerRespone;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;

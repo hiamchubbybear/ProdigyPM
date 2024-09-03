@@ -3,7 +3,7 @@ package com.rs.employer.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.rs.employer.dto.Request.ProductRequest;
+import com.rs.employer.dto.Request.Product.ProductRequest;
 import com.rs.employer.model.Product;
 
 public interface IProductService {

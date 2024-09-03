@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
-import com.rs.employer.dto.Request.PermissionRequest;
+import com.rs.employer.dto.Request.Auth.PermissionRequest;
 import com.rs.employer.model.Permission;
 import com.rs.employer.serviceimplements.PermissionService;
 

@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nimbusds.jose.JOSEException;
 import com.rs.employer.apirespone.ApiRespone;
-import com.rs.employer.dto.Request.AuthenticationRequest;
-import com.rs.employer.dto.Request.IntrospectRequest;
-import com.rs.employer.dto.Request.LogoutRequest;
+import com.rs.employer.dto.Request.Auth.AuthenticationRequest;
+import com.rs.employer.dto.Request.Auth.IntrospectRequest;
+import com.rs.employer.dto.Request.Auth.LogoutRequest;
 import com.rs.employer.dto.Respone.AuthenticationRespone;
 import com.rs.employer.serviceimplements.AuthenticationService;
 

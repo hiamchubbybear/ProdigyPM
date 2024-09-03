@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
-import com.rs.employer.dto.Request.CustomerRequest;
+import com.rs.employer.dto.Request.User.CustomerRequest;
 import com.rs.employer.model.Customer;
 import com.rs.employer.serviceimplements.CustomerService;
 
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @Slf4j
 @CrossOrigin
-public class customercontroller {
+public class CustomerController {
     @Autowired
     private CustomerService customerImplement;
 

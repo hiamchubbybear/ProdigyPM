@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.rs.employer.dto.Request.CustomerRequest;
+import com.rs.employer.dto.Request.User.CustomerRequest;
 import com.rs.employer.dto.Respone.CustomerRespone;
 import com.rs.employer.model.Customer;
 
