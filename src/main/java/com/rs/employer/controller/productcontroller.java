@@ -22,7 +22,7 @@ import com.rs.employer.serviceimplements.ProductService;
 @RestController
 @RequestMapping(path = "/api/product")
 @CrossOrigin
-public class productcontroller {
+public class ProductController {
     private ProductService repo;
 
     // List product by ID
@@ -68,10 +68,10 @@ public class productcontroller {
         apiRespone.setData(repo.updateProduct(ID, product));
         return apiRespone;
     }
-    @GetMapping(path = "/getbycategory/{id}")
-    public ApiRespone<List<Product>> getProductByCategory(@PathVariable(name = "id") Long ID) {
+    @GetMapping(path = "/getbycategory/{name}")
+    public ApiRespone<List<Product>> getProductByCategory(@PathVariable(name = "id") String name) {
         ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(repo.getProductByCategory(ID));
+        apiRespone.setData(repo.getProductByCategory(name));
         return apiRespone;
     }
 }

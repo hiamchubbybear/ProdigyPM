@@ -20,7 +20,7 @@ import com.rs.employer.mapper.ProductMapper;
 import com.rs.employer.model.Cart;
 import com.rs.employer.model.Product;
 @Service
-public class ProductCartServiceImp {
+public class ProductCartService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired

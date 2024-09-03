@@ -18,7 +18,7 @@ import com.rs.employer.model.Role;
 import com.rs.employer.service.IRoleService;
 
 @Service
-public class RoleServiceImp implements IRoleService {
+public class RoleService implements IRoleService {
     @Autowired
     RoleRepository roleRepository;
     @Autowired

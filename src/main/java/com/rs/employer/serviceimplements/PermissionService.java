@@ -15,7 +15,7 @@ import com.rs.employer.model.Permission;
 import com.rs.employer.service.IPermissionService;
 
 @Service
-public class PermissionServiceImp implements IPermissionService {
+public class PermissionService implements IPermissionService {
     @Autowired
     PermissionRepository repo;
     @Autowired

@@ -17,7 +17,7 @@ import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.ProductCartRequest;
 import com.rs.employer.model.Cart;
 import com.rs.employer.serviceimplements.CartService;
-import com.rs.employer.serviceimplements.ProductCartServiceImp;
+import com.rs.employer.serviceimplements.ProductCartService;
 import com.rs.employer.serviceimplements.ProductService;
 
 
@@ -27,7 +27,7 @@ import com.rs.employer.serviceimplements.ProductService;
 @CrossOrigin
 public class CartController {
     private CartService repo;
-    private ProductCartServiceImp pcRepository;
+    private ProductCartService pcRepository;
     private ProductService service;
     // List cart by ID
     @GetMapping(path = "/getbyid/{id}")
