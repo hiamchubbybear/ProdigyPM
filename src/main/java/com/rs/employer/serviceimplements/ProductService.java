@@ -90,22 +90,22 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getProductByBrandAndCategory(Long brandId, Long categoryId) {
+    public List<Product> getProductByBrandAndCategory(String brandId, Long categoryId) {
         return productRepository.findByBrandIdAndCategoryId(brandId, categoryId);
     }
 
     @Override
-    public List<Product> getProductByBrandAndInventory(Long brandId, int inventory) {
+    public List<Product> getProductByBrandAndInventory(String brandId, int inventory) {
         return productRepository.findByBrandIdAndInventory(brandId, inventory);
     }
 
     @Override
-    public List<Product> getProductByBraindAndName(Long brandId, String name) {
+    public List<Product> getProductByBraindAndName(String brandId, String name) {
         return productRepository.findByBrandIdAndName(brandId, name);
     }
 
     @Override
-    public Long countProductByBrandAndName(Long brandId, String name) {
+    public Long countProductByBrandAndName(String brandId, String name) {
         return productRepository.countByBrandIdAndName(brandId, name);
     }
 

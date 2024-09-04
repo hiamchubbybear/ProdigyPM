@@ -45,7 +45,8 @@ public class ProductController {
 
     // Add product
     @PostMapping(path = "/add")
-    public ApiRespone<Boolean> addProduct(@RequestBody ProductRequest product) {
+    public ApiRespone<Boolean> addProduct(
+        @RequestBody ProductRequest product) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(repo.addProduct(product));
         return apiRespone;
@@ -53,7 +54,8 @@ public class ProductController {
 
     // Delete product by ID
     @DeleteMapping(path = "/delete/{id}")
-    public ApiRespone<Boolean> deleteProductByID(@PathVariable(name = "id") Long ID) {
+    public ApiRespone<Boolean> deleteProductByID(
+        @PathVariable(name = "id") Long ID) {
         ApiRespone apiRespone = new ApiRespone<>();
         repo.deleteProduct(ID);
         apiRespone.setData(true);
@@ -62,16 +64,71 @@ public class ProductController {
 
     // Update product by ID
     @PutMapping(path = "/update/{id}")
-    public ApiRespone<String> changeProduct(@PathVariable(name = "id", required = true) Long ID,
+    public ApiRespone<String> changeProduct(
+        @PathVariable(name = "id", required = true) Long ID,
             @RequestBody ProductRequest product) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(repo.updateProduct(ID, product));
         return apiRespone;
     }
     @GetMapping(path = "/getbycategory/{name}")
-    public ApiRespone<List<Product>> getProductByCategory(@PathVariable(name = "id") String name) {
+    public ApiRespone<List<Product>> getProductByCategory(
+        @PathVariable(name = "id") String name) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(repo.getProductByCategory(name));
+        return apiRespone;
+    }
+    @GetMapping(path = "/getbybrand/{id}")
+    public ApiRespone<List<Product>> getProductByBrand(
+        @PathVariable(name = "id") Long id) {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(repo.getProductByBrand(id));
+        return apiRespone;
+    }
+    @GetMapping(path = "/getbyname/{id}")
+    public ApiRespone<List<Product>> getProductByName(
+        @PathVariable(name = "id") String name) {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(repo.getProductByName(name));
+        return apiRespone;
+    }
+    @GetMapping(path = "/getbybrain/{brain}")
+    public ApiRespone<List<Product>> getProductByBrain(
+        @PathVariable(name = "brain") Long id) {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(repo.getProductByBrand(id));
+        return apiRespone;
+    }
+    @GetMapping(path = "/getbybrainandcategory/{brain}/{category}")
+    public ApiRespone<List<Product>> getProductByBrainAndCategory(
+        @PathVariable(name = "brain") String brain,
+    @PathVariable(name = "category") String category) {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(repo.getProductByBrand(brain));
+        return apiRespone;
+    }
+    @GetMapping(path = "/getbybrainandinventiontory/{brain}/{inventiontory}")
+    public ApiRespone<List<Product>> getProductByBrainAndInventiontory(
+        @PathVariable(name = "brain") String brain,
+    @PathVariable(name = "inventiontory") Long inventiontory) {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(repo.getProductByBrand(brain));
+        return apiRespone;
+    }
+    @GetMapping(path = "/getbybrainandname/{brain}/{name}")
+    public ApiRespone<List<Product>> getProductByBrainAndName(
+        @PathVariable(name = "brain") String brain,
+    @PathVariable(name = "name") String name) {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(repo.getProductByBrand(brain));
+        return apiRespone;
+    }
+    @GetMapping(path = "/countbybrainandname/{brain}/{name}")
+    public ApiRespone<Long> countProductByBrainAndName(
+        @PathVariable(name = "brain") String brain,
+    @PathVariable(name = "name") String name) {
+        ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setData(repo.countProductByBrandAndName(brain, name));
         return apiRespone;
     }
 }
