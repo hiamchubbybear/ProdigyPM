@@ -46,26 +46,7 @@ public class GlobleExceptionHandler {
         apiRespone.setMessage(errorCode.getStatus());
         return ResponseEntity.badRequest().body(apiRespone);
     }
-
-    // @ExceptionHandler(value = RuntimeErrorException.class)
-    // ResponseEntity<ApiRespone> runtimeErrorException(RuntimeErrorException
-    // exception) {
-    // ApiRespone apiRespone = new ApiRespone<>();
-    // apiRespone.setCode(00);
-    // apiRespone.setMessage(exception.getMessage());
-    // apiRespone.setResult(false);
-    // return ResponseEntity.badRequest().body(apiRespone);
-    // }
-    // RuntimException --
-    // @ExceptionHandler(value = NullPointerException.class)
-    // ResponseEntity<ApiRespone> nullRespone(NullPointerException exception) {
-
-    // ApiRespone apiRespone = new ApiRespone<>();
-    // apiRespone.setCode(1002);
-    // apiRespone.setMessage(exception.getMessage());
-    // apiRespone.setData(false);
-    // return ResponseEntity.badRequest().body(apiRespone);
-    // }
+    
 
     @ExceptionHandler(value = RuntimeException.class)
     ResponseEntity<ApiRespone> runtimeRespone(AppException exception) {

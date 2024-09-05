@@ -17,27 +17,24 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
 @Entity
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private String brand;
-    private BigDecimal price;
-    private int inventory;
-    private String description;
-    @ManyToOne( cascade= CascadeType.ALL )
-    @JoinColumn(name = "category_id     ")
-    private Category category;
-    private Instant createAt;
-    private Instant updateAt;
-    @OneToMany(mappedBy = "products" , targetEntity = Image.class)
-    private List<Image> images;
+private Long id;
+private String name;
+private String brand;
+private BigDecimal price;
+private int inventory;
+private String description;
+@ManyToOne( cascade= CascadeType.ALL )
+@JoinColumn(name = "category_id")
+private Category category;
+private Instant createAt;
+private Instant updateAt;
+@OneToMany(mappedBy = "products" , targetEntity = Image.class)
+private List<Image> images;
     @ManyToMany
     @JsonIgnore
     Set<Cart> carts;

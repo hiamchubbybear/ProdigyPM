@@ -38,9 +38,8 @@ public class ProductService implements IProductService {
     @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public Product addProduct(ProductRequest request) {
         if (!productRepository.existsByName(request.getName())) {
-            request.setCreateAt(now);
-            request.setUpdateAt(now);
             Product product = mapper.toProduct(request);
+
             return productRepository.save(product);
         } else
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
@@ -58,7 +57,7 @@ public class ProductService implements IProductService {
     @Override
     public Product updateProduct(Long ID, ProductRequest request) {
         if (!productRepository.existsById(ID)) {
-            throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
+            throw new AppException(ErrorCode.PRODUCT_EXISTED);
         } else {
             Product product = mapper.toProduct(request);
             return productRepository.save(product);
@@ -80,8 +79,8 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getProductByBrand(Long id) {
-        return productRepository.findByBrandId(id);
+    public List<Product> getProductByBrand(String brain) {
+        return productRepository.findByBrand(brain);
     }
 
     @Override
@@ -90,23 +89,23 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getProductByBrandAndCategory(String brandId, Long categoryId) {
-        return productRepository.findByBrandIdAndCategoryId(brandId, categoryId);
+    public List<Product> getProductByBrandAndCategory(String brand, Long categoryId) {
+        return productRepository.findByBrandAndCategoryId(brand, categoryId);
     }
 
     @Override
-    public List<Product> getProductByBrandAndInventory(String brandId, int inventory) {
-        return productRepository.findByBrandIdAndInventory(brandId, inventory);
+    public List<Product> getProductByBrandAndInventory(String brand, Long inventory) {
+        return productRepository.findByBrandAndInventory(brand, inventory);
     }
 
     @Override
-    public List<Product> getProductByBraindAndName(String brandId, String name) {
-        return productRepository.findByBrandIdAndName(brandId, name);
+    public List<Product> getProductByBraindAndName(String brand, String name) {
+        return productRepository.findByBrandAndName(brand, name);
     }
 
     @Override
-    public Long countProductByBrandAndName(String brandId, String name) {
-        return productRepository.countByBrandIdAndName(brandId, name);
+    public Long countProductByBrandAndName(String brand, String name) {
+        return productRepository.countByBrandAndName(brand, name);
     }
 
 }

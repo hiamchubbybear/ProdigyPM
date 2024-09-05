@@ -1,13 +1,8 @@
 package com.rs.employer.dto.Request.Product;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.List;
 import java.util.Set;
-
-import com.rs.employer.model.Image;
-
-import jakarta.persistence.OneToMany;
 
 // Product class
 // @Data
@@ -23,10 +18,7 @@ public class ProductRequest {
     private int inventory;
     private String description;
     private String cateId;
-    @OneToMany(mappedBy = "products" , targetEntity = Image.class)
     private List<Long> images;
-    Instant createAt;
-    Instant updateAt;
     Set<Long> carts;
     public Long getId() {
         return id;
@@ -92,24 +84,8 @@ public class ProductRequest {
         this.cateId = cateId;
     }
 
-    public Instant getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(Instant createAt) {
-        this.createAt = createAt;
-    }
-
-    public Instant getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(Instant updateAt) {
-        this.updateAt = updateAt;
-    }
-
     public ProductRequest(Long id, String name, String brand, BigDecimal price, int inventory, String description,
-            String cateId, List<Long> images, Instant createAt, Instant updateAt, Set<Long> carts) {
+            String cateId, List<Long> images, Set<Long> carts) {
         this.id = id;
         this.name = name;
         this.brand = brand;
@@ -118,8 +94,6 @@ public class ProductRequest {
         this.description = description;
         this.cateId = cateId;
         this.images = images;
-        this.createAt = createAt;
-        this.updateAt = updateAt;
         this.carts = carts;
     }
 

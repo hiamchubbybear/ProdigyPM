@@ -10,12 +10,12 @@ import com.rs.employer.model.Product;
 // Database JPA repository for Product
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findByCategoryName(String name);
-    Boolean existsByName(String name);
-    List<Product> findByBrandId(Long id);
-    List<Product> findByName(String name);
-    public List<Product> findByBrandIdAndCategoryId(String brandId, Long categoryId);
-    Long countByBrandIdAndName(String brandId, String name);
-    List<Product> findByBrandIdAndName(String brandId, String name);
-    List<Product> findByBrandIdAndInventory(String brandId, int inventory);
+    public List<Product> findByCategoryName(String name);
+    public Boolean existsByName(String name);
+    public List<Product> findByBrand(String brand);
+    public List<Product> findByName(String name);
+    public List<Product> findByBrandAndCategoryId(String brand, Long id);
+    public Long countByBrandAndName(String brand, String name);
+    public List<Product> findByBrandAndName(String brand, String name);
+    public List<Product> findByBrandAndInventory(String brand, Long inventory);
 }

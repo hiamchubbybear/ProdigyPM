@@ -12,6 +12,7 @@ public interface ProductMapper {
     ProductRespone toProductRespone(ProductRequest request);
     @Mapping(ignore = true , target = "images" )
     @Mapping(ignore = true , target = "carts" )
+    @Mapping(ignore= true ,target = "category")
     Product toProduct(ProductRequest request);
 
 }
