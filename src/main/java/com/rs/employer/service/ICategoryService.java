@@ -7,11 +7,10 @@ import com.rs.employer.model.Category;
 
 public interface  ICategoryService {
     public Category addCategory(Category request);
-
     public Category updateCategory(Category request);
-
-    public Boolean deleteCategory(Long id);
-
+    public Category getCategoryByName(String name);
+    public void deleteCategory(Long id);
+    public Category getCategoryById(Long id);
     public List<Category> allCategory();
 
 }

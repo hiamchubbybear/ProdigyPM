@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import com.rs.employer.dao.CategoryRepository;
 import com.rs.employer.dao.ProductRepository;
 import com.rs.employer.dto.Request.Product.ProductRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.ProductMapper;
+import com.rs.employer.model.Category;
 import com.rs.employer.model.Product;
 import com.rs.employer.service.IProductService;
 
@@ -25,6 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ProductService implements IProductService {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
     Instant now = Instant.now();
     @Autowired
     ProductMapper mapper;
@@ -37,12 +41,14 @@ public class ProductService implements IProductService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public Product addProduct(ProductRequest request) {
-        if (!productRepository.existsByName(request.getName())) {
-            Product product = mapper.toProduct(request);
-
-            return productRepository.save(product);
-        } else
-            throw new AppException(ErrorCode.PRODUCT_EXISTED);
+     Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
+     .orElseGet(() -> {
+        Category category1 = new Category(request.getCategory().getName());
+        return categoryRepository.save(category1);
+     });
+    request.setCategory(category);
+    Product product = mapper.toProduct(request);
+    return productRepository.save(product);
     }
 
     @PreAuthorize("hasAuthority('SCOPE_DELETE_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")

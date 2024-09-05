@@ -11,7 +11,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Data;
 @Entity
+@Data
 @Table(name="category")
 public class Category {
     @Id
@@ -42,10 +44,9 @@ public class Category {
     }
     public Category() {
     }
-    public Category(Long id, String name, List<Product> product) {
-        this.id = id;
+    public Category( String name) {
         this.name = name;
-        this.product = product;
+
     }
 
 }

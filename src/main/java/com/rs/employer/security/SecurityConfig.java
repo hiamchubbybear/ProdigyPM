@@ -36,7 +36,8 @@ public class SecurityConfig {
                         "/api/role/delete/**",
                         "/api/role/update",
                         "/api/category",
-                        "/api/cart/**"
+                        "/api/cart/**",
+                        "/api/category/"
         };
         private final String[] VENDOR_ENDPOINT = {
                         "/api/product/add",

@@ -3,6 +3,7 @@ package com.rs.employer.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,18 +24,14 @@ import com.rs.employer.serviceimplements.ProductService;
 @RequestMapping(path = "/api/product")
 @CrossOrigin
 public class ProductController {
+    @Autowired
     private ProductService repo;
-
-    // List product by ID
     @GetMapping(path = "/getbyid/{id}")
     public ApiRespone<Optional<Product>> getUserById(@PathVariable(name = "id") Long ID) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(repo.getProduct(ID));
         return apiRespone;
     }
-
-
-    // List all product in database
     @GetMapping(path = "/all")
     public ApiRespone<Optional<Product>> getAllProduct(Product product) {
         List<Product> list = repo.getAllProduct();
@@ -42,8 +39,6 @@ public class ProductController {
         apiRespone.setData(list);
         return apiRespone;
     }
-
-    // Add product
     @PostMapping(path = "/add")
     public ApiRespone<Product> addProduct(
         @RequestBody ProductRequest product) {
@@ -51,8 +46,6 @@ public class ProductController {
         apiRespone.setData(repo.addProduct(product));
         return apiRespone;
     }
-
-    // Delete product by ID
     @DeleteMapping(path = "/delete/{id}")
     public ApiRespone<Boolean> deleteProductByID(
         @PathVariable(name = "id") Long ID) {
@@ -61,8 +54,6 @@ public class ProductController {
         apiRespone.setData(true);
         return apiRespone;
     }
-
-    // Update product by ID
     @PutMapping(path = "/update/{id}")
     public ApiRespone<String> changeProduct(
         @PathVariable(name = "id", required = true) Long ID,

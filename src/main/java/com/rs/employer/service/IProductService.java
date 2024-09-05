@@ -3,9 +3,11 @@ package com.rs.employer.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.rs.employer.dto.Request.Product.ProductRequest;
 import com.rs.employer.model.Product;
-
+@Service
 public interface IProductService {
     public List<Product> getAllProduct();
     public Product addProduct(ProductRequest product);

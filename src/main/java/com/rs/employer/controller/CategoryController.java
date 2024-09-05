@@ -43,7 +43,8 @@ public class CategoryController {
     @DeleteMapping("/delete/{role}")
     public ApiRespone<Boolean> deleteCategory(@PathVariable("role") Long role) {
         ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(svc.deleteCategory(role));
+        svc.deleteCategory(role);
+        apiRespone.setData(true);
         return apiRespone;
     }
 }

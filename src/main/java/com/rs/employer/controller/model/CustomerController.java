@@ -61,7 +61,8 @@ public class CustomerController {
     @DeleteMapping(path = "/delete/{id}")
     public ApiRespone<Boolean> deleteCustomer(@PathVariable UUID id) {
         ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(customerImplement.deleteCustomerById(id));
+        customerImplement.deleteCustomerById(id);
+        apiRespone.setData(true);
         return apiRespone;
     }
 

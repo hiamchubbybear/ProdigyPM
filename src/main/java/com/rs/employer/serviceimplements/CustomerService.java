@@ -1,4 +1,5 @@
-    package com.rs.employer.serviceimplements;
+
+package com.rs.employer.serviceimplements;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -71,14 +72,8 @@ public class CustomerService implements ICustomerService {
     }
 
     private Cart createCart(CustomerRequest customer) {
-        // var user = customerRepository.findByUsername(customer.getUsername());
-        // if (user.isPresent()) {
-        // Customer customer1 = user.get();
         Cart cart = new Cart(now , now , customer.getUsername() );
         return cartRepository.save(cart);
-
-        // } else
-        // throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
 
     @Override
@@ -99,19 +94,10 @@ public class CustomerService implements ICustomerService {
 
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_DELETE_MS')")
-    public Boolean deleteCustomerById(UUID id) {
-        if (customerRepository.existsById(id)) {
-            Optional<Customer> eOptional = customerRepository.findById(id);
-            Customer customer1 = eOptional.get();
-            if (customer1.getUuid() != null) {
-                customerRepository.deleteById(id);
-                return true;
-            }
-        }
-        throw new AppException(ErrorCode.USER_NOTFOUND);
-    }
+    public void deleteCustomerById(UUID id) {
+    customerRepository.findById(id).ifPresentOrElse(customerRepository::delete, () -> {throw new AppException(ErrorCode.USER_NOTFOUND);});
 
-    // List customer by ID
+    }
     @Override
     @PostAuthorize("returnObject.username == authentication.name")
     public CustomerRespone listCustomerById(UUID id) {
@@ -124,7 +110,6 @@ public class CustomerService implements ICustomerService {
         } else
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
-
     public Optional<Customer> getMyInfo() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var user = SecurityContextHolder.getContext();
@@ -132,8 +117,6 @@ public class CustomerService implements ICustomerService {
         String name = user.getAuthentication().getName();
         return customerRepository.findByUsername(name);
     }
-
-    // Register user
     public Customer registerUser(UUID id, String password, String login) {
         if (id != null && password != null && login != null) {
             Customer customer = new Customer();
