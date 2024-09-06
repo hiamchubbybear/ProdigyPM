@@ -41,23 +41,25 @@ public class ProductService implements IProductService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public Product addProduct(ProductRequest request) {
-     Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
-     .orElseGet(() -> {
-        Category category1 = new Category(request.getCategory().getName());
-        return categoryRepository.save(category1);
-     });
-    request.setCategory(category);
-    Product product = mapper.toProduct(request);
-    return productRepository.save(product);
+        Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
+                .orElseGet(() -> {
+                    Category category1 = new Category(request.getCategory().getName());
+                    return categoryRepository.save(category1);
+                });
+        Product product = mapper.toProduct(request);
+        product.setCategory(category);
+        product.setCreateAt(now);
+        product.setUpdateAt(now);
+        return productRepository.save(product);
     }
 
     @PreAuthorize("hasAuthority('SCOPE_DELETE_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     @Override
     public void deleteProduct(Long ID) {
-            productRepository.findById(ID).ifPresentOrElse(product -> productRepository.delete(product) , () -> {
-                throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
-            });
-        }
+        productRepository.findById(ID).ifPresentOrElse(product -> productRepository.delete(product), () -> {
+            throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
+        });
+    }
 
     @PreAuthorize("hasAuthority('SCOPE_UPDATE_PRODUCT') or hasAuthority('SCOPE_PERMIT_ALL')")
     @Override
@@ -66,12 +68,14 @@ public class ProductService implements IProductService {
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
         } else {
             Product product = mapper.toProduct(request);
+            product.setUpdateAt(now);
             return productRepository.save(product);
         }
 
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public Optional<Product> getProduct(Long ID) {
         if (productRepository.existsById(ID))
             return productRepository.findById(ID);
@@ -80,36 +84,69 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Product> getProductByCategory(String name) {
-        return productRepository.findByCategoryName(name);
+        if (productRepository.existsByCategoryName(name)) {
+            return productRepository.findByCategoryName(name);
+        } else {
+            throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
+    }
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Product> getProductByBrand(String brain) {
-        return productRepository.findByBrand(brain);
+        List<Product> products = productRepository.findByBrand(brain);
+        if (!products.isEmpty())
+            return products;
+        else
+            throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
+
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Product> getProductByName(String name) {
-        return  productRepository.findByName(name);
+        List<Product> products = productRepository.findByName(name);
+        if (!products.isEmpty())
+            return products;
+        else
+            throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
+
     }
 
     @Override
-    public List<Product> getProductByBrandAndCategory(String brand, Long categoryId) {
-        return productRepository.findByBrandAndCategoryId(brand, categoryId);
+    @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
+    public List<Product> getProductByBrandAndCategory(String brand, String categoryname) {
+        List<Product> products = productRepository.findByBrandAndCategoryName(brand,categoryname);
+        if (!products.isEmpty())
+            return products;
+        else
+            throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Product> getProductByBrandAndInventory(String brand, Long inventory) {
-        return productRepository.findByBrandAndInventory(brand, inventory);
+        List<Product> products = productRepository.findByBrandAndInventory(brand,inventory);
+        if (!products.isEmpty())
+            return products;
+        else
+            throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Product> getProductByBraindAndName(String brand, String name) {
-        return productRepository.findByBrandAndName(brand, name);
+        List<Product> products = productRepository.findByBrandAndName(brand,name);
+        if (!products.isEmpty())
+            return products;
+        else
+            throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public Long countProductByBrandAndName(String brand, String name) {
         return productRepository.countByBrandAndName(brand, name);
     }

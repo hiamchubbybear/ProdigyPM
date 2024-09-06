@@ -18,4 +18,5 @@ public interface ICustomerService {
     public Customer updateCustomer(UUID id, CustomerRequest customer);
     public Customer updatePassword(UUID id, String pwd);
     public Customer registerUser(UUID id, String password, String login);
+    public List<Customer> listAllSort(String sort);
 }

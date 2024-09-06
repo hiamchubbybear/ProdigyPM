@@ -157,4 +157,9 @@ public class CustomerService implements ICustomerService {
     public List<Product> findByName(String name) {
         return customerRepository.findAllDepartment(name);
     }
+
+    @Override
+    public List<Customer> listAllSort(String sort) {
+        return customerRepository.findAll(Sort.by(sort));
+    }
 }

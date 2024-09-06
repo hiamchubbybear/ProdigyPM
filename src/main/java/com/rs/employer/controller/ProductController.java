@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.Product.ProductRequest;
+import com.rs.employer.globalexception.AppException;
+import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Product;
 import com.rs.employer.serviceimplements.ProductService;
 
@@ -29,7 +31,7 @@ public class ProductController {
     @GetMapping(path = "/getbyid/{id}")
     public ApiRespone<Optional<Product>> getUserById(@PathVariable(name = "id") Long ID) {
         ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(repo.getProduct(ID));
+        apiRespone.setData(repo.getProduct(ID).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_EXISTED)));
         return apiRespone;
     }
     @GetMapping(path = "/all")
@@ -64,59 +66,52 @@ public class ProductController {
     }
     @GetMapping(path = "/getbycategory/{name}")
     public ApiRespone<List<Product>> getProductByCategory(
-        @PathVariable(name = "id") String name) {
+        @PathVariable(name = "name") String name) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(repo.getProductByCategory(name));
         return apiRespone;
     }
-    @GetMapping(path = "/getbybrand/{id}")
-    public ApiRespone<List<Product>> getProductByBrand(
-        @PathVariable(name = "id") String brand) {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(repo.getProductByBrand(brand));
-        return apiRespone;
-    }
-    @GetMapping(path = "/getbyname/{id}")
+    @GetMapping(path = "/getbyname/{name}")
     public ApiRespone<List<Product>> getProductByName(
-        @PathVariable(name = "id") String name) {
+        @PathVariable(name = "name") String name) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(repo.getProductByName(name));
         return apiRespone;
     }
-    @GetMapping(path = "/getbybrain/{brain}")
-    public ApiRespone<List<Product>> getProductByBrain(
-        @PathVariable(name = "brain") String brand) {
+    @GetMapping(path = "/getbybrand/{brand}")
+    public ApiRespone<List<Product>> getProductByBrand(
+        @PathVariable(name = "brand") String brand) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(repo.getProductByBrand(brand));
         return apiRespone;
     }
-    @GetMapping(path = "/getbybrainandcategory/{brain}/{category}")
-    public ApiRespone<List<Product>> getProductByBrainAndCategory(
-        @PathVariable(name = "brain") String brand,
+    @GetMapping(path = "/getbybrandandcategory/{brand}/{category}")
+    public ApiRespone<List<Product>> getProductByBrandAndCategory(
+        @PathVariable(name = "brand") String brand,
     @PathVariable(name = "category") String category) {
         ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(repo.getProductByBrand(brand));
+        apiRespone.setData(repo.getProductByBrandAndCategory(brand, category));
         return apiRespone;
     }
-    @GetMapping(path = "/getbybrainandinventiontory/{brain}/{inventiontory}")
-    public ApiRespone<List<Product>> getProductByBrainAndInventiontory(
-        @PathVariable(name = "brain") String brand,
-    @PathVariable(name = "inventiontory") Long inventiontory) {
+    @GetMapping(path = "/getbybrandandinventory/{brand}/{inventory}")
+    public ApiRespone<List<Product>> getProductByBrandAndInventiontory(
+        @PathVariable(name = "brand") String brand,
+    @PathVariable(name = "inventory") Long inventory) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(repo.getProductByBrand(brand));
         return apiRespone;
     }
-    @GetMapping(path = "/getbybrainandname/{brain}/{name}")
-    public ApiRespone<List<Product>> getProductByBrainAndName(
-        @PathVariable(name = "brain") String brand,
+    @GetMapping(path = "/getbybrandandname/{brand}/{name}")
+    public ApiRespone<List<Product>> getProductByBrandAndName(
+        @PathVariable(name = "brand") String brand,
     @PathVariable(name = "name") String name) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(repo.getProductByBrand(brand));
         return apiRespone;
     }
-    @GetMapping(path = "/countbybrainandname/{brain}/{name}")
-    public ApiRespone<Long> countProductByBrainAndName(
-        @PathVariable(name = "brain") String brand,
+    @GetMapping(path = "/countbybrandandname/{brand}/{name}")
+    public ApiRespone<Long> countProductByBrandAndName(
+        @PathVariable(name = "brand") String brand,
         @PathVariable(name = "name") String name) {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setData(repo.countProductByBrandAndName(brand, name));

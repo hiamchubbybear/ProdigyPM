@@ -28,6 +28,7 @@ private Category category;
 private Instant createAt;
 private Instant updateAt;
 @OneToMany(mappedBy = "products" , targetEntity = Image.class)
+@JsonIgnore
 private List<Image> images;
 @ManyToMany
 @JsonIgnore
