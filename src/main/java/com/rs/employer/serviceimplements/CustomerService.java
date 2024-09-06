@@ -28,13 +28,8 @@ import com.rs.employer.model.Customer;
 import com.rs.employer.model.Product;
 import com.rs.employer.service.ICustomerService;
 
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-
-// Service for customer
 @Service
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class CustomerService implements ICustomerService {
     @Autowired
@@ -49,15 +44,12 @@ public class CustomerService implements ICustomerService {
     @Autowired
     CustomerMapper mapper;
 
-    // ZoneId zone = ZoneId.of("Asia/HoChiMinh");
-    // Add customertomertoom
     @Override
     public Customer addCustomer(CustomerRequest customer) {
 
         if (customerRepository.existsByUsername(customer.getUsername()))
             throw new AppException(ErrorCode.USEREXISTED_OR_USERIDEXISTED);
         else {
-            // PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
             var role = roleRepository.findAllById(customer.getRole());
             customer.setPassword(passwordEncoder.encode(customer.getPassword()));
             if (!cartRepository.existsByOwner(customer.getUsername()))
@@ -70,18 +62,15 @@ public class CustomerService implements ICustomerService {
             return customerRepository.save(customer1);
         }
     }
-
     private Cart createCart(CustomerRequest customer) {
         Cart cart = new Cart(now , now , customer.getUsername() );
         return cartRepository.save(cart);
     }
-
     @Override
     @PreAuthorize("hasAuthority('SCOPE_UPDATE_USER') or hasAuthority('SCOPE_PERMIT_ALL')")
     public Customer updateCustomer(UUID id, CustomerRequest customer) {
         Optional<Customer> customer1 = customerRepository.findById(id);
         if (customer1.isPresent()) {
-
             var roles = roleRepository.findAllById(customer.getRole());
             Customer customer3 = mapper.toCustomer(customer);
             customer3.setUpdate(now);
@@ -91,12 +80,10 @@ public class CustomerService implements ICustomerService {
         }
         throw new AppException(ErrorCode.USER_NOTFOUND);
     }
-
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_DELETE_MS')")
     public void deleteCustomerById(UUID id) {
     customerRepository.findById(id).ifPresentOrElse(customerRepository::delete, () -> {throw new AppException(ErrorCode.USER_NOTFOUND);});
-
     }
     @Override
     @PostAuthorize("returnObject.username == authentication.name")
@@ -126,8 +113,6 @@ public class CustomerService implements ICustomerService {
         } else
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
-
-    // List all customer
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List listAllCustomer() {
@@ -157,9 +142,9 @@ public class CustomerService implements ICustomerService {
     public List<Product> findByName(String name) {
         return customerRepository.findAllDepartment(name);
     }
-
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     @Override
     public List<Customer> listAllSort(String sort) {
-        return customerRepository.findAll(Sort.by(sort));
+        return customerRepository.findAll(Sort.by(sort).ascending());
     }
 }

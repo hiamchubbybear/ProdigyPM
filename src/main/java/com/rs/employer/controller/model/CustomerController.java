@@ -22,8 +22,6 @@ import com.rs.employer.serviceimplements.CustomerService;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-
-//Controller for customer
 @RequestMapping(path = "/api/customer")
 @RestController
 @Slf4j
@@ -31,63 +29,54 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomerController {
     @Autowired
     private CustomerService customerImplement;
-
-    // List all customer in database
     @GetMapping(path = "/all")
     public ApiRespone<List<Customer>> getAllUser() {
-        ApiRespone<List<Customer>> apiRespone = new ApiRespone<>();
-        List<Customer> list = customerImplement.listAllCustomer();
-        apiRespone.setData(list);
+        ApiRespone<List<Customer>> apiRespone =
+        new ApiRespone<>(customerImplement.listAllCustomer());
         return apiRespone;
     }
-
-    // List customer by ID as administrator
     @GetMapping(path = "/getbyid/{id}")
     public ApiRespone<Customer> getPaticipateUser(@PathVariable UUID id) {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(customerImplement.listCustomerById(id));
+        ApiRespone apiRespone = new ApiRespone<>
+        (customerImplement.listCustomerById(id));
         return apiRespone;
     }
 
     @GetMapping("/getMyInfo")
     public ApiRespone<Optional<Customer>> getInfo() {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(customerImplement.getMyInfo());
+        ApiRespone apiRespone = new ApiRespone<>
+        (customerImplement.getMyInfo());
         return apiRespone;
-
     }
-
-    // Delete customer by ID
     @DeleteMapping(path = "/delete/{id}")
     public ApiRespone<Boolean> deleteCustomer(@PathVariable UUID id) {
-        ApiRespone apiRespone = new ApiRespone<>();
         customerImplement.deleteCustomerById(id);
-        apiRespone.setData(true);
+        ApiRespone apiRespone = new ApiRespone<>(true);
         return apiRespone;
     }
-
-    // Update customer by ID
     @PutMapping(path = "/update/{id}")
     public ApiRespone<Customer> updatCustomer(@PathVariable UUID id,
             @RequestBody CustomerRequest request) {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(customerImplement.updateCustomer(id, request));
+        ApiRespone apiRespone = new ApiRespone<>
+        (customerImplement.updateCustomer(id, request));
         return apiRespone;
     }
-
-    // Add customer
     @PostMapping(path = "/add")
     public ApiRespone<Customer> addCustomer(@RequestBody @Valid CustomerRequest customer) {
-        ApiRespone<Customer> apirespone = new ApiRespone<Customer>();
-        apirespone.setData(customerImplement.addCustomer(customer));
+        ApiRespone<Customer> apirespone = new ApiRespone<Customer>
+        (customerImplement.addCustomer(customer));
         return apirespone;
     }
-
-    // Hello world
     @GetMapping(path = "/hello")
     public ApiRespone<String> hello() {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData("HelloWorld");
+        ApiRespone apiRespone = new ApiRespone("Hello worlds");
         return apiRespone;
     }
+    @GetMapping(path = "/getallandsortby/{value}")
+    public ApiRespone<List<Customer>> getAllAndSort(
+        @PathVariable(value = "value" ,required = true) String value) {
+        ApiRespone apiRespone = new ApiRespone(customerImplement.listAllSort(value));
+        return apiRespone;
+    }
+
 }

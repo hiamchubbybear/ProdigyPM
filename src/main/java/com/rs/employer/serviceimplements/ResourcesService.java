@@ -19,25 +19,23 @@ import com.rs.employer.service.IResourcesService;
 @Service
 public class ResourcesService implements IResourcesService {
     private ResourcesRepo repository;
-    private Instant date;
+    private Instant now = Instant.now();
     private ProductRepository repo;
     ResourcesMapper mapper;
 
     @Override
-
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_ADD_RESOURCES')")
     public List<Resources> getAllProductByResourcesID() {
         return repository.findAll();
     }
-
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_ADD_RESOURCES')")
     public Resources addProductResources(ResourcesRequest request) {
         Resources resources = mapper.toResources(request);
-        resources.setCreate(date.now());
-        resources.setUpdate(date.now());
+        resources.setCreate(now);
+        resources.setUpdate(now);
         return repository.save(resources);
     }
-
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_UPDATE_RESOURCES')")
     public Resources updateProductResources(ResourcesRequest request) {
@@ -45,11 +43,10 @@ public class ResourcesService implements IResourcesService {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         } else {
             Resources resources = mapper.toResources(request);
-            resources.setUpdate(date.now());
+            resources.setUpdate(now);
             return repository.save(resources);
         }
     }
-
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_DELETE_RESOURCES')")
     public Boolean deleteProductResources(Long id) {
@@ -60,7 +57,6 @@ public class ResourcesService implements IResourcesService {
         } else
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
-
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_GET_RESOURCES')")
     public Resources getProductResourcesByID(Long rID) {
         Optional<Resources> eOptional = repository.findById(rID);
