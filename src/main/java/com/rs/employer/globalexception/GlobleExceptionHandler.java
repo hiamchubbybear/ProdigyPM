@@ -33,8 +33,7 @@ public class GlobleExceptionHandler {
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setCode(errorCode.getCode());
         apiRespone.setMessage(errorCode.getStatus());
-        return ResponseEntity.status(errorCode.getStatusCode()).body(
-                apiRespone);
+        return ResponseEntity.status(errorCode.getStatusCode()).body(apiRespone);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
@@ -49,7 +48,7 @@ public class GlobleExceptionHandler {
     
 
     @ExceptionHandler(value = RuntimeException.class)
-    ResponseEntity<ApiRespone> runtimeRespone(AppException exception) {
+    ResponseEntity<ApiRespone> runtimeRespone(AppException exception , RuntimeException exception1) {
         ErrorCode ec = exception.getErrorCode();
         ApiRespone apiRespone = new ApiRespone<>();
         apiRespone.setCode(ec.getCode());

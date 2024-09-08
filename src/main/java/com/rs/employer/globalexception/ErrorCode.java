@@ -9,6 +9,7 @@ public enum ErrorCode {
             HttpStatus.BAD_REQUEST),
     PASSWORD_INVALID(1004, "Password must be at least 8 characters", HttpStatus.BAD_REQUEST),
     UNCATEGORIZE_EXCEPTION(999, "Uncategorize Exception", HttpStatus.INTERNAL_SERVER_ERROR),
+    SERVER_INTERNAL_ERROR(998, "Server Internal Error", HttpStatus.INTERNAL_SERVER_ERROR),
     USER_UNAUTHENTICATED(1000, "User authentication failed", HttpStatus.UNAUTHORIZED),
     USERNAME_EXISTED(1001, "Username existed", HttpStatus.NOT_FOUND),
     UNAUTHORIZED(401, "You don't have permission to access", HttpStatus.FORBIDDEN),

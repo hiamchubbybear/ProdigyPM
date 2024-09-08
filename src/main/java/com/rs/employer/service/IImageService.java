@@ -1,17 +1,20 @@
 package com.rs.employer.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import com.rs.employer.dto.Request.ImageDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.rs.employer.model.Image;
-import com.rs.employer.model.ImageRequest;
 
-@Service
 public interface IImageService {
     public Image addImage(Image image);
 
-    public Image updateImage(Long id, ImageRequest image);
+    public List<ImageDTO> saveIgImage(List<MultipartFile> file, Long productId) throws SQLException;
+
+    public Image updateImage(MultipartFile file, Long imageId);
 
     public List<Image> getAllImages();
 
