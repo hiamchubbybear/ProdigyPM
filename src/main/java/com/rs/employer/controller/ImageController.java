@@ -1,19 +1,9 @@
 package com.rs.employer.controller;
 
-import java.io.ByteArrayOutputStream;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.List;
 
-import com.rs.employer.dto.Request.ImageDTO;
-import com.rs.employer.globalexception.ErrorCode;
-import com.rs.employer.model.Resources;
-import com.rs.employer.service.IImageService;
-import jakarta.annotation.Resource;
-import org.hibernate.ResourceClosedException;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.metamodel.mapping.EntityRowIdMapping;
-import org.hibernate.metamodel.mapping.internal.ImmutableAttributeMappingList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -29,15 +19,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.rs.employer.apirespone.ApiRespone;
+import com.rs.employer.dto.Request.ImageDTO;
+import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Image;
-import com.rs.employer.model.ImageRequest;
-import com.rs.employer.serviceimplements.ImageService;
-import org.springframework.web.multipart.MultipartFile;
-import org.w3c.dom.html.HTMLParagraphElement;
+import com.rs.employer.service.IImageService;
 
-import javax.xml.stream.events.EntityReference;
+import jakarta.annotation.Resource;
 
 @RestController
 @RequestMapping(value = "/api/images")
@@ -73,12 +64,14 @@ public class ImageController {
         ApiRespone apiRespone = new ApiRespone<>(imageService.getImageByFileName(filename));
         return apiRespone;
     }
-    @GetMapping(value = "/api/images/image/download/{imageId}")
+
+    @GetMapping(value = "/api/image/download/{imageId}")
     public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException {
         Image image = imageService.getImageByID(imageId);
-        ByteArrayResource resource = new ByteArrayResource(image.getImage().getBytes(1,(int)image.getImage().length()));
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType(image.getFileType())).header(HttpHeaders.CONTENT_DISPOSITION,  "attachment; filename=\"" +image.getTypeName() + "\"")
-                .body((Resource) resource);
+        ByteArrayResource resource = new ByteArrayResource(  image.getImage().getBytes(1, (int) image.getImage().length()));
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(image.getFileType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getFileName() + "\"")
+                .body(resource);
     }
 
     @PostMapping(value = "/add")
@@ -87,33 +80,35 @@ public class ImageController {
         return apiRespone;
     }
 
-    @PostMapping(value = "/save")
+    @PostMapping(value = "/upload")
     public ResponseEntity<ApiRespone> saveImage(@RequestParam List<MultipartFile> file, @RequestParam Long productId) {
         try {
             List<ImageDTO> imageDTOS = imageService.saveIgImage(file, productId);
             return ResponseEntity.ok(new ApiRespone<>(imageDTOS));
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiRespone(ErrorCode.UNCATEGORIZE_EXCEPTION));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiRespone(ErrorCode.UNCATEGORIZE_EXCEPTION));
         }
     }
 
-    @PutMapping(value = "/update/{id}")
-    public ResponseEntity<ApiRespone<Image>> updateImage
-            (@PathVariable(required = true) Long id, @RequestBody MultipartFile images) {
+    @PutMapping(value = "/update")
+    public ResponseEntity<ApiRespone<Image>> updateImage(@PathVariable Long imageid,
+            @RequestBody MultipartFile images) {
         try {
-            Image image = imageService.getImageByID(id);
+            Image image = imageService.getImageByID(imageid);
             if (image != null) {
-                imageService.updateImage(images, id);
+                imageService.updateImage(images, imageid);
                 return ResponseEntity.ok(new ApiRespone<>(imageService.updateImage(images, id)));
             }
-        } catch (ResourceClosedException e) {
+        } catch (ResourceAccessException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiRespone(ErrorCode.UNCATEGORIZE_EXCEPTION));
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiRespone(ErrorCode.SERVER_INTERNAL_ERROR));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiRespone(ErrorCode.SERVER_INTERNAL_ERROR));
     }
 
     @DeleteMapping(value = "/update/{id}")
-    public ApiRespone<Image> deleteImage(@PathVariable(value = "id") Long id) {
+    public ApiRespone<Boolean> deleteImage(@PathVariable(value = "id") Long id) {
         ApiRespone apiRespone = new ApiRespone<>(imageService.deleteImage(id));
         return apiRespone;
     }

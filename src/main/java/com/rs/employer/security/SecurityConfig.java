@@ -16,79 +16,81 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-        private final String[] PUBLIC_ENDPOINT = {
-                        "/api/customer/add",
-                        "/api/customer/hello",
-                        "/api/product/all",
-                        "/api/product/getbyid/**",
-                        "/api/resources/all",
-                        "/api/resources/getbyid/**",
-                        "/auth/login",
-                        "/auth/logout",
-                        "/auth/token",
-                        "/api/customer/getMyInfo",
-                        "/api/permission/all",
-                        "/api/permission/add",
-                        "/api/permission/delete/**",
-                        "/api/permission/update",
-                        "/api/role/all",
-                        "/api/role/add",
-                        "/api/role/delete/**",
-                        "/api/role/update",
-                        "/api/category",
-                        "/api/cart/**",
-                        "/api/category/",
-                        "/api/product/"
-        };
-        private final String[] VENDOR_ENDPOINT = {
-                        "/api/product/add",
-                        "/api/product/delete/**",
-                        "/api/product/update/**",
-        };
-        private final String[] USER_ENDPOINT = {
-                        "/api/customer/update/**",
-                        "/api/customer/delete/**",
-                        "/api/customer/getbyid/**"
-        };
-        private final String[] SUPPLIER_ENDPOINT = {
-                        "/api/resources/add",
-                        "/api/resources/update/**",
-                        "/api/resources/delete/**"
-        };
-        private final String[] ADMIN_ENDPOINT = {
-                        "/api/customer/all",
-                        "/api/customer/getMyInfo"
-        };
-        private final String SIGNER_KEY = "UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
+    private final String[] PUBLIC_ENDPOINT = {
+            "/api/customer/add",
+            "/api/customer/hello",
+            "/api/product/all",
+            "/api/product/getbyid/**",
+            "/api/resources/all",
+            "/api/resources/getbyid/**",
+            "/auth/login",
+            "/auth/logout",
+            "/auth/token",
+            "/api/customer/getMyInfo",
+            "/api/permission/all",
+            "/api/permission/add",
+            "/api/permission/delete/**",
+            "/api/permission/update",
+            "/api/role/all",
+            "/api/role/add",
+            "/api/role/delete/**",
+            "/api/role/update",
+            "/api/category",
+            "/api/cart/**",
+            "/api/category/",
+            "/api/images",
+            "/api/images/image/download",
+            "/api/product/"
+    };
+    private final String[] VENDOR_ENDPOINT = {
+            "/api/product/add",
+            "/api/product/delete/**",
+            "/api/product/update/**",
+    };
+    private final String[] USER_ENDPOINT = {
+            "/api/customer/update/**",
+            "/api/customer/delete/**",
+            "/api/customer/getbyid/**"
+    };
+    private final String[] SUPPLIER_ENDPOINT = {
+            "/api/resources/add",
+            "/api/resources/update/**",
+            "/api/resources/delete/**"
+    };
+    private final String[] ADMIN_ENDPOINT = {
+            "/api/customer/all",
+            "/api/customer/getMyInfo"
+    };
+    private final String SIGNER_KEY = "UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
 
-        @Bean
-        public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-                httpSecurity.authorizeHttpRequests(request -> request
-                                .requestMatchers(PUBLIC_ENDPOINT)
-                                .permitAll()
-                                .requestMatchers(USER_ENDPOINT)
-                                .permitAll()
-                                // .hasAnyAuthority("SCOPE_USER", "SCOPE_ADMIN")
-                                .requestMatchers(VENDOR_ENDPOINT)
-                                .permitAll()
-                                // .hasAnyAuthority("SCOPE_VENDOR", "SCOPE_ADMIN")
-                                .requestMatchers(SUPPLIER_ENDPOINT)
-                                .permitAll()
-                                // .hasAnyAuthority("SCOPE_SUPPLIER", "SCOPE_ADMIN")
-                                .requestMatchers(ADMIN_ENDPOINT)
-                                .permitAll()
-                                // .hasAuthority("ADMIN")
-                                .anyRequest().authenticated());
-                httpSecurity.csrf(CsrfConfigurer -> CsrfConfigurer.disable());
-                httpSecurity.oauth2ResourceServer(
-                                oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
-                                                .decoder(jwtDecoder())));
-                return httpSecurity.build();
-        }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.authorizeHttpRequests(request -> request
+                .requestMatchers(PUBLIC_ENDPOINT)
+                .permitAll()
+                .requestMatchers(USER_ENDPOINT)
+                .permitAll()
+                // .hasAnyAuthority("SCOPE_USER", "SCOPE_ADMIN")
+                .requestMatchers(VENDOR_ENDPOINT)
+                .permitAll()
+                // .hasAnyAuthority("SCOPE_VENDOR", "SCOPE_ADMIN")
+                .requestMatchers(SUPPLIER_ENDPOINT)
+                .permitAll()
+                // .hasAnyAuthority("SCOPE_SUPPLIER", "SCOPE_ADMIN")
+                .requestMatchers(ADMIN_ENDPOINT)
+                .permitAll()
+                // .hasAuthority("ADMIN")
+                .anyRequest().authenticated());
+        httpSecurity.csrf(CsrfConfigurer -> CsrfConfigurer.disable());
+        httpSecurity.oauth2ResourceServer(
+                oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
+                        .decoder(jwtDecoder())));
+        return httpSecurity.build();
+    }
 
-        @Bean
-        JwtDecoder jwtDecoder() {
-                SecretKeySpec key = new SecretKeySpec(SIGNER_KEY.getBytes(), "HS256");
-                return NimbusJwtDecoder.withSecretKey(key).macAlgorithm(MacAlgorithm.HS256).build();
-        }
+    @Bean
+    JwtDecoder jwtDecoder() {
+        SecretKeySpec key = new SecretKeySpec(SIGNER_KEY.getBytes(), "HS256");
+        return NimbusJwtDecoder.withSecretKey(key).macAlgorithm(MacAlgorithm.HS256).build();
+    }
 }

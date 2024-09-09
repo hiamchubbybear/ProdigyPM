@@ -6,9 +6,6 @@ import java.util.List;
 
 import javax.sql.rowset.serial.SerialBlob;
 
-import com.rs.employer.dao.ProductRepository;
-import com.rs.employer.dto.Request.ImageDTO;
-import com.rs.employer.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,12 +13,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.rs.employer.dao.ImageRepository;
+import com.rs.employer.dao.ProductRepository;
+import com.rs.employer.dto.Request.ImageDTO;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Image;
+import com.rs.employer.model.Product;
 import com.rs.employer.service.IImageService;
 
-import io.jsonwebtoken.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -45,14 +44,13 @@ public class ImageService implements IImageService {
         Image image = getImageByID(id);
         try {
             image.setFileType(file.getContentType());
-            image.setTypeName(file.getOriginalFilename());
+            image.setFileName(file.getOriginalFilename());
             SerialBlob blob = new SerialBlob(file.getBytes());
             image.setImage(new SerialBlob(file.getBytes()));
-            imageRepository.save(image);
+            return imageRepository.save(image);
         } catch (java.io.IOException | SQLException e) {
             throw new RuntimeException(e.getMessage());
         }
-        return null;
     }
 
     @Override
@@ -107,6 +105,7 @@ public class ImageService implements IImageService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List<ImageDTO> saveIgImage(List<MultipartFile> files, Long productId) throws SQLException {
         Product product = productRepository.findProductById(productId);
         List<ImageDTO> savedImageDto = new ArrayList<>();
@@ -114,16 +113,16 @@ public class ImageService implements IImageService {
             try {
                 Image image = new Image();
                 image.setFileType(fileItem.getContentType());
-                image.setTypeName(fileItem.getOriginalFilename());
+                image.setFileName(fileItem.getOriginalFilename());
                 image.setImage(new SerialBlob(fileItem.getBytes()));
-                String buildDownloadUrl = "/api/images/image/download";
+                String buildDownloadUrl = "/api/images/image/download/";
                 String downloadUrl = buildDownloadUrl + image.getId();
                 image.setDownloadUrl(downloadUrl);
                 Image savedImage = imageRepository.save(image);
                 savedImage.setDownloadUrl(downloadUrl);
                 ImageDTO dto  = new ImageDTO();
                 dto.setDownloadUrl(savedImage.getDownloadUrl());
-                dto.setImageName(savedImage.getTypeName());
+                dto.setImageName(savedImage.getFileName());
                 dto.setImageId(savedImage.getId());
                 savedImageDto.add(dto);
 

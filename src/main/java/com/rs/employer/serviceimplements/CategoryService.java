@@ -36,7 +36,6 @@ public class CategoryService implements ICategoryService {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION); });
     }
 
-
     @Override
     public List<Category> allCategory() {
         return categoryRepository.findAll();

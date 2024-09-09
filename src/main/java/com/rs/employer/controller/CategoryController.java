@@ -1,14 +1,8 @@
 package com.rs.employer.controller;
 
+import com.rs.employer.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.model.Category;
@@ -17,7 +11,7 @@ import com.rs.employer.serviceimplements.CategoryService;
 @RequestMapping("/api/category")
 public class CategoryController {
     @Autowired
-    CategoryService svc;
+    private ICategoryService svc;
 
     @GetMapping("/all")
     public ApiRespone<Category> getAllCategory() {
@@ -45,6 +39,11 @@ public class CategoryController {
         ApiRespone apiRespone = new ApiRespone<>();
         svc.deleteCategory(role);
         apiRespone.setData(true);
+        return apiRespone;
+    }
+    @GetMapping("/getbyname")
+    public ApiRespone<Category> getCategoryByName(@PathVariable String name) {
+        ApiRespone apiRespone = new ApiRespone<>(svc.getCategoryByName(name));
         return apiRespone;
     }
 }
