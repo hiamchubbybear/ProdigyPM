@@ -39,6 +39,7 @@ public class SecurityConfig {
             "/api/cart/**",
             "/api/category/",
             "/api/images",
+            "/api/images/upload/**",
             "/api/images/image/download",
             "/api/product/"
     };

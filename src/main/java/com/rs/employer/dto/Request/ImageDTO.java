@@ -1,7 +1,5 @@
 package com.rs.employer.dto.Request;
 
-import lombok.Data;
-
 public class ImageDTO {
     private Long imageId;
     private String imageName;

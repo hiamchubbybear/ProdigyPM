@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.ImageDTO;
+import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Image;
 import com.rs.employer.service.IImageService;
@@ -68,10 +69,11 @@ public class ImageController {
     @GetMapping(value = "/api/image/download/{imageId}")
     public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException {
         Image image = imageService.getImageByID(imageId);
-        ByteArrayResource resource = new ByteArrayResource(  image.getImage().getBytes(1, (int) image.getImage().length()));
+        ByteArrayResource resource = new ByteArrayResource(
+                image.getImage().getBytes(1, (int) image.getImage().length()));
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(image.getFileType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getFileName() + "\"")
-                .body(resource);
+                .body((Resource) resource);
     }
 
     @PostMapping(value = "/add")
@@ -81,14 +83,13 @@ public class ImageController {
     }
 
     @PostMapping(value = "/upload")
-    public ResponseEntity<ApiRespone> saveImage(@RequestParam List<MultipartFile> file, @RequestParam Long productId) {
-        try {
-            List<ImageDTO> imageDTOS = imageService.saveIgImage(file, productId);
-            return ResponseEntity.ok(new ApiRespone<>(imageDTOS));
-        } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiRespone(ErrorCode.UNCATEGORIZE_EXCEPTION));
-        }
+    public ApiRespone<List<ImageDTO>> saveImage(@RequestParam List<MultipartFile> file, @PathVariable Long productId)
+            throws SQLException {
+        List<ImageDTO> imageDTOS = imageService.saveImage(file, productId);
+        ApiRespone apiRespone = new ApiRespone<>(imageDTOS);
+//        if(apiRespone.getCode() == HttpStatus.OK.value()) {
+            return apiRespone;
+//        }else throw new AppException(ErrorCode.RUNTIME_ERROR);
     }
 
     @PutMapping(value = "/update")
@@ -98,7 +99,7 @@ public class ImageController {
             Image image = imageService.getImageByID(imageid);
             if (image != null) {
                 imageService.updateImage(images, imageid);
-                return ResponseEntity.ok(new ApiRespone<>(imageService.updateImage(images, id)));
+                return ResponseEntity.ok(new ApiRespone<>(imageService.updateImage(images, imageid)));
             }
         } catch (ResourceAccessException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiRespone(ErrorCode.UNCATEGORIZE_EXCEPTION));

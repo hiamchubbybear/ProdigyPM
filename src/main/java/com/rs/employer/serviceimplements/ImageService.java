@@ -98,7 +98,7 @@ public class ImageService implements IImageService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Image> getImageByFileName(String fileName) {
-        List<Image> images = imageRepository.findByTypeName(fileName);
+        List<Image> images = imageRepository.findByfileName(fileName);
         if (!images.isEmpty())
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         return images;
@@ -106,7 +106,7 @@ public class ImageService implements IImageService {
 
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
-    public List<ImageDTO> saveIgImage(List<MultipartFile> files, Long productId) throws SQLException {
+    public List<ImageDTO> saveImage(List<MultipartFile> files, Long productId) throws SQLException {
         Product product = productRepository.findProductById(productId);
         List<ImageDTO> savedImageDto = new ArrayList<>();
         for (MultipartFile fileItem : files) {
@@ -120,14 +120,14 @@ public class ImageService implements IImageService {
                 image.setDownloadUrl(downloadUrl);
                 Image savedImage = imageRepository.save(image);
                 savedImage.setDownloadUrl(downloadUrl);
-                ImageDTO dto  = new ImageDTO();
+                ImageDTO dto = new ImageDTO();
                 dto.setDownloadUrl(savedImage.getDownloadUrl());
                 dto.setImageName(savedImage.getFileName());
                 dto.setImageId(savedImage.getId());
                 savedImageDto.add(dto);
 
-            } catch ( SQLException | java.io.IOException  e) {
-    throw new RuntimeException(e.getMessage());
+            } catch (SQLException | java.io.IOException e) {
+                throw new RuntimeException(e.getMessage());
             }
         }
         return savedImageDto;

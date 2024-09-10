@@ -13,6 +13,6 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
     public List<Image> findByfileType(String filetype);
 
-    public List<Image> findByTypeName(String filename);
+    public List<Image> findByfileName(String filename);
 
 }
