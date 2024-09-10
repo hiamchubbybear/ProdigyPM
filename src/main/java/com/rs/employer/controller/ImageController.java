@@ -83,13 +83,15 @@ public class ImageController {
     }
 
     @PostMapping(value = "/upload")
-    public ApiRespone<List<ImageDTO>> saveImage(@RequestParam List<MultipartFile> file, @PathVariable Long productId)
+    public ApiRespone<List<ImageDTO>> saveImage(@PathVariable Long productId, @RequestParam List<MultipartFile> file)
             throws SQLException {
         List<ImageDTO> imageDTOS = imageService.saveImage(file, productId);
-        ApiRespone apiRespone = new ApiRespone<>(imageDTOS);
-//        if(apiRespone.getCode() == HttpStatus.OK.value()) {
+        if (imageDTOS != null) {
+            ApiRespone apiRespone = new ApiRespone<>(imageDTOS);
             return apiRespone;
-//        }else throw new AppException(ErrorCode.RUNTIME_ERROR);
+        } else
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        // }else throw new AppException(ErrorCode.RUNTIME_ERROR);
     }
 
     @PutMapping(value = "/update")
