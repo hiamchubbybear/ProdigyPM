@@ -1,5 +1,8 @@
 package com.rs.employer.dto.Request;
 
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
 public class ImageDTO {
     private Long imageId;
     private String imageName;
@@ -8,7 +11,6 @@ public class ImageDTO {
     public Long getImageId() {
         return imageId;
     }
-
     public void setImageId(Long imageId) {
         this.imageId = imageId;
     }
@@ -30,5 +32,11 @@ public class ImageDTO {
     }
 
     public ImageDTO() {
+    }
+
+    public ImageDTO(String downloadUrl, String imageName, Long imageId) {
+        this.downloadUrl = downloadUrl;
+        this.imageName = imageName;
+        this.imageId = imageId;
     }
 }

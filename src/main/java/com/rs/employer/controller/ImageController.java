@@ -82,7 +82,7 @@ public class ImageController {
         return apiRespone;
     }
 
-    @PostMapping(value = "/upload")
+        @PostMapping(value = "/upload")
     public ApiRespone<List<ImageDTO>> saveImage(@RequestParam List<MultipartFile> file, @PathVariable Long productId)
             throws SQLException {
         List<ImageDTO> imageDTOS = imageService.saveImage(file, productId);

@@ -106,10 +106,10 @@ public class ImageService implements IImageService {
 
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
-    public List<ImageDTO> saveImage(List<MultipartFile> files, Long productId) throws SQLException {
+    public List<ImageDTO> saveImage(List<MultipartFile> file, Long productId) throws SQLException {
         Product product = productRepository.findProductById(productId);
         List<ImageDTO> savedImageDto = new ArrayList<>();
-        for (MultipartFile fileItem : files) {
+        for (MultipartFile fileItem : file) {
             try {
                 Image image = new Image();
                 image.setFileType(fileItem.getContentType());
