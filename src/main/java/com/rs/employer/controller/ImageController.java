@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.util.List;
 
+import com.rs.employer.serviceimplements.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -35,7 +36,7 @@ import jakarta.annotation.Resource;
 @RequestMapping(value = "/api/images")
 public class ImageController {
     @Autowired
-    private IImageService imageService;
+    private ImageService imageService;
     Instant now = Instant.now();
 
     @GetMapping(value = "/getbyid/{id}")
@@ -82,15 +83,18 @@ public class ImageController {
         return apiRespone;
     }
 
-        @PostMapping(value = "/upload")
-    public ApiRespone<List<ImageDTO>> saveImage(@RequestParam List<MultipartFile> file, @PathVariable Long productId)
+        @PostMapping(value = "/upload/{id}")
+    public ResponseEntity<List<ImageDTO>> saveImage(@RequestParam List<MultipartFile> file, @RequestParam(name = "id") Long productId)
             throws SQLException {
-        List<ImageDTO> imageDTOS = imageService.saveImage(file, productId);
-        ApiRespone apiRespone = new ApiRespone<>(imageDTOS);
-//        if(apiRespone.getCode() == HttpStatus.OK.value()) {
-            return apiRespone;
-//        }else throw new AppException(ErrorCode.RUNTIME_ERROR);
-    }
+            try {
+                List<ImageDTO> imageDtos = imageService.saveImage( file ,productId);
+                return ResponseEntity.ok(imageDtos);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((List<ImageDTO>) new ApiRespone<>(ErrorCode.SERVER_INTERNAL_ERROR));
+            }
+
+        }
+
 
     @PutMapping(value = "/update")
     public ResponseEntity<ApiRespone<Image>> updateImage(@PathVariable Long imageid,
@@ -126,3 +130,4 @@ public class ImageController {
         return apiRespone;
     }
 }
+
