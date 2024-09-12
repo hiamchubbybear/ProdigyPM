@@ -125,7 +125,6 @@ public class ImageService implements IImageService {
                 dto.setImageName(savedImage.getFileName());
                 dto.setImageId(savedImage.getId());
                 savedImageDto.add(dto);
-
             } catch (SQLException | java.io.IOException e) {
                 throw new RuntimeException(e.getMessage());
             }
