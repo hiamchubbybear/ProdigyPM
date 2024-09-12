@@ -10,7 +10,6 @@ public class ImageDTO {
     private Long imageId;
     private String imageName;
     private String downloadUrl;
-
     public Instant getCreateAt() {
         return createAt;
     }

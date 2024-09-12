@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
 
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.ImageDTO;
@@ -30,7 +31,6 @@ import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Image;
 import com.rs.employer.service.IImageService;
 
-import jakarta.annotation.Resource;
 
 @RestController
 @RequestMapping(value = "/api/images")
@@ -68,13 +68,12 @@ public class ImageController {
     }
 
     @GetMapping(value = "/api/image/download/{imageId}")
-    public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException {
+    public ResponseEntity<Resource> downloadImage(@RequestParam(name = "imageId") Long imageId) throws SQLException {
         Image image = imageService.getImageByID(imageId);
-        ByteArrayResource resource = new ByteArrayResource(
-                image.getImage().getBytes(1, (int) image.getImage().length()));
+        ByteArrayResource resource = new ByteArrayResource(image.getImage().getBytes(1, (int) image.getImage().length()));
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(image.getFileType()))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getFileName() + "\"")
-                .body((Resource) resource);
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +image.getFileName() + "\"")
+                .body( resource);
     }
 
     @PostMapping(value = "/add")
@@ -84,7 +83,7 @@ public class ImageController {
     }
 
         @PostMapping(value = "/upload/{id}")
-    public ResponseEntity<List<ImageDTO>> saveImage(@RequestParam List<MultipartFile> file, @RequestParam(name = "id") Long productId)
+    public ResponseEntity<List<ImageDTO>> saveImage(@RequestParam List<MultipartFile> file, @PathVariable(name = "id") Long productId)
             throws SQLException {
             try {
                 List<ImageDTO> imageDtos = imageService.saveImage( file ,productId);
