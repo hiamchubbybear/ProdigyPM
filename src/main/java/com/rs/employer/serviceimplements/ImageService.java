@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.sql.rowset.serial.SerialBlob;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -54,7 +55,7 @@ public class ImageService implements IImageService {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_PRODUCT_MANAGE')")
     public List<Image> getAllImages() {
         return imageRepository.findAll();
     }
@@ -109,6 +110,7 @@ public class ImageService implements IImageService {
     public List<ImageDTO> saveImage(List<MultipartFile> file, Long productId) throws SQLException {
         Product product = productRepository.findProductById(productId);
         List<ImageDTO> savedImageDto = new ArrayList<>();
+        System.out.println("Log to service ->");
         for (MultipartFile fileItem : file) {
             try {
                 Image image = new Image();
@@ -116,6 +118,7 @@ public class ImageService implements IImageService {
                 image.setFileName(fileItem.getOriginalFilename());
                 image.setImage(new SerialBlob(fileItem.getBytes()));
                 String buildDownloadUrl = "/api/images/image/download/";
+                System.out.println("Log to for looop -> ");
                 String downloadUrl = buildDownloadUrl + image.getId();
                 image.setDownloadUrl(downloadUrl);
                 Image savedImage = imageRepository.save(image);
@@ -125,7 +128,7 @@ public class ImageService implements IImageService {
                 dto.setImageName(savedImage.getFileName());
                 dto.setImageId(savedImage.getId());
                 savedImageDto.add(dto);
-
+                return savedImageDto;
             } catch (SQLException | java.io.IOException e) {
                 throw new RuntimeException(e.getMessage());
             }
