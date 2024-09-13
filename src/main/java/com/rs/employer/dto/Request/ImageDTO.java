@@ -1,16 +1,16 @@
 package com.rs.employer.dto.Request;
 
-import org.springframework.context.annotation.Configuration;
-
-import java.time.DateTimeException;
 import java.time.Instant;
 import java.util.UUID;
+
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ImageDTO {
     private UUID imageId;
     private String imageName;
     private String downloadUrl;
+
     public Instant getCreateAt() {
         return createAt;
     }
@@ -65,9 +65,9 @@ public class ImageDTO {
     public ImageDTO() {
     }
 
-//    public ImageDTO(String downloadUrl, String imageName, Long imageId) {
-//        this.downloadUrl = downloadUrl;
-//        this.imageName = imageName;
-//        this.imageId = imageId;
-//    }
+    // public ImageDTO(String downloadUrl, String imageName, Long imageId) {
+    // this.downloadUrl = downloadUrl;
+    // this.imageName = imageName;
+    // this.imageId = imageId;
+    // }
 }

@@ -9,9 +9,5 @@ import com.rs.employer.model.ImageRequest;
 
 @Mapper(componentModel = "spring")
 public interface ImageMapper {
-    @Mapping(target = "products", ignore = true)
-    @Mapping(target = "id" , ignore = true)
-    @Mapping(target = "image", ignore = true)
-    Image toImage(ImageRequest request);
     Image toImageFromDTO(ImageDTO imageDTO);
 }

@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import javax.sql.rowset.serial.SerialBlob;
 
-import org.slf4j.Logger;
+import com.rs.employer.mapper.ImageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
