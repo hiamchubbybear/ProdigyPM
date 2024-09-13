@@ -2,6 +2,7 @@ package com.rs.employer.model;
 
 import java.sql.Blob;
 import java.time.Instant;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,8 +17,8 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Image {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id ;
     private String fileType;
     private String fileName;
     private String downloadUrl;
@@ -30,11 +31,11 @@ public class Image {
     @JsonIgnore
     private Product products;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -94,8 +95,7 @@ public class Image {
         this.products = products;
     }
 
-    public Image(Long id, String fileType, String fileName, String downloadUrl, Instant createAt, Instant updateAt,
-            Blob image, Product products) {
+    public Image(UUID id, String fileType, String fileName, String downloadUrl, Instant createAt, Instant updateAt, Blob image, Product products) {
         this.id = id;
         this.fileType = fileType;
         this.fileName = fileName;

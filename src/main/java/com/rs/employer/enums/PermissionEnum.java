@@ -4,7 +4,6 @@ import jakarta.persistence.PersistenceContext;
 
 @PersistenceContext
 public enum PermissionEnum {
-
     PERMIT_ALL,
     UPDATE_USER,
     DELETE_MS,

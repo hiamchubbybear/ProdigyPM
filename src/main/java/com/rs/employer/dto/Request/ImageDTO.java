@@ -4,10 +4,11 @@ import org.springframework.context.annotation.Configuration;
 
 import java.time.DateTimeException;
 import java.time.Instant;
+import java.util.UUID;
 
 @Configuration
 public class ImageDTO {
-    private Long imageId;
+    private UUID imageId;
     private String imageName;
     private String downloadUrl;
     public Instant getCreateAt() {
@@ -29,7 +30,7 @@ public class ImageDTO {
     Instant createAt;
     Instant updateAt;
 
-    public ImageDTO(Long imageId, String imageName, String downloadUrl, Instant createAt, Instant updateAt) {
+    public ImageDTO(UUID imageId, String imageName, String downloadUrl, Instant createAt, Instant updateAt) {
         this.imageId = imageId;
         this.imageName = imageName;
         this.downloadUrl = downloadUrl;
@@ -37,10 +38,11 @@ public class ImageDTO {
         this.updateAt = updateAt;
     }
 
-    public Long getImageId() {
+    public UUID getImageId() {
         return imageId;
     }
-    public void setImageId(Long imageId) {
+
+    public void setImageId(UUID imageId) {
         this.imageId = imageId;
     }
 

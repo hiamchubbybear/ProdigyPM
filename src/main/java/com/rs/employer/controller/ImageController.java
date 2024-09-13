@@ -3,6 +3,7 @@ package com.rs.employer.controller;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 import com.rs.employer.serviceimplements.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class ImageController {
 
     @GetMapping(value = "/getbyid/{id}")
     public ApiRespone<Image> getImageByID(
-            @PathVariable(value = "id") Long id) {
+            @PathVariable(value = "id") UUID id) {
         ApiRespone apiRespone = new ApiRespone<>(imageService.getImageByID(id));
         return apiRespone;
     }
@@ -68,7 +69,7 @@ public class ImageController {
     }
 
     @GetMapping(value = "/api/image/download/{imageId}")
-    public ResponseEntity<Resource> downloadImage(@RequestParam(name = "imageId") Long imageId) throws SQLException {
+    public ResponseEntity<Resource> downloadImage(@RequestParam(name = "imageId") UUID imageId) throws SQLException {
         Image image = imageService.getImageByID(imageId);
         ByteArrayResource resource = new ByteArrayResource(image.getImage().getBytes(1, (int) image.getImage().length()));
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(image.getFileType()))
@@ -83,43 +84,34 @@ public class ImageController {
     }
 
         @PostMapping(value = "/upload/{id}")
-    public ResponseEntity<List<ImageDTO>> saveImage(@RequestParam List<MultipartFile> file, @PathVariable(name = "id") Long productId)
+    public ApiRespone<List<ImageDTO>> saveImage(@RequestParam List<MultipartFile> file, @PathVariable(name = "id") Long productId)
             throws SQLException {
-            try {
-                List<ImageDTO> imageDtos = imageService.saveImage( file ,productId);
-                return ResponseEntity.ok(imageDtos);
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((List<ImageDTO>) new ApiRespone<>(ErrorCode.SERVER_INTERNAL_ERROR));
-            }
-
+        ApiRespone apiRespone = new ApiRespone<>(imageService.saveImage( file ,productId));
+        return apiRespone;
         }
 
 
     @PutMapping(value = "/update")
-    public ResponseEntity<ApiRespone<Image>> updateImage(@PathVariable Long imageid,
+    public ApiRespone<Image> updateImage(@PathVariable UUID imageid,
             @RequestBody MultipartFile images) {
-        try {
+
             Image image = imageService.getImageByID(imageid);
             if (image != null) {
-                imageService.updateImage(images, imageid);
-                return ResponseEntity.ok(new ApiRespone<>(imageService.updateImage(images, imageid)));
+                ApiRespone<Image> imageApiRespone = new ApiRespone<>(imageService.updateImage(images, imageid));
+                return imageApiRespone;
             }
-        } catch (ResourceAccessException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiRespone(ErrorCode.UNCATEGORIZE_EXCEPTION));
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ApiRespone(ErrorCode.SERVER_INTERNAL_ERROR));
+            else throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
 
     @DeleteMapping(value = "/update/{id}")
-    public ApiRespone<Boolean> deleteImage(@PathVariable(value = "id") Long id) {
+    public ApiRespone<Boolean> deleteImage(@PathVariable(value = "id") UUID id) {
         ApiRespone apiRespone = new ApiRespone<>(imageService.deleteImage(id));
         return apiRespone;
     }
 
     @GetMapping(value = "/all")
-    public ApiRespone<Image> getAll() {
-        ApiRespone apiRespone = new ApiRespone<>(imageService.getAllImages());
+    public ApiRespone<Image> getAll(@PathVariable Long productId) {
+        ApiRespone apiRespone = new ApiRespone<>(imageService.getAllImagesById(productId));
         return apiRespone;
     }
 

@@ -36,6 +36,7 @@ public class ImageService implements IImageService {
     @Autowired
     private ProductRepository productRepository;
     public Instant now = Instant.now();
+
     @Override
     public Image addImage(Image image) {
         return imageRepository.save(image);
@@ -43,7 +44,7 @@ public class ImageService implements IImageService {
 
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
-    public Image updateImage(MultipartFile file, Long id) {
+    public Image updateImage(MultipartFile file, UUID id) {
         Image image = getImageByID(id);
         try {
             image.setFileType(file.getContentType());
@@ -58,8 +59,8 @@ public class ImageService implements IImageService {
 
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_PRODUCT_MANAGE')")
-    public List<Image> getAllImages() {
-        return imageRepository.findAll();
+    public List<Image> getAllImagesById(Long productId) {
+        return imageRepository.findAllByProductsId(productId);
     }
 
     @Override
@@ -70,7 +71,7 @@ public class ImageService implements IImageService {
 
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
-    public Boolean deleteImage(Long id) {
+    public Boolean deleteImage(UUID id) {
         imageRepository.findById(id).ifPresentOrElse(imageRepository::delete,
                 () -> new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION));
         return true;
@@ -78,7 +79,7 @@ public class ImageService implements IImageService {
 
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
-    public Image getImageByID(Long id) {
+    public Image getImageByID(UUID id) {
         return imageRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.IMAGES_NOTFOUND));
     }
 
@@ -111,12 +112,14 @@ public class ImageService implements IImageService {
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List<ImageDTO> saveImage(List<MultipartFile> file, Long productId) throws SQLException {
         Product product = productRepository.findProductById(productId);
+        if (product == null) throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
+
         List<ImageDTO> savedImageDto = new ArrayList<>();
         System.out.println("Log to service ->");
         for (MultipartFile fileItem : file) {
             try {
                 Image image = new Image();
-                image.setId(image.getId());
+                image.setId(UUID.randomUUID());
                 image.setCreateAt(now);
                 image.setUpdateAt(now);
                 image.setFileType(fileItem.getContentType());
@@ -124,7 +127,7 @@ public class ImageService implements IImageService {
                 image.setImage(new SerialBlob(fileItem.getBytes()));
                 image.setProducts(product);
                 String buildDownloadUrl = "/api/images/image/download/";
-                System.out.println("Log to for looop -> ");
+                System.out.println(image.getId());
                 String downloadUrl = buildDownloadUrl + image.getId();
                 System.out.println("String download is " + downloadUrl);
                 image.setDownloadUrl(downloadUrl);
@@ -143,5 +146,4 @@ public class ImageService implements IImageService {
         }
         return savedImageDto;
     }
-
 }
