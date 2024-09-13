@@ -113,9 +113,7 @@ public class ImageService implements IImageService {
     public List<ImageDTO> saveImage(List<MultipartFile> file, Long productId) throws SQLException {
         Product product = productRepository.findProductById(productId);
         if (product == null) throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
-
         List<ImageDTO> savedImageDto = new ArrayList<>();
-        System.out.println("Log to service ->");
         for (MultipartFile fileItem : file) {
             try {
                 Image image = new Image();
@@ -126,8 +124,8 @@ public class ImageService implements IImageService {
                 image.setFileName(fileItem.getOriginalFilename());
                 image.setImage(new SerialBlob(fileItem.getBytes()));
                 image.setProducts(product);
+                System.out.println("Product ID  is "  + product.getId() );
                 String buildDownloadUrl = "/api/images/image/download/";
-                System.out.println(image.getId());
                 String downloadUrl = buildDownloadUrl + image.getId();
                 System.out.println("String download is " + downloadUrl);
                 image.setDownloadUrl(downloadUrl);
