@@ -3,7 +3,12 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-/Users/chessy/CodeSpace/ProductManager_ServerSide/src/main/resources/application.properties
+# Bỏ qua tất cả các file trong src/main/resources
+/src/main/resources/*
+
+# Không bỏ qua file application.properties
+!/src/main/resources/application.properties
+
 ### STS ###
 .apt_generated
 .classpath
