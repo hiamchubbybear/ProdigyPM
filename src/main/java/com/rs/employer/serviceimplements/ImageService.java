@@ -139,7 +139,7 @@ public class ImageService implements IImageService {
                 dto.setUpdateAt(savedImage.getUpdateAt());
                 savedImageDto.add(dto);
             } catch (SQLException | java.io.IOException e) {
-                throw new RuntimeException(e.getMessage());
+                throw new RuntimeException(e.getMessage()); 
             }
         }
         return savedImageDto;
