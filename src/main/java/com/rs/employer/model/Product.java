@@ -39,6 +39,8 @@ private List<Image> images;
 @ManyToMany
 @JsonIgnore
 private Set<Cart> carts;
+@ManyToOne
+private Resources resources;
     public Long getId() {
         return id;
     }

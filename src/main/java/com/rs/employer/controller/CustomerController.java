@@ -1,4 +1,4 @@
-package com.rs.employer.controller.model;
+package com.rs.employer.controller;
 
 import java.util.List;
 import java.util.Optional;

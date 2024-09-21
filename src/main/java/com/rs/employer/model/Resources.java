@@ -1,13 +1,9 @@
 package com.rs.employer.model;
 
 import java.time.Instant;
+import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "resources")
@@ -22,6 +18,9 @@ public class Resources {
     String company;
     @Column(name = "create_at", nullable = true)
     Instant create;
+    @OneToMany
+    @JoinColumn(name = "resouceid" , nullable = false)
+    private Set<Product> product;
     public Instant getCreate() {
         return this.create;
     }
