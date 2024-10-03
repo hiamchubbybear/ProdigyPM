@@ -39,7 +39,8 @@ private List<Image> images;
 @ManyToMany
 @JsonIgnore
 private Set<Cart> carts;
-@ManyToOne
+    @ManyToOne
+@JoinColumn(name = "resource_id", nullable = false)
 private Resources resources;
     public Long getId() {
         return id;

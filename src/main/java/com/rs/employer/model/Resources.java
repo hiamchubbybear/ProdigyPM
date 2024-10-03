@@ -19,7 +19,7 @@ public class Resources {
     @Column(name = "create_at", nullable = true)
     Instant create;
     @OneToMany
-    @JoinColumn(name = "resouceid" , nullable = false)
+//    @JoinColumn(name = "resouceid" , nullable = false)
     private Set<Product> product;
     public Instant getCreate() {
         return this.create;
