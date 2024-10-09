@@ -50,7 +50,8 @@ public class AuthenticationService {
     @Autowired
     private InvalidRepository invalidRepository;
     // @NonFinal
-    public static String SIGNER_KEY = "UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
+    @Value("${signer.key}")
+    public String SIGNER_KEY;
 
     public AuthenticationRespone authentication(AuthenticationRequest authenticationDto) {
         var user = repo.findByUsername(authenticationDto.getUsername())

@@ -7,7 +7,6 @@ target/
 /src/main/resources/*
 
 # Không bỏ qua file application.properties
-!/src/main/resources/application.properties
 
 ### STS ###
 .apt_generated
@@ -17,6 +16,8 @@ target/
 .settings
 .springBeans
 .sts4-cache
+.env
+./src/main/resources/application.properties
 
 ### IntelliJ IDEA ###
 .idea
