@@ -1,6 +1,6 @@
-# FROM ubuntu:latest AS build 
-# RUN apt-get update 
-# RUN apt-get install openjdk-17-jdk -y 
+# FROM ubuntu:latest AS build
+# RUN apt-get update
+# RUN apt-get install openjdk-17-jdk -y
 # COPY . .
 # Base Image
 # FROM ubuntu:latest
@@ -44,7 +44,7 @@
 # RUN mvn clean build
 # FROM openjdk:17.0.1-jdk
 # COPY --from=build  /target/Employer-0.0.1-SNAPSHOT.war demo.war
-# EXPOSE 8080 
+# EXPOSE 8080
 # ENTRYPOINT [ "java" , "-jar" , "demo.war" ]
 
 
@@ -62,5 +62,7 @@ RUN mvn clean package
 FROM openjdk:17.0.1-jdk-slim
 WORKDIR /app
 COPY --from=build /app/target/Employer-0.0.1-SNAPSHOT.war demo.war
-EXPOSE 19279
-ENTRYPOINT ["java", "-jar", "demo.war"]
+ENTRYPOINT ["java", "-jar", "demo.war", "--server.port=19279"]
+
+# EXPOSE 19279
+# ENTRYPOINT ["java", "-jar", "demo.war"]
