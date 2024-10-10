@@ -8,6 +8,8 @@ import java.util.StringJoiner;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,6 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@PropertySource("classpath:application.properties")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class AuthenticationService {
@@ -50,7 +53,8 @@ public class AuthenticationService {
     @Autowired
     private InvalidRepository invalidRepository;
     // @NonFinal
-    public static String SIGNER_KEY = "UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
+//    "${signer_key}";
+    private String signer_key ="UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
 
     public AuthenticationRespone authentication(AuthenticationRequest authenticationDto) {
         var user = repo.findByUsername(authenticationDto.getUsername())
@@ -99,7 +103,7 @@ public class AuthenticationService {
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject = new JWSObject(header, payload);
         try {
-            jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
+            jwsObject.sign(new MACSigner(signer_key.getBytes()));
             return jwsObject.serialize();
         } catch (JOSEException e) {
             throw new RuntimeException(e);
@@ -117,7 +121,7 @@ public class AuthenticationService {
     }
 
     private SignedJWT verifiedToken(String token) throws JOSEException, ParseException {
-        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+        JWSVerifier verifier = new MACVerifier(signer_key.getBytes());
         SignedJWT signedJWT = SignedJWT.parse(token);
         var verified = signedJWT.verify(verifier);
         Date expireDate = signedJWT.getJWTClaimsSet().getExpirationTime();
