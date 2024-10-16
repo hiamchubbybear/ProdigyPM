@@ -6,7 +6,6 @@ target/
 # Bỏ qua tất cả các file trong src/main/resources
 /src/main/resources/*
 
-# Không bỏ qua file application.properties
 /src/main/resources/application.properties
 
 ### STS ###
