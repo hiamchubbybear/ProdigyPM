@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.rs.employer.dto.Request.Register.RegisterRequest;
+import com.rs.employer.dto.Respone.RegisterRespone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(path = "/api/customer")
 @RestController
 @Slf4j
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class CustomerController {
     @Autowired
     private CustomerService customerImplement;
@@ -78,5 +80,9 @@ public class CustomerController {
         ApiRespone apiRespone = new ApiRespone(customerImplement.listAllSort(value));
         return apiRespone;
     }
-
+    @PostMapping(path = "/register")
+    public ApiRespone<Customer> registerCustomer(@RequestBody RegisterRequest customer) {
+        ApiRespone apiRespone = new ApiRespone(customerImplement.register(customer));
+        return apiRespone;
+    }
 }

@@ -41,7 +41,8 @@ public class SecurityConfig {
             "/api/images",
             "/api/images/upload/**",
             "/api/images/image/download",
-            "/api/product/"
+            "/api/product/",
+            "/api/customer/register"
     };
     private final String[] VENDOR_ENDPOINT = {
             "/api/product/add",

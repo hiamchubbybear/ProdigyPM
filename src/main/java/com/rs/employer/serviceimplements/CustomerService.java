@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.rs.employer.dto.Request.Register.RegisterRequest;
+import com.rs.employer.dto.Respone.RegisterRespone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -43,6 +45,21 @@ public class CustomerService implements ICustomerService {
     PasswordEncoder passwordEncoder;
     @Autowired
     CustomerMapper mapper;
+
+    @Override
+    public RegisterRespone register(RegisterRequest registerRequest) {
+        if(!(customerRepository.existsByEmail(registerRequest.getEmail()) || customerRepository.existsByUsername(registerRequest.getUsername()))) {
+        Customer customer = new Customer();
+        customer.setUsername(registerRequest.getUsername());
+        customer.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        customer.setEmail(registerRequest.getEmail());
+        customer.setCreate(now);
+        customerRepository.save(customer);
+            return new RegisterRespone(registerRequest.getUsername(),registerRequest.getPassword(),registerRequest.getEmail());
+        } else {
+            throw new AppException(ErrorCode.USERNAME_EXISTS_OR_EMAIL_EXISTS );
+        }
+    }
 
     @Override
     public Customer addCustomer(CustomerRequest customer) {
@@ -138,10 +155,10 @@ public class CustomerService implements ICustomerService {
             throw new AppException(ErrorCode.USERNAME_INVALID);
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
-    public List<Product> findByName(String name) {
-        return customerRepository.findAllDepartment(name);
-    }
+//    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
+//    public List<Product> findByName(String name) {
+//        return customerRepository.findAllDepartment(name);
+//    }
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     @Override
     public List<Customer> listAllSort(String sort) {

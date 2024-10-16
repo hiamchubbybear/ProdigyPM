@@ -21,10 +21,9 @@ import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Product;
 import com.rs.employer.serviceimplements.ProductService;
 
-
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping(path = "/api/product")
-@CrossOrigin
 public class ProductController {
     @Autowired
     private ProductService repo;
