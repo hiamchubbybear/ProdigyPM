@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.rs.employer.dto.Request.Register.RegisterRequest;
+import com.rs.employer.dto.Respone.RegisterRespone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -78,5 +80,9 @@ public class CustomerController {
         ApiRespone apiRespone = new ApiRespone(customerImplement.listAllSort(value));
         return apiRespone;
     }
-
+    @PostMapping(path = "/register")
+    public ApiRespone<Customer> registerCustomer(@RequestBody RegisterRequest customer) {
+        ApiRespone apiRespone = new ApiRespone(customerImplement.register(customer));
+        return apiRespone;
+    }
 }

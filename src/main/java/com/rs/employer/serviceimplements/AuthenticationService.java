@@ -52,8 +52,6 @@ public class AuthenticationService {
     private CustomerRepo repo;
     @Autowired
     private InvalidRepository invalidRepository;
-    // @NonFinal
-//    "${signer_key}";
     private String signer_key ="UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
 
     public AuthenticationRespone authentication(AuthenticationRequest authenticationDto) {

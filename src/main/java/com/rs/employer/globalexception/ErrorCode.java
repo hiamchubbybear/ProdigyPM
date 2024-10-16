@@ -7,6 +7,7 @@ public enum ErrorCode {
     USER_NOTFOUND(1002, "User not found", HttpStatus.BAD_REQUEST),
     USERNAME_INVALID(1003, "Username must be at least 4 characters and less than 20 characters",
             HttpStatus.BAD_REQUEST),
+    USERNAME_EXISTS_OR_EMAIL_EXISTS(1004, "Username or email already exists", HttpStatus.CONFLICT),
     PASSWORD_INVALID(1004, "Password must be at least 8 characters", HttpStatus.BAD_REQUEST),
     UNCATEGORIZE_EXCEPTION(999, "Uncategorize Exception", HttpStatus.INTERNAL_SERVER_ERROR),
     SERVER_INTERNAL_ERROR(998, "Server Internal Error", HttpStatus.INTERNAL_SERVER_ERROR),

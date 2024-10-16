@@ -18,24 +18,12 @@ import com.rs.employer.model.Product;
 @Repository
 public interface CustomerRepo extends JpaRepository<Customer, UUID> {
         boolean existsByUsername(String username);
+        boolean existsByEmail(String email);
 
         Optional<Customer> findByUsername(String username);
-        
-        // @Query("SELECT birthDay from schema_customer DESC ")
-        // List<Customer> listByBirthday();
-        // @Query("SELECT e FROM Product e WHERE e.name = :name" ,nativeQuery= true)
-        // List<Customer> findByName(@Param("name") String name);
-        @Query(value = "SELECT * FROM Product u WHERE u.name = :name", nativeQuery = true)
-        List<Product> findAllDepartment(@Param("name") String name);
-
-        // void deleteByUsername(String username);
-        //
-        // @Query(value = "select " +
-        // "w.product_id as getProductID," +
-        // "w.name_product as getProductName " +
-        // "from schema_product w", nativeQuery = true)
-        // Optional<ProductNameAndPlaceDto> getData();
-        //
+//        Boolean addCustomer(Customer customer);
+//        @Query(value = "SELECT * FROM Product u WHERE u.name = :name", nativeQuery = true)
+//        List<Product> findAllDepartment(@Param("name") String name);
         @Query(value = "select " +
                         "w.product_id as Product_Id, " +
                         "w.name_product as Product_Name, " +

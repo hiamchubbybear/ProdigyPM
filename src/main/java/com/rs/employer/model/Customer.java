@@ -30,7 +30,6 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
 @Entity
-
 @DynamicUpdate
 @DynamicInsert
 @Table(name = "customer")
@@ -45,41 +44,38 @@ public class Customer {
   @Column(name = "username", nullable = false, updatable = false)
   private String username;
   @Size(min = 8, message = "PASSWORD_INVALID")
-  // @NotBlank
   @Column(nullable = false, updatable = true)
   private String password;
-  @Column(nullable = false, updatable = true)
+  private String email;
   private String name;
-  @Column(nullable = true, updatable = true)
   private String address;
   @ManyToMany
   private Set<Role> roles;
-  @Column(nullable = false, updatable = true)
   private boolean gender;
-  @ValidateStatus
+//  @ValidateStatus
   @Column(name = "status")
   private String status;
-  @Column(name = "create_at", nullable = false, updatable = false)
+  @Column(name = "create_at", updatable = false)
   private Instant create;
   @LastModifiedDate
-  @Column(name = "update_at", nullable = false, updatable = true)
+  @Column(name = "update_at")
   private Instant update;
   @JsonFormat(pattern = "yyyy-MM-dd")
   @DobValidator(min = 18, message = "UNCATEGORIZE_EXCEPTION")
   @Column(name = "dob")
   @JsonIgnore
   private LocalDate dob;
-
   @OneToOne
 //   @JoinColumn(name = "cart", referencedColumnName = "id")
   private Cart cart;
 
-  public Customer(UUID uuid, @NotNull @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username,
-      @Size(min = 8, message = "PASSWORD_INVALID") @NotBlank String password, String name, String address,
-      Set<Role> roles, boolean gender, String status, Instant create, Instant update, LocalDate dob) {
+  public Customer(UUID uuid, @NotNull @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username, String email,
+                  @Size(min = 8, message = "PASSWORD_INVALID") @NotBlank String password, String name, String address,
+                  Set<Role> roles, boolean gender, String status, Instant create, Instant update, LocalDate dob) {
     this.uuid = uuid;
     this.username = username;
-    this.password = password;
+      this.email = email;
+      this.password = password;
     this.name = name;
     this.address = address;
     this.roles = roles;
@@ -110,12 +106,13 @@ public class Customer {
     return password;
   }
 
-  public Customer(UUID uuid, @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username,
-      @Size(min = 8, message = "PASSWORD_INVALID") String password, String name, String address, Set<Role> roles,
-      boolean gender, String status, Instant create, Instant update, LocalDate dob, Cart cart) {
+  public Customer(UUID uuid, @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username, String email,
+                  @Size(min = 8, message = "PASSWORD_INVALID") String password, String name, String address, Set<Role> roles,
+                  boolean gender, String status, Instant create, Instant update, LocalDate dob, Cart cart) {
     this.uuid = uuid;
     this.username = username;
-    this.password = password;
+      this.email = email;
+      this.password = password;
     this.name = name;
     this.address = address;
     this.roles = roles;
@@ -195,13 +192,17 @@ public class Customer {
     this.dob = dob;
   }
 
+  public String getEmail() {
+    return email;
+  }
   public Customer() {
   }
-
+  public void setEmail(String email) {
+    this.email = email;
+  }
   public Cart getCart() {
     return cart;
   }
-
   public void setCart(Cart cart) {
     this.cart = cart;
   }
