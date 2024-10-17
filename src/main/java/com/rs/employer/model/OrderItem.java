@@ -2,19 +2,24 @@ package com.rs.employer.model;
 
 import jakarta.persistence.*;
 
+import javax.naming.Name;
+
 @Entity
+@Table(name ="order_item")
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int order_id;
+    private int id;
+
     private int quantity;
     private double price;
+
     @ManyToOne
-    @JoinColumn(name="order_item", nullable=false)
+    @JoinColumn(name="order_id", nullable=false)
     private Order order;
 
-    public OrderItem(int order_id, int quantity, double price, Order order) {
-        this.order_id = order_id;
+    public OrderItem(int id, int quantity, double price, Order order) {
+        this.id = id;
         this.quantity = quantity;
         this.price = price;
         this.order = order;
@@ -29,11 +34,11 @@ public class OrderItem {
     }
 
     public int getOrder_id() {
-        return order_id;
+        return id;
     }
 
-    public void setOrder_id(int order_id) {
-        this.order_id = order_id;
+    public void setOrder_id(int id) {
+        this.id = id;
     }
 
     public int getQuantity() {

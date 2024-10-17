@@ -38,13 +38,13 @@ public class Customer {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @UuidGenerator
+  @Column(updatable = false)
   private UUID uuid;
-  // @NotNull
   @Size(min = 3, max = 20, message = "USERNAME_INVALID")
   @Column(name = "username", nullable = false, updatable = false)
   private String username;
   @Size(min = 8, message = "PASSWORD_INVALID")
-  @Column(nullable = false, updatable = true)
+  @Column(nullable = false)
   private String password;
   private String email;
   private String name;

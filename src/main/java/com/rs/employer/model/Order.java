@@ -1,62 +1,35 @@
 package com.rs.employer.model;
 
 import jakarta.persistence.*;
-
 import java.time.Instant;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
+@Table(name = "order")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @OneToMany(mappedBy = "order")
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<OrderItem> orderItems;
-    private Instant createAt;
-    private Instant updateAt;
+
+    private Instant createdAt;
+    private Instant updatedAt;
+
     @ManyToOne
-    @JoinColumn(name="ship_order" , nullable = false)
+    @JoinColumn(name="shipment_id", nullable=false)
     private Shipment shipment;
 
-    public Order(int id, Set<OrderItem> orderItems, Instant createAt, Instant updateAt, Shipment shipment) {
+    public Order() {
+    }
+
+    public Order(int id, Set<OrderItem> orderItems, Instant createdAt, Instant updatedAt, Shipment shipment) {
         this.id = id;
         this.orderItems = orderItems;
-        this.createAt = createAt;
-        this.updateAt = updateAt;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.shipment = shipment;
-    }
-
-    public Shipment getShipment() {
-        return shipment;
-    }
-
-    public void setShipment(Shipment shipment) {
-        this.shipment = shipment;
-    }
-
-    public Set<OrderItem> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(Set<OrderItem> orderItems) {
-        this.orderItems = orderItems;
-    }
-
-    public Instant getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(Instant createAt) {
-        this.createAt = createAt;
-    }
-
-    public Instant getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(Instant updateAt) {
-        this.updateAt = updateAt;
     }
 
     public int getId() {
@@ -67,6 +40,35 @@ public class Order {
         this.id = id;
     }
 
-    public Order() {
+    public Set<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(Set<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Shipment getShipment() {
+        return shipment;
+    }
+
+    public void setShipment(Shipment shipment) {
+        this.shipment = shipment;
     }
 }
