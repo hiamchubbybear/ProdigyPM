@@ -6,7 +6,7 @@ target/
 # Bỏ qua tất cả các file trong src/main/resources
 #/src/main/resources/*
 
-!/src/main/resources/application.properties
+/src/main/resources/application.properties
 
 ### STS ###
 .apt_generated

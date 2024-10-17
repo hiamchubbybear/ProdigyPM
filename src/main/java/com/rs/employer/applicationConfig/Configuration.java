@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.rs.employer.dao.CustomerRepo;
@@ -24,10 +25,9 @@ import lombok.experimental.FieldDefaults;
 
 @org.springframework.context.annotation.Configuration
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PUBLIC, makeFinal = true)
 public class Configuration {
     @Autowired
-    PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder ;
     @Autowired
     RoleRepository roleRepository;
     @Autowired
@@ -47,28 +47,11 @@ public class Configuration {
 
         };
     }
-
-    // Role adminRole = new Role();
-    // adminRole.setName("ADMIN");
-    // adminRole.setDescription("Administrator role with full access");
-    // adminRole.setPermissions(new HashSet<>(Arrays.asList(adminPermission)));
-    // adminRole = roleRepository.save(adminRole);
     @Bean
     ApplicationRunner applicationRunner(CustomerRepo repo) {
         return args -> {
         if (!repo.findByUsername("admin").isPresent()) {
-                // HashSet<Role> role = new HashSet<>();
-                // role.forEach(role -> role.setName("ADMIN"););
-
-                // ============
-
-                // Role roleToAdd = findRole.get();
-                // Set<Role> roles = new HashSet<>();
-                // roles.add(roleToAdd);
-
-                // role.ifPresent(role1::add);
                 Permission permission = new Permission("PERMIT_ALL", "Permission crud to all ");
-
                 permissionRepository.save(permission);
                 Role role = new Role();
                 role.setName("ADMIN");

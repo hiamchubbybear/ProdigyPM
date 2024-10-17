@@ -13,8 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.rs.employer.model.Customer;
 import com.rs.employer.model.Product;
 
-// Database JPA repository for Customer
-@EnableJpaRepositories
+
 @Repository
 public interface CustomerRepo extends JpaRepository<Customer, UUID> {
         boolean existsByUsername(String username);
