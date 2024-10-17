@@ -1,9 +1,17 @@
 package com.rs.employer.applicationConfig;
 
+
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.rs.employer.dao.CustomerRepo;
+import com.rs.employer.dao.PermissionRepository;
+import com.rs.employer.dao.RoleRepository;
+import com.rs.employer.enums.PermissionEnum;
+import com.rs.employer.model.Customer;
+import com.rs.employer.model.Permission;
+import com.rs.employer.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
