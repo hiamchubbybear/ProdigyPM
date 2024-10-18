@@ -18,9 +18,8 @@ public class Resources {
     String company;
     @Column(name = "create_at", nullable = true)
     Instant create;
-    @OneToMany
-//    @JoinColumn(name = "resouceid" , nullable = false)
-    private Set<Product> product;
+    @OneToMany(mappedBy = "resources")
+    private Set<Product> products;
     public Instant getCreate() {
         return this.create;
     }

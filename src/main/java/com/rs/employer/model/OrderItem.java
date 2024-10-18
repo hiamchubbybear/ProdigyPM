@@ -14,8 +14,8 @@ public class OrderItem {
     private int quantity;
     private double price;
 
-    @ManyToOne
-    @JoinColumn(name="order_id", nullable=false)
+    @OneToOne
+    @JoinColumn(name="id", nullable=false)
     private Order order;
 
     public OrderItem(int id, int quantity, double price, Order order) {

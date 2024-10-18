@@ -5,14 +5,15 @@ import java.time.Instant;
 import java.util.Set;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<OrderItem> orderItems;
+//    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne
+    private OrderItem orderItems;
 
     private Instant createdAt;
     private Instant updatedAt;
@@ -24,12 +25,8 @@ public class Order {
     public Order() {
     }
 
-    public Order(int id, Set<OrderItem> orderItems, Instant createdAt, Instant updatedAt, Shipment shipment) {
-        this.id = id;
+    public void setOrderItems(OrderItem orderItems) {
         this.orderItems = orderItems;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.shipment = shipment;
     }
 
     public int getId() {
@@ -40,12 +37,8 @@ public class Order {
         this.id = id;
     }
 
-    public Set<OrderItem> getOrderItems() {
+    public OrderItem getOrderItems() {
         return orderItems;
-    }
-
-    public void setOrderItems(Set<OrderItem> orderItems) {
-        this.orderItems = orderItems;
     }
 
     public Instant getCreatedAt() {

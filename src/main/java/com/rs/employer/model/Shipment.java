@@ -1,14 +1,12 @@
 package com.rs.employer.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.Set;
 
 @Entity
+@Table(name = "shipments")
 public class Shipment {
     @Id
     private int shipId;

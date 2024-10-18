@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Null;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UuidGenerator;
@@ -52,7 +54,8 @@ public class Customer {
   @ManyToMany
   private Set<Role> roles;
   private boolean gender;
-//  @ValidateStatus
+  @ValidateStatus
+  @Nullable
   @Column(name = "status")
   private String status;
   @Column(name = "create_at", updatable = false)
