@@ -46,7 +46,7 @@ public class Customer {
   @Column(name = "username", nullable = false, updatable = false)
   private String username;
   @Size(min = 8, message = "PASSWORD_INVALID")
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String password;
   private String email;
   private String name;

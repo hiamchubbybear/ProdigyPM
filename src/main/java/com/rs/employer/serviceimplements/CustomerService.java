@@ -2,13 +2,12 @@
 package com.rs.employer.serviceimplements;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import com.rs.employer.dto.Request.Register.RegisterRequest;
+import com.rs.employer.dto.Respone.CustomerUpdateRespone;
 import com.rs.employer.dto.Respone.RegisterRespone;
+import com.rs.employer.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -45,6 +44,8 @@ public class CustomerService implements ICustomerService {
     PasswordEncoder passwordEncoder;
     @Autowired
     CustomerMapper mapper;
+    @Autowired
+    private CustomerRepo customerRepo;
 
     @Override
     public RegisterRespone register(RegisterRequest registerRequest) {
@@ -135,6 +136,33 @@ public class CustomerService implements ICustomerService {
     public List listAllCustomer() {
         return customerRepository.findAll(Sort.by("create").ascending());
     }
+
+    @Override
+    public Customer customerRequest(CustomerUpdateRespone request) {
+        var user = SecurityContextHolder.getContext();
+        String name = user.getAuthentication().getName();
+        Optional<Customer> customerOptional = customerRepository.findByUsername(name);
+        if(customerOptional.isPresent()) {
+            Customer customer = customerOptional.get();
+            if(((request.getPassword() != null)  && (request.getPassword() != customer.getPassword()))) customer.setPassword(request.getPassword());
+            if(request.getEmail() != customer.getEmail()) customer.setEmail(request.getEmail());
+            customer.setName(request.getName());
+            customer.setAddress(request.getAddress());
+            Set<Role> setRoles = new HashSet<Role>();
+            setRoles.add(roleRepository.findByName(request.getRole()));
+            customer.setRoles(setRoles);
+            customer.setGender(request.isGender());
+            customer.setStatus(customer.getStatus());
+            customer.setUpdate(now);
+            customer.setDob(request.getDob());
+            customer.setCart(null);
+            return customerRepo.save(customer);
+        } else {
+            throw new AppException(ErrorCode.USER_NOTFOUND);
+        }
+
+    }
+
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List listAllSortByKey(String key) {
         return customerRepository.findAll(Sort.by(key).ascending());
