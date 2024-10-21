@@ -54,7 +54,7 @@ public class Customer {
   @ManyToMany
   private Set<Role> roles;
   private boolean gender;
-  @ValidateStatus
+//  @ValidateStatus
   @Nullable
   @Column(name = "status")
   private String status;
