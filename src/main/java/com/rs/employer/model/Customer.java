@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Null;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UuidGenerator;
@@ -38,13 +40,13 @@ public class Customer {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @UuidGenerator
+  @Column(updatable = false)
   private UUID uuid;
-  // @NotNull
   @Size(min = 3, max = 20, message = "USERNAME_INVALID")
   @Column(name = "username", nullable = false, updatable = false)
   private String username;
   @Size(min = 8, message = "PASSWORD_INVALID")
-  @Column(nullable = false, updatable = true)
+  @Column(nullable = true)
   private String password;
   private String email;
   private String name;
@@ -53,6 +55,7 @@ public class Customer {
   private Set<Role> roles;
   private boolean gender;
 //  @ValidateStatus
+  @Nullable
   @Column(name = "status")
   private String status;
   @Column(name = "create_at", updatable = false)

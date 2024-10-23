@@ -1,9 +1,11 @@
 package com.rs.employer.applicationConfig;
 
+
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+<<<<<<< HEAD
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -11,13 +13,22 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+=======
+>>>>>>> main
 import com.rs.employer.dao.CustomerRepo;
 import com.rs.employer.dao.PermissionRepository;
 import com.rs.employer.dao.RoleRepository;
+import com.rs.employer.email.EmailSender;
 import com.rs.employer.enums.PermissionEnum;
 import com.rs.employer.model.Customer;
 import com.rs.employer.model.Permission;
 import com.rs.employer.model.Role;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.actuate.sbom.SbomEndpoint;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +43,8 @@ public class Configuration {
     RoleRepository roleRepository;
     @Autowired
     PermissionRepository permissionRepository;
-
+    @Autowired
+    EmailSender emailSender;
     @Bean
     @Primary
     ApplicationRunner createAdmin() {
@@ -47,10 +59,18 @@ public class Configuration {
 
         };
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
     @Bean
-    ApplicationRunner applicationRunner(CustomerRepo repo) {
+    ApplicationRunner applicationRunner(CustomerRepo repo, SbomEndpoint sbomEndpoint) {
         return args -> {
+<<<<<<< HEAD
         if (!repo.findByUsername("admin").isPresent()) {
+=======
+            if (!repo.findByUsername("admin").isPresent()) {
+>>>>>>> main
                 Permission permission = new Permission("PERMIT_ALL", "Permission crud to all ");
                 permissionRepository.save(permission);
                 Role role = new Role();
@@ -68,10 +88,13 @@ public class Configuration {
                 admin.setCreate(Instant.now());
                 admin.setUpdate(Instant.now());
                 admin.setGender(true);
+                admin.setEmail("ilovepakpak@gmail.com");
                 admin.setName("Chessy");
                 admin.setPassword(passwordEncoder.encode("160304"));
                 admin.setRoles(role1);
                 admin.setStatus("ONLINE");
+                emailSender.sendSimpleMail("ilovepakpak@gmail.com","Test email" , "TOOOOOOO");
+                System.out.println("Sent email!");
                 repo.save(admin);
             }
         };

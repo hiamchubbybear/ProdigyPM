@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.rs.employer.dto.Request.Register.RegisterRequest;
+import com.rs.employer.dto.Respone.CustomerUpdateRespone;
 import com.rs.employer.dto.Respone.RegisterRespone;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public interface ICustomerService {
     public CustomerRespone listCustomerById(UUID id);
     public void deleteCustomerById(UUID id);
     public List listAllCustomer();
+    public Customer customerRequest(CustomerUpdateRespone request);
     public Customer updateCustomer(UUID id, CustomerRequest customer);
     public Customer updatePassword(UUID id, String pwd);
     public Customer registerUser(UUID id, String password, String login);
