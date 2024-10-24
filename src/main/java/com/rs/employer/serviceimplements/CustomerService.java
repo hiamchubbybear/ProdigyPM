@@ -1,9 +1,14 @@
 
 package com.rs.employer.serviceimplements;
 
+import java.text.ParseException;
 import java.time.Instant;
 import java.util.*;
 
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.rs.employer.dto.Request.ActivateRequestAccount;
+import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
 import com.rs.employer.dto.Respone.CustomerUpdateRespone;
 import com.rs.employer.dto.Respone.RegisterRespone;
@@ -47,7 +52,8 @@ public class CustomerService implements ICustomerService {
     CustomerMapper mapper;
     @Autowired
     private CustomerRepo customerRepo;
-
+    @Autowired
+    AuthenticationService authenticationService;
     @Override
     public RegisterRespone register(RegisterRequest registerRequest) {
         try {
@@ -64,9 +70,6 @@ public class CustomerService implements ICustomerService {
                 e.printStackTrace();
         }
         return null;
-//        else {
-//            throw new AppException(ErrorCode.USERNAME_EXISTS_OR_EMAIL_EXISTS );
-//        }
     }
 
     @Override
@@ -200,13 +203,28 @@ public class CustomerService implements ICustomerService {
             throw new AppException(ErrorCode.USERNAME_INVALID);
     }
 
-    //    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
-//    public List<Product> findByName(String name) {
-//        return customerRepository.findAllDepartment(name);
-//    }
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     @Override
     public List<Customer> listAllSort(String sort) {
         return customerRepository.findAll(Sort.by(sort).ascending());
     }
+
+    @Override
+    public ActivateRequestAccount activateRequest(ActivateRequestToken tokenRequest) throws ParseException, JOSEException {
+        JWTClaimsSet claimsSet = JWTClaimsSet.parse(tokenRequest.getToken());
+        authenticationService.ActivateAccount(tokenRequest);
+        ActivateRequestAccount activateRequestAccount = new ActivateRequestAccount(
+                claimsSet.getSubject(),
+                claimsSet.getStringClaim("email")
+        );
+        if (customerRepository.existsByUsernameAndEmail(activateRequestAccount.getUsername(), activateRequestAccount.getEmail())) {
+            if (customerRepository.updateStatus(activateRequestAccount.getUsername()) == 1) {
+                return activateRequestAccount;
+            }
+        } else {
+            throw new AppException(ErrorCode.ACTIVATED_FAILED);
+        }
+        throw new AppException(ErrorCode.USER_NOTFOUND);
+    }
+
 }

@@ -22,7 +22,8 @@ public enum ErrorCode {
     BRAND_NOTFOUND(1012, "Brand not found" , HttpStatus.NOT_FOUND),
     IMAGES_NOTFOUND(1012, "Images not found" , HttpStatus.NOT_FOUND),
     CART_NOT_FOUNT(1010, "Cart not exists or can't be find ", HttpStatus.NOT_ACCEPTABLE),
-    USEREXISTED_OR_USERIDEXISTED(1008, "Userid  existed or Username existed", HttpStatus.BAD_REQUEST);
+    USEREXISTED_OR_USERIDEXISTED(1008, "Userid  existed or Username existed", HttpStatus.BAD_REQUEST) ,
+    ACTIVATED_FAILED(1003, "Activated failed", HttpStatus.CONFLICT),;
 
     private int code;
     private String status;

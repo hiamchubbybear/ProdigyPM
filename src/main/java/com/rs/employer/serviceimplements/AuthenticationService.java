@@ -4,12 +4,20 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Random;
 import java.util.StringJoiner;
 import java.util.UUID;
 
+import com.rs.employer.dto.Request.ActivateRequestAccount;
+import com.rs.employer.dto.Request.ActivateRequestToken;
+import com.rs.employer.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.autoconfigure.wavefront.WavefrontProperties;
+import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,7 +60,9 @@ public class AuthenticationService {
     private CustomerRepo repo;
     @Autowired
     private InvalidRepository invalidRepository;
-    private String signer_key ="UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
+    private String signer_key = "UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
+    @Autowired
+    private EmailService emailService;
 
     public AuthenticationRespone authentication(AuthenticationRequest authenticationDto) {
         var user = repo.findByUsername(authenticationDto.getUsername())
@@ -68,9 +78,16 @@ public class AuthenticationService {
             aps.setToken(token);
             aps.setAuthenticated(true);
             return aps;
-            // return
-            // AuthenticationRespone.builder().token(token).authenticated(true).build();
         }
+    }
+
+    public ActivateRequestToken ActivateAccount(ActivateRequestToken treq) throws JOSEException, ParseException {
+        try {
+            verifiedToken(treq.getToken());
+        } catch (AppException e) {
+            throw new AppException(ErrorCode.ACTIVATED_FAILED);
+        }
+        return treq;
     }
 
     public IntrospectRespone introspectRequest(IntrospectRequest request) throws JOSEException, ParseException {
@@ -105,6 +122,22 @@ public class AuthenticationService {
             return jwsObject.serialize();
         } catch (JOSEException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public boolean EmailVerification(ActivateRequestAccount customer) {
+        JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
+        String token = new Random().nextInt(1000000) + "";
+        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject(customer.getUsername()).issuer("Chessy").jwtID(token).
+                expirationTime(new Date(Instant.now().plus(15, ChronoUnit.MINUTES).toEpochMilli())).claim("email", customer.getEmail()).build();
+        Payload payload = new Payload(jwtClaimsSet.toJSONObject());
+        JWSObject jwsObject = new JWSObject(header, payload);
+        try {
+            jwsObject.sign(new MACSigner(signer_key.getBytes()));
+            emailService.sendActivateToken(customer.getEmail(), customer.getUsername(), jwsObject.serialize());
+            return true;
+        } catch (JOSEException e) {
+            throw new RuntimeException();
         }
     }
 

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.rs.employer.model.Product;
 
-// Database JPA repository for Product
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     public List<Product> findByCategoryName(String name);
