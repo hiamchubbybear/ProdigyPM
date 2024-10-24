@@ -45,7 +45,7 @@ public class AuthenticationController {
           return apiRespone;
      }
      @PostMapping("/sendActivateToken")
-     public ApiRespone<Boolean> sendAuthenticate(@RequestBody ActivateRequestAccount activateRequestAccount) {
+     public ApiRespone<Boolean> sendAuthenticate(@RequestBody ActivateRequestAccount activateRequestAccount) throws JOSEException {
           return new ApiRespone<>(authen.EmailVerification(activateRequestAccount));
      }
 }
