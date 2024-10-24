@@ -43,7 +43,11 @@ public class SecurityConfig {
             "/api/images/image/download",
             "/api/product/",
             "/api/customer/register/**",
-            "/api/customer/updateUser"
+            "/api/customer/updateUser",
+            "/api/customer/activate",
+            "auth/sendActivateToken",
+            "api/customer/hello"
+
     };
     private final String[] VENDOR_ENDPOINT = {
             "/api/product/add",
@@ -62,7 +66,8 @@ public class SecurityConfig {
     };
     private final String[] ADMIN_ENDPOINT = {
             "/api/customer/all",
-            "/api/customer/getMyInfo"
+            "/api/customer/getMyInfo",
+
     };
     private final String SIGNER_KEY = "UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
 
