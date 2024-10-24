@@ -2,6 +2,7 @@ package com.rs.employer.controller.auth;
 
 import java.text.ParseException;
 
+import com.rs.employer.dto.Request.ActivateRequestAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import com.rs.employer.serviceimplements.AuthenticationService;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/auth")
-public class Authentication {
+public class AuthenticationController {
      @Autowired
      private AuthenticationService authen;
 
@@ -25,7 +26,6 @@ public class Authentication {
           ApiRespone apiRespone = new ApiRespone<>();
           apiRespone.setData(result);
           return apiRespone;
-          // return ApiRespone.<AuthenticationDto>builder().setData(result).build();
      }
 
      @PostMapping("/token")
@@ -43,5 +43,9 @@ public class Authentication {
           ApiRespone apiRespone = new ApiRespone<>();
           apiRespone.setCode(1000);
           return apiRespone;
+     }
+     @PostMapping("/sendActivateToken")
+     public ApiRespone<Boolean> sendAuthenticate(@RequestBody ActivateRequestAccount activateRequestAccount) {
+          return new ApiRespone<>(authen.EmailVerification(activateRequestAccount));
      }
 }

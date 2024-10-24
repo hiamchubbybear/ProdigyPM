@@ -5,7 +5,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
-<<<<<<< HEAD
+import com.rs.employer.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -13,12 +13,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-=======
->>>>>>> main
 import com.rs.employer.dao.CustomerRepo;
 import com.rs.employer.dao.PermissionRepository;
 import com.rs.employer.dao.RoleRepository;
-import com.rs.employer.email.EmailSender;
 import com.rs.employer.enums.PermissionEnum;
 import com.rs.employer.model.Customer;
 import com.rs.employer.model.Permission;
@@ -38,13 +35,14 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 public class Configuration {
     @Autowired
-    PasswordEncoder passwordEncoder ;
+    PasswordEncoder passwordEncoder;
     @Autowired
     RoleRepository roleRepository;
     @Autowired
     PermissionRepository permissionRepository;
     @Autowired
-    EmailSender emailSender;
+    EmailService emailService;
+
     @Bean
     @Primary
     ApplicationRunner createAdmin() {
@@ -59,44 +57,40 @@ public class Configuration {
 
         };
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> main
     @Bean
     ApplicationRunner applicationRunner(CustomerRepo repo, SbomEndpoint sbomEndpoint) {
         return args -> {
-<<<<<<< HEAD
-        if (!repo.findByUsername("admin").isPresent()) {
-=======
             if (!repo.findByUsername("admin").isPresent()) {
->>>>>>> main
-                Permission permission = new Permission("PERMIT_ALL", "Permission crud to all ");
-                permissionRepository.save(permission);
-                Role role = new Role();
-                role.setName("ADMIN");
-                role.setDescription("ADMIN Role");
-                HashSet<Permission> permissions = new HashSet<>();
-                permissions.add(permission);
-                role.setPermissions(permissions);
-                roleRepository.save(role);
-                Set<Role> role1 = new HashSet<>();
-                role1.add(roleRepository.findByName("ADMIN"));
-                Customer admin = new Customer();
-                admin.setUsername("admin");
-                admin.setAddress("Hue");
-                admin.setCreate(Instant.now());
-                admin.setUpdate(Instant.now());
-                admin.setGender(true);
-                admin.setEmail("ilovepakpak@gmail.com");
-                admin.setName("Chessy");
-                admin.setPassword(passwordEncoder.encode("160304"));
-                admin.setRoles(role1);
-                admin.setStatus("ONLINE");
-                emailSender.sendSimpleMail("ilovepakpak@gmail.com","Test email" , "TOOOOOOO");
-                System.out.println("Sent email!");
-                repo.save(admin);
+                if (!repo.findByUsername("admin").isPresent()) {
+                    Permission permission = new Permission("PERMIT_ALL", "Permission crud to all ");
+                    permissionRepository.save(permission);
+                    Role role = new Role();
+                    role.setName("ADMIN");
+                    role.setDescription("ADMIN Role");
+                    HashSet<Permission> permissions = new HashSet<>();
+                    permissions.add(permission);
+                    role.setPermissions(permissions);
+                    roleRepository.save(role);
+                    Set<Role> role1 = new HashSet<>();
+                    role1.add(roleRepository.findByName("ADMIN"));
+                    Customer admin = new Customer();
+                    admin.setUsername("admin");
+                    admin.setAddress("Hue");
+                    admin.setCreate(Instant.now());
+                    admin.setUpdate(Instant.now());
+                    admin.setGender(true);
+                    admin.setEmail("ilovepakpak@gmail.com");
+                    admin.setName("Chessy");
+                    admin.setPassword(passwordEncoder.encode("160304"));
+                    admin.setRoles(role1);
+                    admin.setStatus("ONLINE");
+//                    emailService.sendActivateToken("ilovepakpak@gmail.com", "Test email", "TOOOOOOO");
+//                    System.out.println("Sent email!");
+                    repo.save(admin);
+                }
             }
+            ;
         };
     }
 }

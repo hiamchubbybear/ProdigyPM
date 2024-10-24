@@ -7,6 +7,9 @@ import java.util.UUID;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Null;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UuidGenerator;
