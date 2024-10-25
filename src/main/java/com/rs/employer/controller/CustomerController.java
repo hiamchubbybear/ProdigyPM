@@ -6,12 +6,16 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jwt.JWTClaimsSet;
 import com.rs.employer.dao.CustomerRepo;
 import com.rs.employer.dto.Request.ActivateRequestAccount;
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
 import com.rs.employer.dto.Respone.CustomerUpdateRespone;
 import com.rs.employer.dto.Respone.RegisterRespone;
+import com.rs.employer.globalexception.AppException;
+import com.rs.employer.globalexception.ErrorCode;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -74,9 +78,13 @@ public class CustomerController {
                 (customerImplement.addCustomer(customer));
     }
     @GetMapping(path = "/hello")
-    public ApiRespone<String> hello() {
+    public ApiRespone<String> hello() throws ParseException {
+        JSONObject object   = new JSONObject("eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDaGVzc3kiLCJzdWIiOiJhZG1pbiIsImV4cCI6MTcyOTc5MzI4NiwiaWF0IjoxNzI5Nzg5Njg2LCJqdGkiOiIyNmE1YTVhMC1iNzUyLTQ1MDMtOTI2Yy1mZDNmMzRkOGU3N2YiLCJzY29wZSI6IkFETUlOIFBFUk1JVF9BTEwifQ.MxsrRjjEjlMs4rY_c14c43CqZXhRzZt9Boq6hZGGLpw");
+        JWTClaimsSet claimsSet = JWTClaimsSet.parse(object.toString());
+        String subject = claimsSet.getSubject();
+        String email = claimsSet.getStringClaim("email");
         customerRepo.updateStatus("admin");
-    return new ApiRespone<>("true");
+    return new ApiRespone<>(subject + "   "  + email);
     }
     @GetMapping(path = "/getallandsortby/{value}")
     public ApiRespone<List<Customer>> getAllAndSort(
@@ -93,7 +101,13 @@ public class CustomerController {
         return new ApiRespone(customerImplement.customerRequest(customer));
     }
     @PostMapping(path = "/activate")
-    public ApiRespone<ActivateRequestAccount> activateAccount(@RequestBody ActivateRequestToken token) throws ParseException, JOSEException {
-         return new ApiRespone<>(customerImplement.activateRequest(token));
+    public ApiRespone<ActivateRequestAccount> activateAccount(
+            @RequestBody ActivateRequestToken request
+    ) throws ParseException, JOSEException {
+        if (request == null || request.getToken() == null) {
+            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+        }
+        return new ApiRespone<>(customerImplement.activateRequest(request));
     }
+
 }

@@ -2,6 +2,7 @@ package com.rs.employer.controller.auth;
 
 import java.text.ParseException;
 
+import com.rs.employer.dao.CustomerRepo;
 import com.rs.employer.dto.Request.ActivateRequestAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +20,17 @@ import com.rs.employer.serviceimplements.AuthenticationService;
 public class AuthenticationController {
      @Autowired
      private AuthenticationService authen;
-
+     @Autowired
+     private CustomerRepo customerRepo;
      @PostMapping("/login")
-     public ApiRespone<AuthenticationRespone> postMethodName(@RequestBody AuthenticationRequest authenticated) {
-          var result = authen.authentication(authenticated);
-          ApiRespone apiRespone = new ApiRespone<>();
-          apiRespone.setData(result);
-          return apiRespone;
+     public ApiRespone<?> postMethodName(@RequestBody AuthenticationRequest authenticated) throws JOSEException {
+          var  username = authenticated.getUsername();
+          var  password = authenticated.getPassword();
+          if(customerRepo.existsByUsernameAndEmail(username, password) && (customerRepo.findStatusByUsernameAndEmail(username,password) ==true)) {
+               return new ApiRespone<>(authen.authentication(authenticated));
+          } else {
+               return new ApiRespone<>(authen.EmailVerification(authenticated));
+          }
      }
 
      @PostMapping("/token")
@@ -43,9 +48,5 @@ public class AuthenticationController {
           ApiRespone apiRespone = new ApiRespone<>();
           apiRespone.setCode(1000);
           return apiRespone;
-     }
-     @PostMapping("/sendActivateToken")
-     public ApiRespone<Boolean> sendAuthenticate(@RequestBody ActivateRequestAccount activateRequestAccount) {
-          return new ApiRespone<>(authen.EmailVerification(activateRequestAccount));
      }
 }

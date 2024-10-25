@@ -57,10 +57,9 @@ public class Customer {
   @ManyToMany
   private Set<Role> roles;
   private boolean gender;
-//  @ValidateStatus
   @Nullable
   @Column(name = "status")
-  private String status;
+  private boolean status;
   @Column(name = "create_at", updatable = false)
   private Instant create;
   @LastModifiedDate
@@ -75,9 +74,9 @@ public class Customer {
 //   @JoinColumn(name = "cart", referencedColumnName = "id")
   private Cart cart;
 
-  public Customer(UUID uuid, @NotNull @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username, String email,
+  public Customer(UUID uuid, @NotNull @Size(min = 8, max = 20, message = "USERNAME_INVALID") String username, String email,
                   @Size(min = 8, message = "PASSWORD_INVALID") @NotBlank String password, String name, String address,
-                  Set<Role> roles, boolean gender, String status, Instant create, Instant update, LocalDate dob) {
+                  Set<Role> roles, boolean gender, boolean status, Instant create, Instant update, LocalDate dob) {
     this.uuid = uuid;
     this.username = username;
       this.email = email;
@@ -112,9 +111,9 @@ public class Customer {
     return password;
   }
 
-  public Customer(UUID uuid, @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username, String email,
+  public Customer(UUID uuid, @NotNull @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username, String email,
                   @Size(min = 8, message = "PASSWORD_INVALID") String password, String name, String address, Set<Role> roles,
-                  boolean gender, String status, Instant create, Instant update, LocalDate dob, Cart cart) {
+                  boolean gender, boolean status, Instant create, Instant update, LocalDate dob, Cart cart) {
     this.uuid = uuid;
     this.username = username;
       this.email = email;
@@ -166,11 +165,11 @@ public class Customer {
     this.gender = gender;
   }
 
-  public String getStatus() {
+  public boolean getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(boolean status) {
     this.status = status;
   }
 

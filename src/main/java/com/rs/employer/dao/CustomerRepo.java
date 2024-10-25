@@ -23,12 +23,22 @@ public interface CustomerRepo extends JpaRepository<Customer, UUID> {
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
     Optional<Customer> findByUsername(String username);
+
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Customer c WHERE c.username = :username AND c.email = :email")
     boolean existsByUsernameAndEmail(@Param("username") String username,@Param("email") String email);
+
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query("UPDATE Customer c SET c.status = 'TEST' WHERE c.username = :username")
+    @Query("UPDATE Customer c SET c.status = true WHERE c.username = :username")
     int updateStatus(@Param("username") String username);
+
+    @Query("SELECT c.status from Customer  c where (c.username = :username and  c.email = :email )")
+    Boolean findStatusByUsernameAndEmail(@Param("username") String username, @Param("email") String email);
+
+
+    @Query("SELECT c.email from Customer c where  (c.username = :username)")
+    String findEmailByUsername(@Param("username") String username);
+
     @Query(value = "select " +
             "w.product_id as Product_Id, " +
             "w.name_product as Product_Name, " +

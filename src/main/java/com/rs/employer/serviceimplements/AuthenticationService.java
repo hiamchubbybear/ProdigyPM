@@ -8,16 +8,11 @@ import java.util.Random;
 import java.util.StringJoiner;
 import java.util.UUID;
 
-import com.rs.employer.dto.Request.ActivateRequestAccount;
+
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.autoconfigure.wavefront.WavefrontProperties;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -64,6 +59,7 @@ public class AuthenticationService {
     @Autowired
     private EmailService emailService;
 
+
     public AuthenticationRespone authentication(AuthenticationRequest authenticationDto) {
         var user = repo.findByUsername(authenticationDto.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
@@ -89,7 +85,6 @@ public class AuthenticationService {
         }
         return treq;
     }
-
     public IntrospectRespone introspectRequest(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
         IntrospectRespone respone = new IntrospectRespone();
@@ -102,6 +97,7 @@ public class AuthenticationService {
         }
         respone.setValid(true);
         return respone;
+
     }
 
     private String generateToken(Customer customer) {
@@ -125,17 +121,20 @@ public class AuthenticationService {
         }
     }
 
-    public boolean EmailVerification(ActivateRequestAccount customer) {
+    public String EmailVerification(AuthenticationRequest customer)  {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
+        String email = repo.findEmailByUsername(customer.getUsername());
         String token = new Random().nextInt(1000000) + "";
-        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject(customer.getUsername()).issuer("Chessy").jwtID(token).
-                expirationTime(new Date(Instant.now().plus(15, ChronoUnit.MINUTES).toEpochMilli())).claim("email", customer.getEmail()).build();
+        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
+                .subject(customer.getUsername()).issuer("Chessy")
+                .jwtID(token).expirationTime(new Date(Instant.now().plus(15, ChronoUnit.MINUTES).toEpochMilli()))
+                .claim("email", email).build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject = new JWSObject(header, payload);
         try {
             jwsObject.sign(new MACSigner(signer_key.getBytes()));
-            emailService.sendActivateToken(customer.getEmail(), customer.getUsername(), jwsObject.serialize());
-            return true;
+            emailService.sendActivateToken(email, customer.getUsername(), token);
+            return jwsObject.serialize();
         } catch (JOSEException e) {
             throw new RuntimeException();
         }
@@ -173,6 +172,7 @@ public class AuthenticationService {
 
             });
         }
+        System.out.println("SCOPE" + joiner.toString());
         return joiner.toString();
     }
 }
