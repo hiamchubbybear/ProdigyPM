@@ -25,8 +25,11 @@ public class AuthenticationController {
      @PostMapping("/login")
      public ApiRespone<?> postMethodName(@RequestBody AuthenticationRequest authenticated) throws JOSEException {
           var  username = authenticated.getUsername();
-          var  password = authenticated.getPassword();
-          if(customerRepo.existsByUsernameAndEmail(username, password) && (customerRepo.findStatusByUsernameAndEmail(username,password) ==true)) {
+          var  status = customerRepo.findStatusByUsernameAndEmail(username);
+          var email = customerRepo.findEmailByUsername(username);
+          System.out.println(status);
+          if(customerRepo.existsByUsernameAndEmail(username,email) && status == true
+                  || username.equals("admin")) {
                return new ApiRespone<>(authen.authentication(authenticated));
           } else {
                return new ApiRespone<>(authen.EmailVerification(authenticated));

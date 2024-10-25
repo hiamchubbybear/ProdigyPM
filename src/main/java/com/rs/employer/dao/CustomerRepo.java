@@ -32,9 +32,8 @@ public interface CustomerRepo extends JpaRepository<Customer, UUID> {
     @Query("UPDATE Customer c SET c.status = true WHERE c.username = :username")
     int updateStatus(@Param("username") String username);
 
-    @Query("SELECT c.status from Customer  c where (c.username = :username and  c.email = :email )")
-    Boolean findStatusByUsernameAndEmail(@Param("username") String username, @Param("email") String email);
-
+    @Query("SELECT c.status FROM Customer c WHERE (c.username = :username)")
+    Boolean findStatusByUsernameAndEmail(@Param("username") String username);
 
     @Query("SELECT c.email from Customer c where  (c.username = :username)")
     String findEmailByUsername(@Param("username") String username);

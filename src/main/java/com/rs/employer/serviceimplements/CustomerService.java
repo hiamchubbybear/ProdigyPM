@@ -228,7 +228,7 @@ public class CustomerService implements ICustomerService {
                 System.out.println(name);
                 if (token.getToken().equals(jwt.getId())) {
                     if (customerRepository.existsByUsernameAndEmail(name,email)
-                            && customerRepo.findStatusByUsernameAndEmail(name, email) != true) {
+                            && customerRepo.findStatusByUsernameAndEmail(name) != true) {
                         if (customerRepository.updateStatus(name) > 0) return new ActivateRequestAccount(name, email);
                     }
                 } else {
@@ -236,8 +236,8 @@ public class CustomerService implements ICustomerService {
                 }
             }
         } catch (Exception e) {
-//            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
-            e.printStackTrace();
+            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+//            e.printStackTrace();
         }
         return account;
     }

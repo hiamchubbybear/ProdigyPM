@@ -63,6 +63,7 @@ public class AuthenticationService {
     public AuthenticationRespone authentication(AuthenticationRequest authenticationDto) {
         var user = repo.findByUsername(authenticationDto.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+        user.getRoles().stream().forEach((item) -> System.out.println(item));
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         boolean authenticated = passwordEncoder.matches(authenticationDto.getPassword(),
                 user.getPassword());
