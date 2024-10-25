@@ -84,6 +84,7 @@ public class Configuration {
                     admin.setName("Chessy");
                     admin.setPassword(passwordEncoder.encode("160304"));
                     admin.setRoles(role1);
+                    admin.setStatus(true);
 //                    admin.setStatus("ONLINE");
 //                    emailService.sendActivateToken("ilovepakpak@gmail.com", "Test email", "TOOOOOOO");
 //                    System.out.println("Sent email!");
