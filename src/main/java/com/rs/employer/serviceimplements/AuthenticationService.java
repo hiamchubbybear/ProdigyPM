@@ -8,16 +8,11 @@ import java.util.Random;
 import java.util.StringJoiner;
 import java.util.UUID;
 
-import com.rs.employer.dto.Request.ActivateRequestAccount;
+
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.autoconfigure.wavefront.WavefrontProperties;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -64,6 +59,7 @@ public class AuthenticationService {
     @Autowired
     private EmailService emailService;
 
+
     public AuthenticationRespone authentication(AuthenticationRequest authenticationDto) {
         var user = repo.findByUsername(authenticationDto.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
@@ -89,7 +85,6 @@ public class AuthenticationService {
         }
         return treq;
     }
-
     public IntrospectRespone introspectRequest(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
         IntrospectRespone respone = new IntrospectRespone();
@@ -102,6 +97,7 @@ public class AuthenticationService {
         }
         respone.setValid(true);
         return respone;
+
     }
 
     private String generateToken(Customer customer) {
@@ -125,57 +121,24 @@ public class AuthenticationService {
         }
     }
 
-    public boolean EmailVerification(ActivateRequestAccount customer) throws JOSEException {
+    public String EmailVerification(AuthenticationRequest customer)  {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
+        String email = repo.findEmailByUsername(customer.getUsername());
         String token = new Random().nextInt(1000000) + "";
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(customer.getUsername()).issuer("Chessy")
                 .jwtID(token).expirationTime(new Date(Instant.now().plus(15, ChronoUnit.MINUTES).toEpochMilli()))
-                .claim("email", customer.getEmail()).build();
+                .claim("email", email).build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject = new JWSObject(header, payload);
         try {
             jwsObject.sign(new MACSigner(signer_key.getBytes()));
-            emailService.sendActivateToken(customer.getEmail(), customer.getUsername(), jwsObject.serialize());
-            return true;
+            emailService.sendActivateToken(email, customer.getUsername(), token);
+            return jwsObject.serialize();
         } catch (JOSEException e) {
             throw new RuntimeException();
         }
     }
-
-//    public boolean EmailVerification(ActivateRequestAccount customer) {
-//        // Khởi tạo header
-//        JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
-//
-//        // Sinh mã ID duy nhất
-//        String token = UUID.randomUUID().toString();
-//
-//        // Tạo claims
-//        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-//                .subject(customer.getUsername())
-//                .issuer("Chessy")
-//                .jwtID(token)
-//                .expirationTime(Date.from(Instant.now().plusSeconds(15 * 60))) // 15 phút
-//                .claim("email", customer.getEmail())
-//                .build();
-//
-//        // Tạo đối tượng JWS
-//        JWSObject jwsObject = new JWSObject(header, new Payload(jwtClaimsSet.toJSONObject()));
-//
-//        try {
-//            // Ký token
-//            jwsObject.sign(new MACSigner(signer_key.getBytes()));
-//
-//            // Gửi email
-//            emailService.sendActivateToken(customer.getEmail(), customer.getUsername(), jwsObject.serialize());
-//            return true;
-//        } catch (JOSEException e) {
-//            // Ghi log hoặc xử lý ngoại lệ
-//            e.printStackTrace();
-//            throw new RuntimeException("Error signing JWT: " + e.getMessage());
-//        }
-//    }
-
 
     public void Logout(LogoutRequest request) throws JOSEException, ParseException {
         var signedToken = verifiedToken(request.getToken());
@@ -209,6 +172,7 @@ public class AuthenticationService {
 
             });
         }
+        System.out.println("SCOPE" + joiner.toString());
         return joiner.toString();
     }
 }

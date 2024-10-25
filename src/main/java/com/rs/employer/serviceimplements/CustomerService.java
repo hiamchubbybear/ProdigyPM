@@ -13,12 +13,14 @@ import com.rs.employer.dto.Request.Register.RegisterRequest;
 import com.rs.employer.dto.Respone.CustomerUpdateRespone;
 import com.rs.employer.dto.Respone.RegisterRespone;
 import com.rs.employer.model.Role;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dao.CartRepository;
@@ -35,6 +37,7 @@ import com.rs.employer.model.Product;
 import com.rs.employer.service.ICustomerService;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.servlet.view.AbstractCachingViewResolver;
 
 @Service
 @Slf4j
@@ -54,6 +57,7 @@ public class CustomerService implements ICustomerService {
     private CustomerRepo customerRepo;
     @Autowired
     AuthenticationService authenticationService;
+
     @Override
     public RegisterRespone register(RegisterRequest registerRequest) {
         try {
@@ -67,7 +71,7 @@ public class CustomerService implements ICustomerService {
                 return new RegisterRespone(registerRequest.getUsername(), registerRequest.getPassword(), registerRequest.getEmail());
             }
         } catch (Exception e) {
-                e.printStackTrace();
+            e.printStackTrace();
         }
         return null;
     }
@@ -210,21 +214,32 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public ActivateRequestAccount activateRequest(ActivateRequestToken tokenRequest) throws ParseException, JOSEException {
-        JWTClaimsSet claimsSet = JWTClaimsSet.parse(tokenRequest.getToken());
-        authenticationService.ActivateAccount(tokenRequest);
-        ActivateRequestAccount activateRequestAccount = new ActivateRequestAccount(
-                claimsSet.getSubject(),
-                claimsSet.getStringClaim("email")
-        );
-        if (customerRepository.existsByUsernameAndEmail(activateRequestAccount.getUsername(), activateRequestAccount.getEmail())) {
-            if (customerRepository.updateStatus(activateRequestAccount.getUsername()) == 1) {
-                return activateRequestAccount;
+    public ActivateRequestAccount activateRequest(ActivateRequestToken token) {
+        ActivateRequestAccount  account = new ActivateRequestAccount();
+        try {
+            var context = SecurityContextHolder.getContext().getAuthentication();
+            if (context != null && context.getPrincipal() instanceof Jwt) {
+                Jwt jwt = (Jwt) (context.getPrincipal());
+                String email = jwt.getClaim("email");
+                var name = jwt.getSubject();
+                account.setEmail(email);
+                account.setUsername(name);
+                System.out.println(email);
+                System.out.println(name);
+                if (token.getToken().equals(jwt.getId())) {
+                    if (customerRepository.existsByUsernameAndEmail(name,email)
+                            && customerRepo.findStatusByUsernameAndEmail(name, email) != true) {
+                        if (customerRepository.updateStatus(name) > 0) return new ActivateRequestAccount(name, email);
+                    }
+                } else {
+                    throw new AppException(ErrorCode.ACTIVATED_FAILED);
+                }
             }
-        } else {
-            throw new AppException(ErrorCode.ACTIVATED_FAILED);
+        } catch (Exception e) {
+//            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+            e.printStackTrace();
         }
-        throw new AppException(ErrorCode.USER_NOTFOUND);
+        return account;
     }
 
 }

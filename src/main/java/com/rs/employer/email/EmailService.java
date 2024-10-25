@@ -15,7 +15,7 @@ public class EmailService {
         message.setFrom("noreply@pmapi.com");
         message.setTo(to);
         message.setSubject(subject);
-        message.setText("Your activate token is" + content);
+        message.setText("Your activate token is : " + content);
         javaMailSender.send(message);
     }
 }
