@@ -8,6 +8,7 @@ import com.nimbusds.jose.JOSEException;
 import com.rs.employer.dto.Request.ActivateRequestAccount;
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
+import com.rs.employer.dto.Respone.ActivateAccountRespone;
 import com.rs.employer.dto.Respone.CustomerUpdateRespone;
 import com.rs.employer.dto.Respone.RegisterRespone;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,5 @@ public interface ICustomerService {
     public Customer updatePassword(UUID id, String pwd);
     public Customer registerUser(UUID id, String password, String login);
     public List<Customer> listAllSort(String sort);
-    public ActivateRequestAccount activateRequest(ActivateRequestToken treq) throws ParseException, JOSEException;
+    public ActivateAccountRespone activateRequest(ActivateRequestToken treq) throws ParseException, JOSEException;
 }

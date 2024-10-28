@@ -10,6 +10,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.rs.employer.dto.Request.ActivateRequestAccount;
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
+import com.rs.employer.dto.Respone.ActivateAccountRespone;
 import com.rs.employer.dto.Respone.CustomerUpdateRespone;
 import com.rs.employer.dto.Respone.RegisterRespone;
 import com.rs.employer.model.Role;
@@ -137,9 +138,7 @@ public class CustomerService implements ICustomerService {
     }
 
     public Optional<Customer> getMyInfo() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
         var user = SecurityContextHolder.getContext();
-        System.out.printf("The role of the jwt code : {}" + authentication.getAuthorities());
         String name = user.getAuthentication().getName();
         return customerRepository.findByUsername(name);
     }
@@ -214,22 +213,19 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public ActivateRequestAccount activateRequest(ActivateRequestToken token) {
-        ActivateRequestAccount  account = new ActivateRequestAccount();
+    public ActivateAccountRespone activateRequest(ActivateRequestToken token) {
         try {
             var context = SecurityContextHolder.getContext().getAuthentication();
             if (context != null && context.getPrincipal() instanceof Jwt) {
                 Jwt jwt = (Jwt) (context.getPrincipal());
                 String email = jwt.getClaim("email");
                 var name = jwt.getSubject();
-                account.setEmail(email);
-                account.setUsername(name);
-                System.out.println(email);
-                System.out.println(name);
                 if (token.getToken().equals(jwt.getId())) {
                     if (customerRepository.existsByUsernameAndEmail(name,email)
                             && customerRepo.findStatusByUsernameAndEmail(name) != true) {
-                        if (customerRepository.updateStatus(name) > 0) return new ActivateRequestAccount(name, email);
+                        return(customerRepository.updateStatus(name) > 0)
+                                ? new ActivateAccountRespone(true)
+                                : new ActivateAccountRespone(false);
                     }
                 } else {
                     throw new AppException(ErrorCode.ACTIVATED_FAILED);
@@ -237,9 +233,8 @@ public class CustomerService implements ICustomerService {
             }
         } catch (Exception e) {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
-//            e.printStackTrace();
         }
-        return account;
+        return new ActivateAccountRespone(false);
     }
 
 }

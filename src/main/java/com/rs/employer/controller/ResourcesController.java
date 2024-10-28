@@ -19,10 +19,9 @@ import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.Resources;
 import com.rs.employer.serviceimplements.ResourcesService;
-
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping(path = "/api/resources")
-@CrossOrigin
 public class ResourcesController {
 
     @Autowired

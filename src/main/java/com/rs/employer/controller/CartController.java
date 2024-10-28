@@ -24,7 +24,7 @@ import com.rs.employer.serviceimplements.ProductService;
 //Controller for cart
 @RestController
 @RequestMapping(path = "/api/cart")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class CartController {
     private CartService repo;
     private ProductCartService pcRepository;

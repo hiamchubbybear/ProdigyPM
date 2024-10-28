@@ -11,6 +11,7 @@ import com.rs.employer.dao.CustomerRepo;
 import com.rs.employer.dto.Request.ActivateRequestAccount;
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
+import com.rs.employer.dto.Respone.ActivateAccountRespone;
 import com.rs.employer.dto.Respone.CustomerUpdateRespone;
 import com.rs.employer.dto.Respone.RegisterRespone;
 import com.rs.employer.globalexception.AppException;
@@ -34,9 +35,11 @@ import com.rs.employer.serviceimplements.CustomerService;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+
 @RequestMapping(path = "/api/customer")
 @RestController
 @Slf4j
+
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class CustomerController {
     @Autowired
@@ -79,12 +82,8 @@ public class CustomerController {
     }
     @GetMapping(path = "/hello")
     public ApiRespone<String> hello() throws ParseException {
-        JSONObject object   = new JSONObject("eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDaGVzc3kiLCJzdWIiOiJhZG1pbiIsImV4cCI6MTcyOTc5MzI4NiwiaWF0IjoxNzI5Nzg5Njg2LCJqdGkiOiIyNmE1YTVhMC1iNzUyLTQ1MDMtOTI2Yy1mZDNmMzRkOGU3N2YiLCJzY29wZSI6IkFETUlOIFBFUk1JVF9BTEwifQ.MxsrRjjEjlMs4rY_c14c43CqZXhRzZt9Boq6hZGGLpw");
-        JWTClaimsSet claimsSet = JWTClaimsSet.parse(object.toString());
-        String subject = claimsSet.getSubject();
-        String email = claimsSet.getStringClaim("email");
         customerRepo.updateStatus("admin");
-    return new ApiRespone<>(subject + "   "  + email);
+    return new ApiRespone<>("Hello worlds");
     }
     @GetMapping(path = "/getallandsortby/{value}")
     public ApiRespone<List<Customer>> getAllAndSort(
@@ -101,7 +100,7 @@ public class CustomerController {
         return new ApiRespone(customerImplement.customerRequest(customer));
     }
     @PostMapping(path = "/activate")
-    public ApiRespone<ActivateRequestAccount> activateAccount(
+    public ApiRespone<ActivateAccountRespone> activateAccount(
             @RequestBody ActivateRequestToken request
     ) throws ParseException, JOSEException {
         if (request == null || request.getToken() == null) {

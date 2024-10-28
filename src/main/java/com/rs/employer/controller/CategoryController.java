@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.model.Category;
 import com.rs.employer.serviceimplements.CategoryService;
+
 @RestController
 @RequestMapping("/api/category")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class CategoryController {
     @Autowired
     private ICategoryService svc;
@@ -41,6 +43,7 @@ public class CategoryController {
         apiRespone.setData(true);
         return apiRespone;
     }
+
     @GetMapping("/getbyname")
     public ApiRespone<Category> getCategoryByName(@PathVariable String name) {
         ApiRespone apiRespone = new ApiRespone<>(svc.getCategoryByName(name));
