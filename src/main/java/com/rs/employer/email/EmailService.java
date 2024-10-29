@@ -18,4 +18,12 @@ public class EmailService {
         message.setText("Your activate token is : " + content);
         javaMailSender.send(message);
     }
+    public void sendResetPasswordLink(String to, String subject, String content) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("noreply@pmapi.com");
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText("This is your link to reset your password : " + content);
+        javaMailSender.send(message);
+    }
 }

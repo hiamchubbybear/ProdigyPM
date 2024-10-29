@@ -4,19 +4,16 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jwt.JWTClaimsSet;
 import com.rs.employer.dao.CustomerRepo;
-import com.rs.employer.dto.Request.ActivateRequestAccount;
 import com.rs.employer.dto.Request.ActivateRequestToken;
+import com.rs.employer.dto.Request.ForgotAccountRequest;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
 import com.rs.employer.dto.Respone.ActivateAccountRespone;
 import com.rs.employer.dto.Respone.CustomerUpdateRespone;
-import com.rs.employer.dto.Respone.RegisterRespone;
+import com.rs.employer.dto.Respone.ForgotAccountRespone;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -108,5 +105,10 @@ public class CustomerController {
         }
         return new ApiRespone<>(customerImplement.activateRequest(request));
     }
+    @GetMapping(path = "/resetpwd")
+    public ApiRespone<ForgotAccountRespone> resetPassword(@RequestBody ForgotAccountRequest request) throws JOSEException {
+        return new ApiRespone(customerImplement.forgotAccount(request));
+    }
+
 
 }

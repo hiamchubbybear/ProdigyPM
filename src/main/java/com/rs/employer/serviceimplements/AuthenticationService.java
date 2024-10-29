@@ -9,21 +9,17 @@ import java.util.StringJoiner;
 import java.util.UUID;
 
 
+import com.nimbusds.jose.*;
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JWSAlgorithm;
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.JWSObject;
-import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
@@ -78,6 +74,7 @@ public class AuthenticationService {
         }
     }
 
+
     public ActivateRequestToken ActivateAccount(ActivateRequestToken treq) throws JOSEException, ParseException {
         try {
             verifiedToken(treq.getToken());
@@ -128,7 +125,8 @@ public class AuthenticationService {
         String token = new Random().nextInt(1000000) + "";
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(customer.getUsername()).issuer("Chessy")
-                .jwtID(token).expirationTime(new Date(Instant.now().plus(15, ChronoUnit.MINUTES).toEpochMilli()))
+                .jwtID(token).expirationTime(new Date(Instant.now()
+                .plus(15, ChronoUnit.MINUTES).toEpochMilli()))
                 .claim("email", email).build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject = new JWSObject(header, payload);
@@ -140,7 +138,16 @@ public class AuthenticationService {
             throw new RuntimeException();
         }
     }
+    public String ResetPasswordToken(String username , String email ) throws JOSEException {
+        JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
+        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject(username).issuer("Chessy").claim("email", email)
+                .expirationTime(new Date(Instant.now().plus(5,ChronoUnit.MINUTES).toEpochMilli())).build();
+        Payload payload = new Payload(jwtClaimsSet.toJSONObject());
+        JWSObject jwsObject = new JWSObject(header, payload);
+        jwsObject.sign(new MACSigner(signer_key));
+        return jwsObject.serialize();
 
+    }
     public void Logout(LogoutRequest request) throws JOSEException, ParseException {
         var signedToken = verifiedToken(request.getToken());
         String jit = signedToken.getJWTClaimsSet().getJWTID();

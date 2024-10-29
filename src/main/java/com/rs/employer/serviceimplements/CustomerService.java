@@ -9,10 +9,11 @@ import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.rs.employer.dto.Request.ActivateRequestAccount;
 import com.rs.employer.dto.Request.ActivateRequestToken;
+import com.rs.employer.dto.Request.ForgotAccountRequest;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
-import com.rs.employer.dto.Respone.ActivateAccountRespone;
-import com.rs.employer.dto.Respone.CustomerUpdateRespone;
-import com.rs.employer.dto.Respone.RegisterRespone;
+import com.rs.employer.dto.Respone.*;
+import com.rs.employer.email.EmailService;
+import com.rs.employer.email.MailService;
 import com.rs.employer.model.Role;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,6 @@ import com.rs.employer.dao.CartRepository;
 import com.rs.employer.dao.CustomerRepo;
 import com.rs.employer.dao.RoleRepository;
 import com.rs.employer.dto.Request.User.CustomerRequest;
-import com.rs.employer.dto.Respone.CustomerRespone;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.CustomerMapper;
@@ -58,6 +59,10 @@ public class CustomerService implements ICustomerService {
     private CustomerRepo customerRepo;
     @Autowired
     AuthenticationService authenticationService;
+    @Autowired
+    private MailService mailService;
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public RegisterRespone register(RegisterRequest registerRequest) {
@@ -221,9 +226,9 @@ public class CustomerService implements ICustomerService {
                 String email = jwt.getClaim("email");
                 var name = jwt.getSubject();
                 if (token.getToken().equals(jwt.getId())) {
-                    if (customerRepository.existsByUsernameAndEmail(name,email)
+                    if (customerRepository.existsByUsernameAndEmail(name, email)
                             && customerRepo.findStatusByUsernameAndEmail(name) != true) {
-                        return(customerRepository.updateStatus(name) > 0)
+                        return (customerRepository.updateStatus(name) > 0)
                                 ? new ActivateAccountRespone(true)
                                 : new ActivateAccountRespone(false);
                     }
@@ -237,4 +242,18 @@ public class CustomerService implements ICustomerService {
         return new ActivateAccountRespone(false);
     }
 
+    @Override
+    public ForgotAccountRespone forgotAccount(ForgotAccountRequest request) throws JOSEException {
+        var email = request.getEmail();
+        if (customerRepository.existsByUsernameAndEmail
+                (request.getUsername(), request.getEmail())) {
+            String link = new StringBuilder().
+                    append("http://localhost:19279/api/customer/resetpwd?").
+                    append(authenticationService.ResetPasswordToken(request.getUsername(), request.getEmail())).toString();
+            emailService.sendResetPasswordLink(email, "", link);
+            return new ForgotAccountRespone(true, "Your auth link sent to your email");
+        }
+        return new ForgotAccountRespone(false , "Failed");
+
+    }
 }

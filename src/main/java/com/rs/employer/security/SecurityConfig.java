@@ -46,7 +46,8 @@ public class SecurityConfig {
             "/api/customer/updateUser",
             "/api/customer/activate",
             "auth/sendActivateToken",
-            "api/customer/hello"
+            "api/customer/hello",
+            "api/customer/resetpwd"
 
     };
     private final String[] VENDOR_ENDPOINT = {
