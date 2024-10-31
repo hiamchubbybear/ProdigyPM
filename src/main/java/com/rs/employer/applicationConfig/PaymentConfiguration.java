@@ -1,6 +1,7 @@
 package com.rs.employer.applicationConfig;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Transient;
 
@@ -23,13 +24,14 @@ import javax.crypto.spec.SecretKeySpec;
  */
 @Configuration
 public class PaymentConfiguration {
-
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-//    public static String vnp_ReturnUrl = "http://localhost:8080/vnpay_jsp/vnpay_return.jsp";
+    public static String vnp_ReturnUrl = "http://localhost:8080/vnpay_jsp/vnpay_return.jsp";
     public static String vnp_TmnCode = "FGYXY12A";
     public static String secretKey = "QX1792AYL2OUZS1O0SC2D8CT8K08Q8N1";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
-
+    public static String vnp_Version = "2.1.0";
+    public static String vnp_Command = "pay";
+    public static String orderType = "other";
     public static String md5(String message) {
         String digest = null;
         try {
@@ -66,6 +68,7 @@ public class PaymentConfiguration {
         return digest;
     }
 
+    //Util for VNPAY
     public static String hashAllFields(Map fields) {
         List fieldNames = new ArrayList(fields.keySet());
         Collections.sort(fieldNames);
@@ -107,6 +110,19 @@ public class PaymentConfiguration {
         } catch (Exception ex) {
             return "";
         }
+    }
+
+    public static String getIpAddress(HttpServletRequest request) {
+        String ipAdress;
+        try {
+            ipAdress = request.getHeader("X-FORWARDED-FOR");
+            if (ipAdress == null) {
+                ipAdress = request.getRemoteAddr();
+            }
+        } catch (Exception e) {
+            ipAdress = "Invalid IP:" + e.getMessage();
+        }
+        return ipAdress;
     }
 
     public static String getRandomNumber(int len) {

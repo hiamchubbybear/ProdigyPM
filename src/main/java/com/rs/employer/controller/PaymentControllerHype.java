@@ -1,49 +1,39 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.rs.employer.controller;
-import com.nimbusds.jose.shaded.gson.Gson;
+
 import com.nimbusds.jose.shaded.gson.JsonObject;
 import com.rs.employer.applicationConfig.PaymentConfiguration;
-
-import com.rs.employer.service.PaymentService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;import java.net.URLEncoder;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- *
- * @author CTT VNPAY
- */
 @RestController
 @RequestMapping("/api/payment")
-public class PaymentControllerHype  {
+public class PaymentControllerHype {
+
     @Autowired
     PaymentConfiguration Config;
-    @Autowired
-    PaymentService service;
 
     @GetMapping("/vnpay")
-    protected ResponseEntity<?> doPost() throws IOException {
-
+    public ResponseEntity<?> createPayment() throws IOException {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
-//        long amount = Integer.parseInt(req.get("amount"))*100;
-        double  amount = 1000000;
-//        String bankCode = req.getParameter("");
-            String bankCode = "NCB";
+//        long amount = Integer.parseInt(req.getParameter("amount"))*100;
+//        String bankCode = req.getParameter("bankCode");
+        long amount  = 1000000*100;
+        String bankCode = "NCB";
         String vnp_TxnRef = Config.getRandomNumber(8);
-        String vnp_IpAddr = "192.168.1.1";
+//        String vnp_IpAddr = Config.getIpAddress(req);
 
         String vnp_TmnCode = Config.vnp_TmnCode;
 
@@ -62,14 +52,13 @@ public class PaymentControllerHype  {
         vnp_Params.put("vnp_OrderType", orderType);
 
 //        String locate = req.getParameter("language");
-        String locate = "Vie";
-        if (locate != null && !locate.isEmpty()) {
-            vnp_Params.put("vnp_Locale", locate);
-        } else {
+//        if (locate != null && !locate.isEmpty()) {
+//            vnp_Params.put("vnp_Locale", locate);
+//        } else {
             vnp_Params.put("vnp_Locale", "vn");
-        }
-        vnp_Params.put("vnp_ReturnUrl", "Google.com");
-        vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
+//        }
+        vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
+//        vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -107,11 +96,9 @@ public class PaymentControllerHype  {
         String vnp_SecureHash = Config.hmacSHA512(Config.secretKey, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;
-        JsonObject job = new JsonObject();
-        job.addProperty("code", "00");
-        job.addProperty("message", "success");
-        job.addProperty("data", paymentUrl);
-        return ResponseEntity.ok().body(new Gson().toJson(job));
+        JsonObject response = new JsonObject();
+        response.addProperty("status", "success");
+        response.addProperty("paymentUrl", paymentUrl);
+        return ResponseEntity.ok(response.toString());
     }
-
 }

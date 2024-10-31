@@ -3,22 +3,27 @@ package com.rs.employer.dto.Respone;
 public class PaymentRespone {
     boolean isSuccess;
     String message;
-
+    String url;
     public PaymentRespone() {
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public PaymentRespone(boolean isSuccess, String message, String url) {
+        this.isSuccess = isSuccess;
+        this.message = message;
+        this.url = url;
     }
 
     public PaymentRespone(boolean isSuccess, String message, Double cash) {
         this.isSuccess = isSuccess;
         this.message = message;
-        this.cash = cash;
-    }
-
-    public Double getCash() {
-        return cash;
-    }
-
-    public void setCash(Double cash) {
-        this.cash = cash;
     }
 
     public String getMessage() {
@@ -36,6 +41,4 @@ public class PaymentRespone {
     public void setSuccess(boolean success) {
         isSuccess = success;
     }
-
-    Double cash;
 }
