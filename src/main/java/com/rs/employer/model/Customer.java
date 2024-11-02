@@ -72,6 +72,36 @@ public class Customer {
   @OneToOne
 //   @JoinColumn(name = "cart", referencedColumnName = "id")
   private Cart cart;
+  String resetToken;
+
+  public boolean isStatus() {
+    return status;
+  }
+
+  public String getResetToken() {
+    return resetToken;
+  }
+
+  public Customer(UUID uuid, String username, String password, String email, String name, String address, Set<Role> roles, boolean gender, boolean status, Instant create, Instant update, LocalDate dob, Cart cart, String resetToken) {
+    this.uuid = uuid;
+    this.username = username;
+    this.password = password;
+    this.email = email;
+    this.name = name;
+    this.address = address;
+    this.roles = roles;
+    this.gender = gender;
+    this.status = status;
+    this.create = create;
+    this.update = update;
+    this.dob = dob;
+    this.cart = cart;
+    this.resetToken = resetToken;
+  }
+
+  public void setResetToken(String resetToken) {
+    this.resetToken = resetToken;
+  }
 
   public Customer(UUID uuid, @NotNull @Size(min = 8, max = 20, message = "USERNAME_INVALID") String username, String email,
                   @Size(min = 8, message = "PASSWORD_INVALID") @NotBlank String password, String name, String address,

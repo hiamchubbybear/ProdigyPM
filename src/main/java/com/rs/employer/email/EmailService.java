@@ -16,6 +16,7 @@ public class EmailService {
         message.setTo(to);
         message.setSubject(subject);
         message.setText("Your activate token is : " + content);
+        System.out.println("Send email successful");
         javaMailSender.send(message);
     }
     public void sendResetPasswordLink(String to, String subject, String content) {
@@ -24,6 +25,7 @@ public class EmailService {
         message.setTo(to);
         message.setSubject(subject);
         message.setText("This is your link to reset your password : " + content);
+        System.out.println("Send email successful");
         javaMailSender.send(message);
     }
 }

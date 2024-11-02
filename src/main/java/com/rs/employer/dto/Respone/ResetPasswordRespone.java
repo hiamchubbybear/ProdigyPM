@@ -1,23 +1,13 @@
 package com.rs.employer.dto.Respone;
-
-public class ForgotAccountRespone {
-    public ForgotAccountRespone(boolean isSuccess, String message, String token) {
-        this.isSuccess = isSuccess;
-        this.message = message;
-        this.token = token;
-    }
-
+public class ResetPasswordRespone {
     boolean isSuccess;
     String message;
-    String token;
 
-    public String getToken() {
-        return token;
+    public ResetPasswordRespone(boolean isSuccess, String message) {
+        this.isSuccess = isSuccess;
+        this.message = message;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
 
     public boolean isSuccess() {
         return isSuccess;
@@ -35,3 +25,4 @@ public class ForgotAccountRespone {
         this.message = message;
     }
 }
+

@@ -140,13 +140,18 @@ public class AuthenticationService {
     }
     public String ResetPasswordToken(String username , String email ) throws JOSEException {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
-        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject(username).issuer("Chessy").claim("email", email)
-                .expirationTime(new Date(Instant.now().plus(5,ChronoUnit.MINUTES).toEpochMilli())).build();
+        long token = 100000L + new Random().nextInt(900000);
+        repo.updateResetToken(username,String.valueOf(token));
+        System.out.println("Update token to reset token" + token);
+        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject(username).issuer("Chessy")
+                .claim("email", email)
+                .expirationTime(new Date(Instant.now().plus(5,ChronoUnit.MINUTES).
+                        toEpochMilli())).claim("token" , token).build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
+
         JWSObject jwsObject = new JWSObject(header, payload);
         jwsObject.sign(new MACSigner(signer_key));
         return jwsObject.serialize();
-
     }
     public void Logout(LogoutRequest request) throws JOSEException, ParseException {
         var signedToken = verifiedToken(request.getToken());

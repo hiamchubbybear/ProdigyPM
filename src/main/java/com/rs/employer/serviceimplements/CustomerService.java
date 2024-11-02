@@ -245,15 +245,16 @@ public class CustomerService implements ICustomerService {
     @Override
     public ForgotAccountRespone forgotAccount(ForgotAccountRequest request) throws JOSEException {
         var email = request.getEmail();
+        String token = authenticationService.ResetPasswordToken(request.getUsername(), request.getEmail());
         if (customerRepository.existsByUsernameAndEmail
                 (request.getUsername(), request.getEmail())) {
             String link = new StringBuilder().
-                    append("http://localhost:19279/api/customer/resetpwd?").
-                    append(authenticationService.ResetPasswordToken(request.getUsername(), request.getEmail())).toString();
+                    append("http://localhost:3000/api/customer/resetpwd?").
+                    append(token).toString();
             emailService.sendResetPasswordLink(email, "", link);
-            return new ForgotAccountRespone(true, "Your auth link sent to your email");
+            return new ForgotAccountRespone(true, "Your auth link sent to your email" , token);
         }
-        return new ForgotAccountRespone(false , "Failed");
-
+        return new ForgotAccountRespone(false , "Failed" , "null");
     }
+
 }

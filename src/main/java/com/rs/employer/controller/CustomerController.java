@@ -105,10 +105,9 @@ public class CustomerController {
         }
         return new ApiRespone<>(customerImplement.activateRequest(request));
     }
-    @GetMapping(path = "/resetpwd")
+    @PostMapping(path = "/resetpwd")
     public ApiRespone<ForgotAccountRespone> resetPassword(@RequestBody ForgotAccountRequest request) throws JOSEException {
         return new ApiRespone(customerImplement.forgotAccount(request));
     }
-
 
 }
