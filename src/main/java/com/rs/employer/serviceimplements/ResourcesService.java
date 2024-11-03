@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +19,15 @@ import com.rs.employer.service.IResourcesService;
 
 @Service
 public class ResourcesService implements IResourcesService {
-    private ResourcesRepo repository;
-    private Instant now = Instant.now();
-    private ProductRepository repo;
+    private final ResourcesRepo repository;
+    private final Instant now = Instant.now();
+    private final ProductRepository repo;
     ResourcesMapper mapper;
+    @Autowired
+    public ResourcesService(ResourcesRepo repository, ProductRepository repo) {
+        this.repository = repository;
+        this.repo = repo;
+    }
 
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_ADD_RESOURCES')")

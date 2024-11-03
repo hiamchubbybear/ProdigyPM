@@ -39,10 +39,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class CustomerController {
+    private final CustomerService customerImplement;
+    private final CustomerRepo customerRepo;
     @Autowired
-    private CustomerService customerImplement;
-    @Autowired
-    private CustomerRepo customerRepo;
+    public CustomerController(CustomerService customerImplement, CustomerRepo customerRepo) {
+        this.customerImplement = customerImplement;
+        this.customerRepo = customerRepo;
+    }
 
     @GetMapping(path = "/all")
     public ApiRespone<List<Customer>> getAllUser() {

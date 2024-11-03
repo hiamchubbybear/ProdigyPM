@@ -6,8 +6,6 @@ import java.time.Instant;
 import java.util.*;
 
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.rs.employer.dto.Request.ActivateRequestAccount;
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.dto.Request.ForgotAccountRequest;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
@@ -15,13 +13,11 @@ import com.rs.employer.dto.Respone.*;
 import com.rs.employer.email.EmailService;
 import com.rs.employer.email.MailService;
 import com.rs.employer.model.Role;
-import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -43,26 +39,33 @@ import org.springframework.web.servlet.view.AbstractCachingViewResolver;
 
 @Service
 @Slf4j
+
 public class CustomerService implements ICustomerService {
+
+    private final CustomerRepo customerRepository;
+    private final RoleRepository roleRepository;
+    private final CartRepository cartRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final CustomerMapper mapper;
+    private final CustomerRepo customerRepo;
+    private final AuthenticationService authenticationService;
+    private final EmailService emailService;
+    private final Instant now = Instant.now();
     @Autowired
-    private CustomerRepo customerRepository;
-    @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
-    CartRepository cartRepository;
-    Instant now = Instant.now();
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    CustomerMapper mapper;
-    @Autowired
-    private CustomerRepo customerRepo;
-    @Autowired
-    AuthenticationService authenticationService;
-    @Autowired
-    private MailService mailService;
-    @Autowired
-    private EmailService emailService;
+    public CustomerService(CustomerRepo customerRepository, RoleRepository roleRepository,
+                           CartRepository cartRepository, PasswordEncoder passwordEncoder,
+                           CustomerMapper mapper, CustomerRepo customerRepo,
+                           AuthenticationService authenticationService, EmailService emailService) {
+        this.customerRepository = customerRepository;
+        this.roleRepository = roleRepository;
+        this.cartRepository = cartRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.mapper = mapper;
+        this.customerRepo = customerRepo;
+        this.authenticationService = authenticationService;
+        this.emailService = emailService;
+    }
+
 
     @Override
     public RegisterRespone register(RegisterRequest registerRequest) {

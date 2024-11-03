@@ -21,15 +21,19 @@ import com.rs.employer.model.Cart;
 import com.rs.employer.model.Product;
 @Service
 public class ProductCartService {
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    CartRepository cartRepository;
-    @Autowired
-    CustomerRepo customerRepository;
+    private final ProductRepository productRepository;
+    private final CartRepository cartRepository;
+    private final ProductMapper mapper;
+    private final CustomerRepo customerRepository;
     Instant now = Instant.now();
-    @Autowired
-    ProductMapper mapper;
+
+    public ProductCartService(ProductRepository productRepository, CartRepository cartRepository, ProductMapper mapper, CustomerRepo customerRepository) {
+        this.productRepository = productRepository;
+        this.cartRepository = cartRepository;
+        this.mapper = mapper;
+        this.customerRepository = customerRepository;
+    }
+
 
     public Cart addProductToCart(ProductCartRequest request) {
         // var data = SecurityContextHolder.getContext().getAuthentication().getName();

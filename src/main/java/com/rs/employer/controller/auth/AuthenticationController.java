@@ -18,11 +18,15 @@ import com.rs.employer.serviceimplements.AuthenticationService;
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
+     private final AuthenticationService authen;
+     private final CustomerRepo customerRepo;
      @Autowired
-     private AuthenticationService authen;
-     @Autowired
-     private CustomerRepo customerRepo;
-     @PostMapping("/login")
+    public AuthenticationController(AuthenticationService authen, CustomerRepo customerRepo) {
+        this.authen = authen;
+        this.customerRepo = customerRepo;
+    }
+
+    @PostMapping("/login")
      public ApiRespone<?> postMethodName(@RequestBody AuthenticationRequest authenticated) throws JOSEException {
           var  username = authenticated.getUsername();
           var  status = customerRepo.findStatusByUsernameAndEmail(username);

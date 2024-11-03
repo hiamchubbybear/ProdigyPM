@@ -16,10 +16,13 @@ import com.rs.employer.service.IPermissionService;
 
 @Service
 public class PermissionService implements IPermissionService {
-    @Autowired
-    PermissionRepository repo;
-    @Autowired
-    PermissionMapper mapper;
+    private final PermissionRepository repo;
+    private final PermissionMapper mapper;
+
+    public PermissionService(PermissionRepository repo, PermissionMapper mapper) {
+        this.repo = repo;
+        this.mapper = mapper;
+    }
 
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")

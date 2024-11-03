@@ -25,13 +25,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class ProductService implements IProductService {
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
     Instant now = Instant.now();
-    @Autowired
     ProductMapper mapper;
+    @Autowired
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+        this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+    }
 
     @Override
     public List<Product> getAllProduct() {

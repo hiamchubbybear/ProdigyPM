@@ -42,18 +42,20 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@RequiredArgsConstructor
 @PropertySource("classpath:application.properties")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class AuthenticationService {
+    private final CustomerRepo repo;
+    private final InvalidRepository invalidRepository;
+    private final String signer_key = "UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
+    private final EmailService emailService;
     @Autowired
-    private CustomerRepo repo;
-    @Autowired
-    private InvalidRepository invalidRepository;
-    private String signer_key = "UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
-    @Autowired
-    private EmailService emailService;
+    public AuthenticationService(CustomerRepo repo, InvalidRepository invalidRepository, EmailService emailService) {
+        this.repo = repo;
+        this.invalidRepository = invalidRepository;
+        this.emailService = emailService;
+    }
 
 
     public AuthenticationRespone authentication(AuthenticationRequest authenticationDto) {

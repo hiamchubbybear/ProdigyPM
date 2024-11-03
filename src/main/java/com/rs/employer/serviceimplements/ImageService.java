@@ -29,13 +29,16 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class ImageService implements IImageService {
-    @Autowired
-    private ImageRepository imageRepository;
-    @Autowired
-    private ImageMapper mapper;
-    @Autowired
-    private ProductRepository productRepository;
+    private final ImageRepository imageRepository;
+    private final ImageMapper mapper;
+    private final ProductRepository productRepository;
     public Instant now = Instant.now();
+    @Autowired
+    public ImageService(ImageRepository imageRepository, ImageMapper mapper, ProductRepository productRepository) {
+        this.imageRepository = imageRepository;
+        this.mapper = mapper;
+        this.productRepository = productRepository;
+    }
 
     @Override
     public Image addImage(Image image) {

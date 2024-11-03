@@ -19,12 +19,15 @@ import com.rs.employer.service.IRoleService;
 
 @Service
 public class RoleService implements IRoleService {
+    private final RoleRepository roleRepository;
+    private final PermissionRepository permissionRepository;
+    private final RoleMapper mapper;
     @Autowired
-    RoleRepository roleRepository;
-    @Autowired
-    PermissionRepository permissionRepository;
-    @Autowired
-    RoleMapper mapper;
+    public RoleService(RoleRepository roleRepository, PermissionRepository permissionRepository, RoleMapper mapper) {
+        this.roleRepository = roleRepository;
+        this.permissionRepository = permissionRepository;
+        this.mapper = mapper;
+    }
 
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")

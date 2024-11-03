@@ -32,16 +32,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @org.springframework.context.annotation.Configuration
-@RequiredArgsConstructor
 public class Configuration {
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
+    private final PermissionRepository permissionRepository;
     @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    RoleRepository roleRepository;
-    @Autowired
-    PermissionRepository permissionRepository;
-    @Autowired
-    EmailService emailService;
+    public Configuration(PasswordEncoder passwordEncoder, RoleRepository roleRepository, PermissionRepository permissionRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
+        this.permissionRepository = permissionRepository;
+    }
 
     @Bean
     @Primary
@@ -85,9 +85,6 @@ public class Configuration {
                     admin.setPassword(passwordEncoder.encode("160304"));
                     admin.setRoles(role1);
                     admin.setStatus(true);
-//                    admin.setStatus("ONLINE");
-//                    emailService.sendActivateToken("ilovepakpak@gmail.com", "Test email", "TOOOOOOO");
-//                    System.out.println("Sent email!");
                     repo.save(admin);
                 }
             }
