@@ -45,7 +45,7 @@ public class Configuration {
 
     @Bean
     @Primary
-    ApplicationRunner createAdmin() {
+    ApplicationRunner createAdmin( @Autowired(required = false) SbomEndpoint sbomEndpoint) {
         return args -> {
             for (PermissionEnum permissionEnum : PermissionEnum.values()) {
                 if (!permissionRepository.existsByName(permissionEnum.name())) {

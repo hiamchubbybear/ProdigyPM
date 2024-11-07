@@ -1,5 +1,6 @@
 package com.rs.employer.controller;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
@@ -15,15 +16,7 @@ import com.rs.employer.dto.Respone.ForgotAccountRespone;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.User.CustomerRequest;
@@ -32,6 +25,7 @@ import com.rs.employer.serviceimplements.CustomerService;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequestMapping(path = "/api/customer")
 @RestController
@@ -112,5 +106,11 @@ public class CustomerController {
     public ApiRespone<ForgotAccountRespone> resetPassword(@RequestBody ForgotAccountRequest request) throws JOSEException {
         return new ApiRespone(customerImplement.forgotAccount(request));
     }
-
+    @PostMapping("/upload")
+    public ApiRespone<String> uploadImage(@RequestParam String username,@RequestParam("file") MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        byte[] fileBytes = file.getBytes();
+        customerRepo.updateCustomerImage(username, fileBytes );
+        return new ApiRespone<>("Image uploaded successfully: " + fileName);
+    }
 }

@@ -6,9 +6,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.Null;
+import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -19,14 +18,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rs.employer.Validator.DateOfBirth.DobValidator;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -37,6 +28,8 @@ import lombok.experimental.FieldDefaults;
 @DynamicUpdate
 @DynamicInsert
 @Table(name = "customer")
+@Getter
+@Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Customer {
   @Id
@@ -73,6 +66,37 @@ public class Customer {
 //   @JoinColumn(name = "cart", referencedColumnName = "id")
   private Cart cart;
   String resetToken;
+  @Lob
+  @Column(name = "image", columnDefinition = "LONGBLOB")
+  @Nullable
+  @JsonIgnore
+  private byte[] image;
+
+  public Customer(UUID uuid, String username, String password, String email, String name, String address, Set<Role> roles, boolean gender, boolean status, Instant create, Instant update, LocalDate dob, Cart cart, String resetToken, byte[] image) {
+    this.uuid = uuid;
+    this.username = username;
+    this.password = password;
+    this.email = email;
+    this.name = name;
+    this.address = address;
+    this.roles = roles;
+    this.gender = gender;
+    this.status = status;
+    this.create = create;
+    this.update = update;
+    this.dob = dob;
+    this.cart = cart;
+    this.resetToken = resetToken;
+    this.image = image;
+  }
+
+  public byte[] getImage() {
+    return image;
+  }
+
+  public void setImage(byte[] image) {
+    this.image = image;
+  }
 
   public boolean isStatus() {
     return status;
