@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import com.rs.employer.dao.CustomerRepo;
 import com.rs.employer.dto.Request.ActivateRequestAccount;
+import com.rs.employer.dto.Respone.LoginInactiveAccountRespone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,9 @@ public class AuthenticationController {
                   || username.equals("admin")) {
                return new ApiRespone<>(authen.authentication(authenticated));
           } else {
-               return new ApiRespone<>(authen.EmailVerification(authenticated));
+               String token = authen.EmailVerification(authenticated);
+               LoginInactiveAccountRespone res = new LoginInactiveAccountRespone(token,true);
+               return new ApiRespone<>(res);
           }
      }
 
