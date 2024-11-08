@@ -15,7 +15,15 @@ import com.rs.employer.dto.Respone.CustomerUpdateRespone;
 import com.rs.employer.dto.Respone.ForgotAccountRespone;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
+import com.rs.employer.model.Resources;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.rs.employer.apirespone.ApiRespone;
@@ -35,10 +43,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class CustomerController {
     private final CustomerService customerImplement;
     private final CustomerRepo customerRepo;
+    private final SystemMetricsAutoConfiguration systemMetricsAutoConfiguration;
+
     @Autowired
-    public CustomerController(CustomerService customerImplement, CustomerRepo customerRepo) {
+    public CustomerController(CustomerService customerImplement, CustomerRepo customerRepo, SystemMetricsAutoConfiguration systemMetricsAutoConfiguration) {
         this.customerImplement = customerImplement;
         this.customerRepo = customerRepo;
+        this.systemMetricsAutoConfiguration = systemMetricsAutoConfiguration;
     }
 
     @GetMapping(path = "/all")
@@ -113,4 +124,18 @@ public class CustomerController {
         customerRepo.updateCustomerImage(username, fileBytes );
         return new ApiRespone<>("Image uploaded successfully: " + fileName);
     }
+    @GetMapping(path = "/image")
+    public ResponseEntity<Resource> getImage(@RequestParam(name = "username") String username) throws IOException {
+        ByteArrayResource imageResource = customerImplement.userImage(username);
+        if (imageResource == null) {
+            System.out.println("Cannot find image");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"image.png\"") // Đặt tên tệp tin
+                .contentType(MediaType.IMAGE_PNG)
+                .body(imageResource);
+    }
+
 }

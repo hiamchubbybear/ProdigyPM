@@ -12,8 +12,9 @@ import com.rs.employer.dto.Request.Register.RegisterRequest;
 import com.rs.employer.dto.Respone.*;
 import com.rs.employer.email.EmailService;
 import com.rs.employer.email.MailService;
-import com.rs.employer.model.Role;
+import com.rs.employer.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,9 +30,6 @@ import com.rs.employer.dto.Request.User.CustomerRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.CustomerMapper;
-import com.rs.employer.model.Cart;
-import com.rs.employer.model.Customer;
-import com.rs.employer.model.Product;
 import com.rs.employer.service.ICustomerService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -259,5 +257,22 @@ public class CustomerService implements ICustomerService {
         }
         return new ForgotAccountRespone(false , "Failed" , "null");
     }
+
+    @Override
+    public ByteArrayResource userImage(String username) {
+        Optional<Customer> customerOpt = customerRepository.findByUsername(username);
+        if (customerOpt.isPresent()) {
+            Customer customer = customerOpt.get();
+            byte[] image = customer.getImage();
+            if (image != null) {
+                return new ByteArrayResource(image);
+            } else {
+                throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+            }
+        } else {
+            throw new AppException(ErrorCode.USER_NOTFOUND);
+        }
+    }
+
 
 }

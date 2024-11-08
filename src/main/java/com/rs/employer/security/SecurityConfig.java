@@ -50,7 +50,7 @@ public class SecurityConfig {
             "api/customer/resetpwd",
             "api/payment/vnpay",
             "api/customer/upload",
-
+            "api/customer/image",
     };
     private final String[] VENDOR_ENDPOINT = {
             "/api/product/add",
@@ -90,8 +90,10 @@ public class SecurityConfig {
                 // .hasAnyAuthority("SCOPE_SUPPLIER", "SCOPE_ADMIN")
                 .requestMatchers(ADMIN_ENDPOINT)
                 .permitAll()
-                // .hasAuthority("ADMIN")
-                .anyRequest().authenticated());
+//                 .hasAuthority("ADMIN")
+                .anyRequest()
+                .authenticated());
+
         httpSecurity.csrf(CsrfConfigurer -> CsrfConfigurer.disable());
         httpSecurity.oauth2ResourceServer(
                 oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer

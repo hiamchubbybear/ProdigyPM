@@ -41,6 +41,10 @@ public interface CustomerRepo extends JpaRepository<Customer, UUID> {
 
     @Query("SELECT c.email from Customer c where  (c.username = :username)")
     String findEmailByUsername(@Param("username") String username);
+
+    @Query("SELECT c.image FROM Customer c WHERE c.username = :username")
+    Optional<byte[]> findImageByUsername(@Param("username") String username);
+
     @Modifying
     @Transactional
     @Query("UPDATE Customer c SET c.resetToken = :resetToken WHERE c.username = :username")

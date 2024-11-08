@@ -11,6 +11,8 @@ import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.dto.Request.ForgotAccountRequest;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
 import com.rs.employer.dto.Respone.*;
+import com.rs.employer.model.Resources;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dto.Request.User.CustomerRequest;
@@ -30,4 +32,5 @@ public interface ICustomerService {
     public List<Customer> listAllSort(String sort);
     public ActivateAccountRespone activateRequest(ActivateRequestToken treq) throws ParseException, JOSEException;
     public ForgotAccountRespone forgotAccount(ForgotAccountRequest request) throws JOSEException;
+    public ByteArrayResource userImage(String username );
 }
