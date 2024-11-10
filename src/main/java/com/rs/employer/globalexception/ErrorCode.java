@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
 public enum ErrorCode {
-    USER_NOTFOUND(1002, "User not found", HttpStatus.BAD_REQUEST),
+    USER_NOTFOUND(1002, "User not found", HttpStatus.INTERNAL_SERVER_ERROR),
     USERNAME_INVALID(1003, "Username must be at least 4 characters and less than 20 characters",
             HttpStatus.BAD_REQUEST),
     USERNAME_EXISTS_OR_EMAIL_EXISTS(1004, "Username or email already exists", HttpStatus.CONFLICT),

@@ -11,6 +11,7 @@ import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.dto.Request.ForgotAccountRequest;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
 import com.rs.employer.dto.Respone.ActivateAccountRespone;
+import com.rs.employer.dto.Respone.CustomerInfoDTO;
 import com.rs.employer.dto.Respone.CustomerUpdateRespone;
 import com.rs.employer.dto.Respone.ForgotAccountRespone;
 import com.rs.employer.globalexception.AppException;
@@ -64,7 +65,7 @@ public class CustomerController {
     }
 
     @GetMapping("/getMyInfo")
-    public ApiRespone<Optional<Customer>> getInfo() {
+    public ApiRespone<Optional<CustomerInfoDTO>> getInfo() {
         return new ApiRespone<>
                 (customerImplement.getMyInfo());
     }
@@ -74,15 +75,15 @@ public class CustomerController {
         ApiRespone apiRespone = new ApiRespone<>(true);
         return apiRespone;
     }
-    @PutMapping(path = "/update/{id}")
-    public ApiRespone<Customer> updatCustomer(@PathVariable UUID id,
-            @RequestBody CustomerRequest request) {
+    @PutMapping(path = "/update")
+    public ApiRespone<CustomerInfoDTO> updatCustomer(
+            @RequestBody CustomerInfoDTO request) {
         return new ApiRespone<>
-                (customerImplement.updateCustomer(id, request));
+                (customerImplement.updateCustomer(request));
     }
     @PostMapping(path = "/add")
     public ApiRespone<Customer> addCustomer(@RequestBody @Valid CustomerRequest customer) {
-        return  new ApiRespone<Customer>
+        return  new ApiRespone<>
                 (customerImplement.addCustomer(customer));
     }
     @GetMapping(path = "/hello")

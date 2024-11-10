@@ -108,19 +108,27 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('SCOPE_UPDATE_USER') or hasAuthority('SCOPE_PERMIT_ALL')")
-    public Customer updateCustomer(UUID id, CustomerRequest customer) {
-        Optional<Customer> customer1 = customerRepository.findById(id);
-        if (customer1.isPresent()) {
-            var roles = roleRepository.findAllById(customer.getRole());
-            Customer customer3 = mapper.toCustomer(customer);
-            customer3.setUpdate(now);
-            customer3.setRoles(new HashSet<>(roles));
-            customer3.setPassword(passwordEncoder.encode(customer.getPassword()));
-            return customerRepository.save(customer3);
+    @PostAuthorize("returnObject.username == authentication.name")
+    public CustomerInfoDTO updateCustomer(CustomerInfoDTO customer) {
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<Customer> customerOptional = customerRepository.findByUsername(username);
+
+        if (customerOptional.isPresent()) {
+            Customer existingCustomer = customerOptional.get();
+            if (username.equals(customer.getUsername())) {
+                existingCustomer.setEmail(customer.getEmail());
+                existingCustomer.setName(customer.getName());
+                existingCustomer.setAddress(customer.getAddress());
+                existingCustomer.setGender(customer.isGender());
+                existingCustomer.setStatus(customer.isStatus());
+                   customerRepository.save(existingCustomer);
+                return customer;
+            }
+            throw new AppException(ErrorCode.USER_NOTFOUND);
         }
         throw new AppException(ErrorCode.USER_NOTFOUND);
     }
+
 
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_DELETE_MS')")
@@ -143,10 +151,11 @@ public class CustomerService implements ICustomerService {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
 
-    public Optional<Customer> getMyInfo() {
+    public Optional<CustomerInfoDTO> getMyInfo() {
         var user = SecurityContextHolder.getContext();
         String name = user.getAuthentication().getName();
-        return customerRepository.findByUsername(name);
+        Customer customer =  customerRepository.findByUsername(name).orElse(new Customer());
+        return Optional.ofNullable(mapper.toCustomerInfoDTO(customer));
     }
 
     public Customer registerUser(UUID id, String password, String login) {

@@ -26,7 +26,7 @@ public interface ICustomerService {
     public void deleteCustomerById(UUID id);
     public List listAllCustomer();
     public Customer customerRequest(CustomerUpdateRespone request);
-    public Customer updateCustomer(UUID id, CustomerRequest customer);
+    public CustomerInfoDTO updateCustomer(CustomerInfoDTO customer);
     public Customer updatePassword(UUID id, String pwd);
     public Customer registerUser(UUID id, String password, String login);
     public List<Customer> listAllSort(String sort);

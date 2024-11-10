@@ -1,5 +1,6 @@
 package com.rs.employer.mapper;
 
+import com.rs.employer.dto.Respone.CustomerInfoDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -18,4 +19,7 @@ public interface CustomerMapper {
 
     @Mapping(target = "role", ignore = true)
     CustomerRespone toCustomerRespone(Customer request);
+
+    CustomerInfoDTO toCustomerInfoDTO(Customer customer);
+    Customer toCustomer(CustomerInfoDTO customerInfoDTO);
 }
