@@ -151,11 +151,12 @@ public class CustomerService implements ICustomerService {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
 
-    public Optional<CustomerInfoDTO> getMyInfo() {
+    public CustomerInfoDTO getMyInfo() {
         var user = SecurityContextHolder.getContext();
         String name = user.getAuthentication().getName();
         Customer customer =  customerRepository.findByUsername(name).orElse(new Customer());
-        return Optional.ofNullable(mapper.toCustomerInfoDTO(customer));
+        return new CustomerInfoDTO(name,customer.getEmail(),customer.getName(), customer.getAddress(),
+                customer.isGender(), customer.isStatus());
     }
 
     public Customer registerUser(UUID id, String password, String login) {

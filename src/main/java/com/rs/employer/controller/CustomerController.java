@@ -65,7 +65,7 @@ public class CustomerController {
     }
 
     @GetMapping("/getMyInfo")
-    public ApiRespone<Optional<CustomerInfoDTO>> getInfo() {
+    public ApiRespone<CustomerInfoDTO> getInfo() {
         return new ApiRespone<>
                 (customerImplement.getMyInfo());
     }
