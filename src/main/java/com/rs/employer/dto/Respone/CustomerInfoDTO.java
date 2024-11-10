@@ -1,7 +1,6 @@
 package com.rs.employer.dto.Respone;
 
 public class CustomerInfoDTO {
-    String username;
     String email;
     String name;
     String address;
@@ -10,15 +9,6 @@ public class CustomerInfoDTO {
 
     public CustomerInfoDTO() {
     }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -59,8 +49,7 @@ public class CustomerInfoDTO {
         this.status = status;
     }
 
-    public CustomerInfoDTO(String username, String email, String name, String address, boolean gender, boolean status) {
-        this.username = username;
+    public CustomerInfoDTO( String email, String name, String address, boolean gender, boolean status) {
         this.email = email;
         this.name = name;
         this.address = address;
