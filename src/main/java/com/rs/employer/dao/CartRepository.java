@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.rs.employer.model.Cart;
+import com.rs.employer.model.customer.Cart;
 
 @Repository
 public interface

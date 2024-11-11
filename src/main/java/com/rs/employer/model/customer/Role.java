@@ -1,4 +1,4 @@
-package com.rs.employer.model;
+package com.rs.employer.model.customer;
 
 import java.util.Set;
 
@@ -15,6 +15,12 @@ public class Role {
     private Set<Permission> permissions;
 
     public Role() {
+    }
+
+    public Role(String name, String description, Set<Permission> permissions) {
+        this.name = name;
+        this.description = description;
+        this.permissions = permissions;
     }
 
     public String getName() {
@@ -40,11 +46,4 @@ public class Role {
     public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
     }
-
-    public Role(String name, String description, Set<Permission> permissions) {
-        this.name = name;
-        this.description = description;
-        this.permissions = permissions;
-    }
-
 }

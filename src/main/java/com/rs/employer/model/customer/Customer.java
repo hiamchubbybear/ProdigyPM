@@ -1,4 +1,4 @@
-package com.rs.employer.model;
+package com.rs.employer.model.customer;
 
 import java.time.Instant;
 import java.time.LocalDate;

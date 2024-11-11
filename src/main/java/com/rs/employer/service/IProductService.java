@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dto.Request.Product.ProductRequest;
-import com.rs.employer.model.Product;
+import com.rs.employer.model.warehouse.Product;
 @Service
 public interface IProductService {
     public List<Product> getAllProduct();

@@ -5,11 +5,9 @@ import java.util.List;
 import java.util.UUID;
 
 import com.rs.employer.dto.Request.ImageDTO;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.rs.employer.model.Image;
+import com.rs.employer.model.others.Image;
 
 public interface IImageService {
     public Image addImage(Image image);

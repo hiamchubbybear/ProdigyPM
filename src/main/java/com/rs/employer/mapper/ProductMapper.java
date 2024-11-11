@@ -5,7 +5,7 @@ import org.mapstruct.Mapping;
 
 import com.rs.employer.dto.Request.Product.ProductRequest;
 import com.rs.employer.dto.Respone.ProductRespone;
-import com.rs.employer.model.Product;
+import com.rs.employer.model.warehouse.Product;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {

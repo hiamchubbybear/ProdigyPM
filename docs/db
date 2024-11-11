@@ -1,0 +1,483 @@
+-- Quản lý Tài khoản người dùng và Phân quyền
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY,
+    Username VARCHAR(50) UNIQUE,
+    Password VARCHAR(255),
+    Email VARCHAR(100),
+    FullName NVARCHAR(100),
+    Status TINYINT,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Roles (
+    RoleID INT PRIMARY KEY,
+    RoleName VARCHAR(50),
+    Description NVARCHAR(200)
+);
+
+CREATE TABLE UserRoles (
+    UserID INT,
+    RoleID INT,
+    PRIMARY KEY (UserID, RoleID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
+);
+
+-- Module Tài chính - Kế toán
+CREATE TABLE ChartOfAccounts (
+    AccountID VARCHAR(20) PRIMARY KEY,
+    AccountName NVARCHAR(100),
+    AccountType VARCHAR(50),
+    ParentAccount VARCHAR(20),
+    Balance DECIMAL(18,2),
+    FOREIGN KEY (ParentAccount) REFERENCES ChartOfAccounts(AccountID)
+);
+
+CREATE TABLE JournalEntries (
+    EntryID INT PRIMARY KEY,
+    EntryDate DATE,
+    Description NVARCHAR(200),
+    Status TINYINT,
+    CreatedBy INT,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (CreatedBy) REFERENCES Users(UserID)
+);
+
+CREATE TABLE JournalEntryDetails (
+    EntryDetailID INT PRIMARY KEY,
+    EntryID INT,
+    AccountID VARCHAR(20),
+    Debit DECIMAL(18,2),
+    Credit DECIMAL(18,2),
+    FOREIGN KEY (EntryID) REFERENCES JournalEntries(EntryID),
+    FOREIGN KEY (AccountID) REFERENCES ChartOfAccounts(AccountID)
+);
+
+-- Module Bán hàng
+CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY,
+    CustomerCode VARCHAR(20) UNIQUE,
+    CustomerName NVARCHAR(100),
+    Address NVARCHAR(200),
+    Phone VARCHAR(20),
+    Email VARCHAR(100),
+    TaxCode VARCHAR(20),
+    Status TINYINT
+);
+
+CREATE TABLE SalesOrders (
+    OrderID INT PRIMARY KEY,
+    OrderNo VARCHAR(20) UNIQUE,
+    CustomerID INT,
+    OrderDate DATE,
+    DeliveryDate DATE,
+    TotalAmount DECIMAL(18,2),
+    Status TINYINT,
+    CreatedBy INT,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (CreatedBy) REFERENCES Users(UserID)
+);
+
+-- Module Mua hàng
+CREATE TABLE Suppliers (
+    SupplierID INT PRIMARY KEY,
+    SupplierCode VARCHAR(20) UNIQUE,
+    SupplierName NVARCHAR(100),
+    Address NVARCHAR(200),
+    Phone VARCHAR(20),
+    Email VARCHAR(100),
+    TaxCode VARCHAR(20),
+    Status TINYINT
+);
+
+CREATE TABLE PurchaseOrders (
+    POID INT PRIMARY KEY,
+    PONo VARCHAR(20) UNIQUE,
+    SupplierID INT,
+    OrderDate DATE,
+    DeliveryDate DATE,
+    TotalAmount DECIMAL(18,2),
+    Status TINYINT,
+    CreatedBy INT,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (SupplierID) REFERENCES Suppliers(SupplierID),
+    FOREIGN KEY (CreatedBy) REFERENCES Users(UserID)
+);
+
+-- Module Kho
+CREATE TABLE Warehouses (
+    WarehouseID INT PRIMARY KEY,
+    WarehouseCode VARCHAR(20) UNIQUE,
+    WarehouseName NVARCHAR(100),
+    Address NVARCHAR(200),
+    Status TINYINT
+);
+
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY,
+    ProductCode VARCHAR(20) UNIQUE,
+    ProductName NVARCHAR(100),
+    UnitID INT,
+    CategoryID INT,
+    MinStock INT,
+    MaxStock INT,
+    Status TINYINT
+);
+
+CREATE TABLE Inventory (
+    InventoryID INT PRIMARY KEY,
+    ProductID INT,
+    WarehouseID INT,
+    Quantity DECIMAL(18,2),
+    LastUpdated DATETIME,
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (WarehouseID) REFERENCES Warehouses(WarehouseID)
+);
+
+-- Module Sản xuất
+CREATE TABLE ProductionOrders (
+    ProductionOrderID INT PRIMARY KEY,
+    OrderNo VARCHAR(20) UNIQUE,
+    ProductID INT,
+    PlannedQuantity DECIMAL(18,2),
+    StartDate DATE,
+    EndDate DATE,
+    Status TINYINT,
+    CreatedBy INT,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (CreatedBy) REFERENCES Users(UserID)
+);
+
+CREATE TABLE BOM (
+    BOMID INT PRIMARY KEY,
+    ProductID INT,
+    MaterialID INT,
+    Quantity DECIMAL(18,2),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (MaterialID) REFERENCES Products(ProductID)
+);
+
+-- Module Nhân sự
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    EmployeeCode VARCHAR(20) UNIQUE,
+    FirstName NVARCHAR(50),
+    LastName NVARCHAR(50),
+    BirthDate DATE,
+    Gender TINYINT,
+    Address NVARCHAR(200),
+    Phone VARCHAR(20),
+    Email VARCHAR(100),
+    DepartmentID INT,
+    Position NVARCHAR(100),
+    StartDate DATE,
+    Status TINYINT
+);
+
+CREATE TABLE Payroll (
+    PayrollID INT PRIMARY KEY,
+    EmployeeID INT,
+    Period VARCHAR(7), -- Format: YYYY-MM
+    BasicSalary DECIMAL(18,2),
+    Allowance DECIMAL(18,2),
+    Deductions DECIMAL(18,2),
+    NetSalary DECIMAL(18,2),
+    Status TINYINT,
+    CreatedBy INT,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID),
+    FOREIGN KEY (CreatedBy) REFERENCES Users(UserID)
+);
+
+-- Bảng liên kết và quan hệ bổ sung
+CREATE TABLE Departments (
+    DepartmentID INT PRIMARY KEY,
+    DepartmentCode VARCHAR(20) UNIQUE,
+    DepartmentName NVARCHAR(100),
+    ParentDepartment INT,
+    Status TINYINT,
+    FOREIGN KEY (ParentDepartment) REFERENCES Departments(DepartmentID)
+);
+
+CREATE TABLE Units (
+    UnitID INT PRIMARY KEY,
+    UnitCode VARCHAR(20) UNIQUE,
+    UnitName NVARCHAR(50)
+);
+
+CREATE TABLE Categories (
+    CategoryID INT PRIMARY KEY,
+    CategoryCode VARCHAR(20) UNIQUE,
+    CategoryName NVARCHAR(100),
+    ParentCategory INT,
+    FOREIGN KEY (ParentCategory) REFERENCES Categories(CategoryID)
+);
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class User {
+    private Long userId;
+    private String username;
+    private String password;
+    private String email;
+    private String fullName;
+    private Integer status;
+    private java.time.LocalDateTime createdDate;
+
+    private Set<Role> roles; // Quan hệ many-to-many với bảng Roles
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class Role {
+    private Integer roleId;
+    private String roleName;
+    private String description;
+
+    private Set<User> users; // Quan hệ many-to-many với bảng Users
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class UserRole {
+    private User user;
+    private Role role;
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class ChartOfAccounts {
+    private String accountId;
+    private String accountName;
+    private String accountType;
+    private ChartOfAccounts parentAccount; // Quan hệ one-to-many với chính nó
+    private java.math.BigDecimal balance;
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class JournalEntry {
+    private Integer entryId;
+    private java.time.LocalDate entryDate;
+    private String description;
+    private Integer status;
+    private User createdBy; // Quan hệ many-to-one với bảng Users
+    private java.time.LocalDateTime createdDate;
+
+    private Set<JournalEntryDetail> details; // Quan hệ one-to-many với bảng JournalEntryDetails
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class JournalEntryDetail {
+    private Integer entryDetailId;
+    private JournalEntry journalEntry; // Quan hệ many-to-one với bảng JournalEntries
+    private ChartOfAccounts account; // Quan hệ many-to-one với bảng ChartOfAccounts
+    private java.math.BigDecimal debit;
+    private java.math.BigDecimal credit;
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class Customer {
+    private Integer customerId;
+    private String customerCode;
+    private String customerName;
+    private String address;
+    private String phone;
+    private String email;
+    private String taxCode;
+    private Integer status;
+
+    private Set<SalesOrder> orders; // Quan hệ one-to-many với bảng SalesOrders
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class SalesOrder {
+    private Integer orderId;
+    private String orderNo;
+    private Customer customer; // Quan hệ many-to-one với bảng Customers
+    private java.time.LocalDate orderDate;
+    private java.time.LocalDate deliveryDate;
+    private java.math.BigDecimal totalAmount;
+    private Integer status;
+    private User createdBy; // Quan hệ many-to-one với bảng Users
+    private java.time.LocalDateTime createdDate;
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class Supplier {
+    private Integer supplierId;
+    private String supplierCode;
+    private String supplierName;
+    private String address;
+    private String phone;
+    private String email;
+    private String taxCode;
+    private Integer status;
+
+    private Set<PurchaseOrder> orders; // Quan hệ one-to-many với bảng PurchaseOrders
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class PurchaseOrder {
+    private Integer poId;
+    private String poNo;
+    private Supplier supplier; // Quan hệ many-to-one với bảng Suppliers
+    private java.time.LocalDate orderDate;
+    private java.time.LocalDate deliveryDate;
+    private java.math.BigDecimal totalAmount;
+    private Integer status;
+    private User createdBy; // Quan hệ many-to-one với bảng Users
+    private java.time.LocalDateTime createdDate;
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class Warehouse {
+    private Integer warehouseId;
+    private String warehouseCode;
+    private String warehouseName;
+    private String address;
+    private Integer status;
+
+    private Set<Inventory> inventories; // Quan hệ one-to-many với bảng Inventory
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class Product {
+    private Integer productId;
+    private String productCode;
+    private String productName;
+    private Unit unit; // Quan hệ many-to-one với bảng Units
+    private Category category; // Quan hệ many-to-one với bảng Categories
+    private Integer minStock;
+    private Integer maxStock;
+    private Integer status;
+
+    private Set<Inventory> inventories; // Quan hệ one-to-many với bảng Inventory
+    private Set<ProductionOrder> productionOrders; // Quan hệ one-to-many với bảng ProductionOrders
+    private Set<BOM> bom; // Quan hệ one-to-many với bảng BOM
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class Inventory {
+    private Integer inventoryId;
+    private Product product; // Quan hệ many-to-one với bảng Products
+    private Warehouse warehouse; // Quan hệ many-to-one với bảng Warehouses
+    private java.math.BigDecimal quantity;
+    private java.time.LocalDateTime lastUpdated;
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class ProductionOrder {
+    private Integer productionOrderId;
+    private String orderNo;
+    private Product product; // Quan hệ many-to-one với bảng Products
+    private java.math.BigDecimal plannedQuantity;
+    private java.time.LocalDate startDate;
+    private java.time.LocalDate endDate;
+    private Integer status;
+    private User createdBy; // Quan hệ many-to-one với bảng Users
+    private java.time.LocalDateTime createdDate;
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class BOM {
+    private Integer bomId;
+    private Product product; // Quan hệ many-to-one với bảng Products
+    private Product material; // Quan hệ many-to-one với bảng Products (cho mặt hàng nguyên vật liệu)
+    private java.math.BigDecimal quantity;
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class Employee {
+    private Integer employeeId;
+    private String employeeCode;
+    private String firstName;
+    private String lastName;
+    private java.time.LocalDate birthDate;
+    private Integer gender;
+    private String address;
+    private String phone;
+    private String email;
+    private Department department; // Quan hệ many-to-one với bảng Departments
+    private String position;
+    private java.time.LocalDate startDate;
+    private Integer status;
+
+    private Set<Payroll> payrolls; // Quan hệ one-to-many với bảng Payroll
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class Payroll {
+    private Integer payrollId;
+    private Employee employee; // Quan hệ many-to-one với bảng Employees
+    private String period;
+    private java.math.BigDecimal basicSalary;
+    private java.math.BigDecimal allowance;
+    private java.math.BigDecimal deductions;
+    private java.math.BigDecimal netSalary;
+    private Integer status;
+    private User createdBy; // Quan hệ many-to-one với bảng Users
+    private java.time.LocalDateTime createdDate;
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class Department {
+    private Integer departmentId;
+    private String departmentCode;
+    private String departmentName;
+    private Department parentDepartment; // Quan hệ one-to-many với chính nó
+    private Integer status;
+
+    private Set<Employee> employees; // Quan hệ one-to-many với bảng Employees
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class Unit {
+    private Integer unitId;
+    private String unitCode;
+    private String unitName;
+}
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class Category {
+    private Integer categoryId;
+    private String categoryCode;
+    private String categoryName;
+    private Category parentCategory; // Quan hệ one-to-many với chính nó
+}

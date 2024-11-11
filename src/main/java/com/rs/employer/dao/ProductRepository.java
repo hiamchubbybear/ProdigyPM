@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.rs.employer.model.Product;
+import com.rs.employer.model.warehouse.Product;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {

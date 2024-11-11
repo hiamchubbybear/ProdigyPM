@@ -1,9 +1,9 @@
 package com.rs.employer.dao;
 
+import com.rs.employer.model.customer.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.rs.employer.model.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, String> {

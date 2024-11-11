@@ -18,7 +18,7 @@ import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.Product.ProductRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
-import com.rs.employer.model.Product;
+import com.rs.employer.model.warehouse.Product;
 import com.rs.employer.serviceimplements.ProductService;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")

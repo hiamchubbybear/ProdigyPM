@@ -3,6 +3,9 @@ package com.rs.employer.serviceimplements;
 import java.util.HashSet;
 import java.util.List;
 
+
+import com.rs.employer.mapper.RoleMapper;
+import com.rs.employer.model.customer.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -13,8 +16,6 @@ import com.rs.employer.dto.Request.Auth.RoleRequest;
 import com.rs.employer.dto.Respone.RoleRespone;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
-import com.rs.employer.mapper.RoleMapper;
-import com.rs.employer.model.Role;
 import com.rs.employer.service.IRoleService;
 
 @Service
@@ -67,8 +68,8 @@ public class RoleService implements IRoleService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Role> allRole() {
-        List<Role> list = roleRepository.findAll();
-        return list;
+        List<Role> lists = roleRepository.findAll();
+        return lists;
     }
 
 }

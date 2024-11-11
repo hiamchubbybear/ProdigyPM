@@ -3,12 +3,10 @@ package com.rs.employer.dao;
 import java.util.List;
 import java.util.UUID;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.rs.employer.dto.Request.ImageDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.rs.employer.model.Image;
+import com.rs.employer.model.others.Image;
 
 @Repository
 

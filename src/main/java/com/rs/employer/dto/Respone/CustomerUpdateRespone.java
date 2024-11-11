@@ -1,21 +1,11 @@
 package com.rs.employer.dto.Respone;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.rs.employer.Validator.DateOfBirth.DobValidator;
-import com.rs.employer.Validator.Status.ValidateStatus;
-import com.rs.employer.model.Cart;
-import com.rs.employer.model.Role;
+import com.rs.employer.model.customer.Cart;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Size;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Set;
 
 public class CustomerUpdateRespone {
 //    @Size(min = 2, message = "PASSWORD_INVALID")

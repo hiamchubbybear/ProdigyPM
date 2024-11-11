@@ -1,8 +1,6 @@
-package com.rs.employer.model;
+package com.rs.employer.model.temp;
 
 import jakarta.persistence.*;
-
-import javax.naming.Name;
 
 @Entity
 @Table(name ="order_item")

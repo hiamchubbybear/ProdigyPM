@@ -1,7 +1,6 @@
 
 package com.rs.employer.serviceimplements;
 
-import java.text.ParseException;
 import java.time.Instant;
 import java.util.*;
 
@@ -11,8 +10,9 @@ import com.rs.employer.dto.Request.ForgotAccountRequest;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
 import com.rs.employer.dto.Respone.*;
 import com.rs.employer.email.EmailService;
-import com.rs.employer.email.MailService;
-import com.rs.employer.model.*;
+import com.rs.employer.model.customer.Cart;
+import com.rs.employer.model.customer.Customer;
+import com.rs.employer.model.customer.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Sort;
@@ -33,7 +33,6 @@ import com.rs.employer.mapper.CustomerMapper;
 import com.rs.employer.service.ICustomerService;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.servlet.view.AbstractCachingViewResolver;
 
 @Service
 @Slf4j

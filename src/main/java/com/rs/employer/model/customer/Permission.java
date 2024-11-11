@@ -1,4 +1,4 @@
-package com.rs.employer.model;
+package com.rs.employer.model.customer;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

@@ -6,8 +6,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.rs.employer.email.EmailService;
+import com.rs.employer.model.customer.Customer;
+import com.rs.employer.model.customer.Permission;
+import com.rs.employer.model.customer.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.actuate.sbom.SbomEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,19 +21,6 @@ import com.rs.employer.dao.CustomerRepo;
 import com.rs.employer.dao.PermissionRepository;
 import com.rs.employer.dao.RoleRepository;
 import com.rs.employer.enums.PermissionEnum;
-import com.rs.employer.model.Customer;
-import com.rs.employer.model.Permission;
-import com.rs.employer.model.Role;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.actuate.sbom.SbomEndpoint;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 
 @org.springframework.context.annotation.Configuration
 public class Configuration {

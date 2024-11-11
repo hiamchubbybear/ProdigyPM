@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.rs.employer.model.Cart;
-import com.rs.employer.model.Category;
-import com.rs.employer.model.Image;
+import com.rs.employer.model.customer.Cart;
+import com.rs.employer.model.warehouse.Category;
+import com.rs.employer.model.others.Image;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinColumn;

@@ -14,7 +14,7 @@ import com.rs.employer.dto.Request.Resources.ResourcesRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.ResourcesMapper;
-import com.rs.employer.model.Resources;
+import com.rs.employer.model.warehouse.Resources;
 import com.rs.employer.service.IResourcesService;
 
 @Service

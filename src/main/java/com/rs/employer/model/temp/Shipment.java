@@ -1,5 +1,6 @@
-package com.rs.employer.model;
+package com.rs.employer.model.temp;
 
+import com.rs.employer.model.customer.Customer;
 import jakarta.persistence.*;
 
 import java.util.Date;

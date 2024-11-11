@@ -1,10 +1,8 @@
 package com.rs.employer;
 
-import com.rs.employer.model.Customer;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import com.rs.employer.model.Product;
+import com.rs.employer.model.customer.Customer;
+import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class EmployerApplicationTests {

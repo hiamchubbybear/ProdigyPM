@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dao.CartRepository;
@@ -17,8 +16,8 @@ import com.rs.employer.dto.Request.Product.ProductCartRequestOne;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.ProductMapper;
-import com.rs.employer.model.Cart;
-import com.rs.employer.model.Product;
+import com.rs.employer.model.customer.Cart;
+import com.rs.employer.model.warehouse.Product;
 @Service
 public class ProductCartService {
     private final ProductRepository productRepository;

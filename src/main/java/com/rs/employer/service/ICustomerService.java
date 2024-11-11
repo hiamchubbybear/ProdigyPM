@@ -6,17 +6,16 @@ import java.util.UUID;
 
 import com.nimbusds.jose.JOSEException;
 
-import com.rs.employer.dto.Request.ActivateRequestAccount;
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.dto.Request.ForgotAccountRequest;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
 import com.rs.employer.dto.Respone.*;
-import com.rs.employer.model.Resources;
+import com.rs.employer.model.customer.Customer;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dto.Request.User.CustomerRequest;
-import com.rs.employer.model.Customer;
+
 
 @Service
 public interface ICustomerService {

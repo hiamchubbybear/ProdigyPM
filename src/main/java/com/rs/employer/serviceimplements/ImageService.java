@@ -20,8 +20,8 @@ import com.rs.employer.dao.ProductRepository;
 import com.rs.employer.dto.Request.ImageDTO;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
-import com.rs.employer.model.Image;
-import com.rs.employer.model.Product;
+import com.rs.employer.model.others.Image;
+import com.rs.employer.model.warehouse.Product;
 import com.rs.employer.service.IImageService;
 
 import lombok.extern.slf4j.Slf4j;

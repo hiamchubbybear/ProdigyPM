@@ -12,11 +12,11 @@ import java.util.UUID;
 import com.nimbusds.jose.*;
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.email.EmailService;
+import com.rs.employer.model.customer.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -33,11 +33,9 @@ import com.rs.employer.dto.Respone.AuthenticationRespone;
 import com.rs.employer.dto.Respone.IntrospectRespone;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
-import com.rs.employer.model.Customer;
-import com.rs.employer.model.Invalid;
+import com.rs.employer.model.others.Invalid;
 
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 

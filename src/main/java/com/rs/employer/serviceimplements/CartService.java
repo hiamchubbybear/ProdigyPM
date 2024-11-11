@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.rs.employer.dao.CartRepository;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
-import com.rs.employer.model.Cart;
+import com.rs.employer.model.customer.Cart;
 @Service
 public class CartService {
     @Autowired

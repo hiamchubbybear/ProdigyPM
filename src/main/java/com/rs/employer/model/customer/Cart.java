@@ -1,10 +1,11 @@
-package com.rs.employer.model;
+package com.rs.employer.model.customer;
 
 import java.time.Instant;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.rs.employer.model.warehouse.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

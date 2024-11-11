@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.rs.employer.model.customer.Customer;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,9 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.rs.employer.model.Customer;
-import com.rs.employer.model.Product;
-import org.springframework.web.bind.annotation.PathVariable;
+import com.rs.employer.model.warehouse.Product;
 
 
 @Repository

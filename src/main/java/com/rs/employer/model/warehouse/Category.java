@@ -1,4 +1,4 @@
-package com.rs.employer.model;
+package com.rs.employer.model.warehouse;
 
 import java.util.List;
 

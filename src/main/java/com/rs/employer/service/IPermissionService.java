@@ -1,11 +1,13 @@
 package com.rs.employer.service;
 
-import java.util.List;
+import  java.util.List;
 
+import com.rs.employer.model.customer.Permission;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dto.Request.Auth.PermissionRequest;
-import com.rs.employer.model.Permission;
+
+
 
 @Service
 public interface IPermissionService {

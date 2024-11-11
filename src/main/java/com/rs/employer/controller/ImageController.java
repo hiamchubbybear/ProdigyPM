@@ -9,11 +9,9 @@ import com.rs.employer.serviceimplements.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.Resource;
 
@@ -21,8 +19,7 @@ import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.ImageDTO;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
-import com.rs.employer.model.Image;
-import com.rs.employer.service.IImageService;
+import com.rs.employer.model.others.Image;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController

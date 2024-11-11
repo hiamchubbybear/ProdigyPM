@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.rs.employer.dao.CategoryRepository;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
-import com.rs.employer.model.Category;
+import com.rs.employer.model.warehouse.Category;
 import com.rs.employer.service.ICategoryService;
 @Service
 public class CategoryService implements ICategoryService {

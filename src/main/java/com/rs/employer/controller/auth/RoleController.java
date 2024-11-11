@@ -2,12 +2,13 @@ package com.rs.employer.controller.auth;
 
 import java.util.List;
 
+import com.rs.employer.model.customer.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.Auth.RoleRequest;
-import com.rs.employer.model.Role;
+
 import com.rs.employer.serviceimplements.RoleService;
 
 @RestController

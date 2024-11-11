@@ -1,8 +1,7 @@
-package com.rs.employer.model;
+package com.rs.employer.model.temp;
 
 import jakarta.persistence.*;
 import java.time.Instant;
-import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -11,7 +10,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-//    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OneToOne
     private OrderItem orderItems;
 

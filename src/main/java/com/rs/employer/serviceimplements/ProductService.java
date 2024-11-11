@@ -14,8 +14,8 @@ import com.rs.employer.dto.Request.Product.ProductRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.ProductMapper;
-import com.rs.employer.model.Category;
-import com.rs.employer.model.Product;
+import com.rs.employer.model.warehouse.Category;
+import com.rs.employer.model.warehouse.Product;
 import com.rs.employer.service.IProductService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class ProductService implements IProductService {
     ProductMapper mapper;
     @Autowired
     public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
-        this.productRepository = productRepository;
+    this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
     }
 

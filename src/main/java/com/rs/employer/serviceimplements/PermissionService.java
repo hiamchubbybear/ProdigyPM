@@ -2,6 +2,9 @@ package com.rs.employer.serviceimplements;
 
 import java.util.List;
 
+
+import com.rs.employer.model.customer.Permission;
+import jakarta.persistence.Access;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -11,14 +14,13 @@ import com.rs.employer.dto.Request.Auth.PermissionRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.PermissionMapper;
-import com.rs.employer.model.Permission;
 import com.rs.employer.service.IPermissionService;
 
 @Service
 public class PermissionService implements IPermissionService {
     private final PermissionRepository repo;
     private final PermissionMapper mapper;
-
+    @Autowired
     public PermissionService(PermissionRepository repo, PermissionMapper mapper) {
         this.repo = repo;
         this.mapper = mapper;

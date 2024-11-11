@@ -1,4 +1,4 @@
-package com.rs.employer.model;
+package com.rs.employer.model.warehouse;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -7,6 +7,8 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.rs.employer.model.others.Image;
+import com.rs.employer.model.customer.Cart;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -3,7 +3,6 @@ package com.rs.employer.controller;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import com.nimbusds.jose.JOSEException;
 import com.rs.employer.dao.CustomerRepo;
@@ -16,7 +15,7 @@ import com.rs.employer.dto.Respone.CustomerUpdateRespone;
 import com.rs.employer.dto.Respone.ForgotAccountRespone;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
-import com.rs.employer.model.Resources;
+import com.rs.employer.model.customer.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration;
 import org.springframework.core.io.ByteArrayResource;
@@ -29,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.User.CustomerRequest;
-import com.rs.employer.model.Customer;
 import com.rs.employer.serviceimplements.CustomerService;
 
 import jakarta.validation.Valid;
