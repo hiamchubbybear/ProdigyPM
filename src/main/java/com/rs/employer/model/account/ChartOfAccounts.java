@@ -7,16 +7,15 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
-
 public class ChartOfAccounts {
     @Id
-    @GeneratedValue( strategy = GenerationType.AUTO)
+//    @GeneratedValue( strategy = GenerationType.AUTO)
     private String accountId;
     private String accountName;
     private String accountType;
     @ManyToOne
     @JoinColumn(name = "parent_account")
-    private ChartOfAccounts parentAccount; // Quan hệ one-to-many với chính nó
+    private ChartOfAccounts parentAccount;
     @OneToMany(mappedBy = "parentAccount")
     private List<ChartOfAccounts> childrenAccounts;
     private java.math.BigDecimal balance;

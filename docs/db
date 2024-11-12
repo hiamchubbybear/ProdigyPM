@@ -430,7 +430,6 @@ public class Employee {
     private String position;
     private java.time.LocalDate startDate;
     private Integer status;
-
     private Set<Payroll> payrolls; // Quan hệ one-to-many với bảng Payroll
 }
 

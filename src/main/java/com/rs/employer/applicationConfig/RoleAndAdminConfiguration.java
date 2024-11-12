@@ -5,7 +5,6 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.rs.employer.email.EmailService;
 import com.rs.employer.model.customer.Customer;
 import com.rs.employer.model.customer.Permission;
 import com.rs.employer.model.customer.Role;
@@ -14,7 +13,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.actuate.sbom.SbomEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.rs.employer.dao.CustomerRepo;
@@ -23,12 +21,12 @@ import com.rs.employer.dao.RoleRepository;
 import com.rs.employer.enums.PermissionEnum;
 
 @org.springframework.context.annotation.Configuration
-public class Configuration {
+public class RoleAndAdminConfiguration {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
     @Autowired
-    public Configuration(PasswordEncoder passwordEncoder, RoleRepository roleRepository, PermissionRepository permissionRepository) {
+    public RoleAndAdminConfiguration(PasswordEncoder passwordEncoder, RoleRepository roleRepository, PermissionRepository permissionRepository) {
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.permissionRepository = permissionRepository;

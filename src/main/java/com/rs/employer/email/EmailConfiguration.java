@@ -3,13 +3,13 @@
 //import jakarta.mail.SendFailedException;
 //import jakarta.validation.constraints.Email;
 //import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
+//import org.springframework.context.annotation.RoleAndAdminConfiguration;
 //import org.springframework.mail.javamail.JavaMailSender;
 //import org.springframework.mail.javamail.JavaMailSenderImpl;
 //
 //import java.util.Properties;
 //
-//@Configuration
+//@RoleAndAdminConfiguration
 //public class EmailConfiguration {
 //    @Bean
 //    public JavaMailSender getJavaMailSender() {

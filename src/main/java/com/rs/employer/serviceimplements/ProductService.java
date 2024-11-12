@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import com.rs.employer.model.others.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,6 @@ import com.rs.employer.dto.Request.Product.ProductRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.ProductMapper;
-import com.rs.employer.model.warehouse.Category;
 import com.rs.employer.model.warehouse.Product;
 import com.rs.employer.service.IProductService;
 
@@ -43,9 +43,9 @@ public class ProductService implements IProductService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public Product addProduct(ProductRequest request) {
-        Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
+        Category category = Optional.ofNullable(categoryRepository.findByCategoryName(request.getCategory().getCategoryName()))
                 .orElseGet(() -> {
-                    Category category1 = new Category(request.getCategory().getName());
+                    Category category1 = new Category();
                     return categoryRepository.save(category1);
                 });
         Product product = mapper.toProduct(request);
@@ -88,8 +88,8 @@ public class ProductService implements IProductService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Product> getProductByCategory(String name) {
-        if (productRepository.existsByCategoryName(name)) {
-            return productRepository.findByCategoryName(name);
+        if (productRepository.existsByCategoryCategoryName(name)) {
+            return productRepository.findByCategoryCategoryName(name);
         } else {
             throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
     }
@@ -109,7 +109,7 @@ public class ProductService implements IProductService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Product> getProductByName(String name) {
-        List<Product> products = productRepository.findByName(name);
+        List<Product> products = productRepository.findByProductName(name);
         if (!products.isEmpty())
             return products;
         else
@@ -120,7 +120,7 @@ public class ProductService implements IProductService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Product> getProductByBrandAndCategory(String brand, String categoryname) {
-        List<Product> products = productRepository.findByBrandAndCategoryName(brand,categoryname);
+        List<Product> products = productRepository.findByBrandAndCategory_CategoryName(brand,categoryname);
         if (!products.isEmpty())
             return products;
         else
@@ -130,7 +130,7 @@ public class ProductService implements IProductService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Product> getProductByBrandAndInventory(String brand, Long inventory) {
-        List<Product> products = productRepository.findByBrandAndInventory(brand,inventory);
+        List<Product> products = productRepository.findByBrandAndInventories(brand,inventory);
         if (!products.isEmpty())
             return products;
         else
@@ -140,7 +140,7 @@ public class ProductService implements IProductService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Product> getProductByBraindAndName(String brand, String name) {
-        List<Product> products = productRepository.findByBrandAndName(brand,name);
+        List<Product> products = productRepository.findByBrandAndProductName(brand,name);
         if (!products.isEmpty())
             return products;
         else
@@ -150,7 +150,7 @@ public class ProductService implements IProductService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_ADD_PRODUCT')or hasAuthority('SCOPE_PERMIT_ALL')")
     public Long countProductByBrandAndName(String brand, String name) {
-        return productRepository.countByBrandAndName(brand, name);
+        return productRepository.countByBrandAndProductName(brand, name);
     }
 
 }

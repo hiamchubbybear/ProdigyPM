@@ -1,0 +1,74 @@
+    // Nhóm tài khoản 1: Tài sản ngắn hạn
+    CASH("111", "Tiền mặt"),
+    BANK_DEPOSIT("112", "Tiền gửi ngân hàng"),
+    MONEY_IN_TRANSIT("113", "Tiền đang chuyển"),
+    INVESTMENT("121", "Đầu tư nắm giữ đến ngày đáo hạn"),
+    RECEIVABLE_CUSTOMERS("131", "Phải thu khách hàng"),
+    RECEIVABLE_INTERNAL("132", "Phải thu nội bộ"),
+    VAT_DEDUCTIBLE("133", "Thuế GTGT được khấu trừ"),
+    ADVANCE("141", "Tạm ứng"),
+    PREPAID_EXPENSES("142", "Chi phí trả trước ngắn hạn"),
+    GOODS_IN_TRANSIT("151", "Hàng mua đang đi đường"),
+    RAW_MATERIAL("152", "Nguyên liệu, vật liệu"),
+    TOOLS("153", "Công cụ, dụng cụ"),
+    IN_PROGRESS_COST("154", "Chi phí sản xuất, kinh doanh dở dang"),
+    MERCHANDISE("156", "Hàng hóa"),
+    GOODS_SENT_FOR_SALE("157", "Hàng gửi bán"),
+    REAL_ESTATE("158", "Hàng hóa bất động sản"),
+    SHORT_TERM_LOANS("161", "Vay ngắn hạn"),
+    SHORT_TERM_PAYABLE("162", "Phải trả ngắn hạn"),
+
+    // Nhóm tài khoản 2: Tài sản dài hạn
+    FIXED_ASSETS("211", "Tài sản cố định hữu hình"),
+    INTANGIBLE_ASSETS("212", "Tài sản cố định vô hình"),
+    IN_PROGRESS_CONSTRUCTION("213", "Chi phí xây dựng cơ bản dở dang"),
+    LEASED_FIXED_ASSETS("214", "Tài sản cố định thuê tài chính"),
+    INVESTMENTS_IN_SUBSIDIARIES("221", "Đầu tư vào công ty con"),
+    INVESTMENTS_IN_ASSOCIATES("222", "Đầu tư vào công ty liên kết"),
+    OTHER_LONG_TERM_INVESTMENTS("223", "Đầu tư dài hạn khác"),
+
+    // Nhóm tài khoản 3: Nguồn vốn chủ sở hữu
+    EQUITY("311", "Vốn chủ sở hữu"),
+    CHARTER_CAPITAL("312", "Vốn điều lệ"),
+    OWNER_CONTRIBUTION("313", "Vốn góp của chủ sở hữu"),
+    RETAINED_EARNINGS("314", "Lợi nhuận sau thuế chưa phân phối"),
+    BONUS_WELFARE_FUNDS("315", "Quỹ khen thưởng, phúc lợi"),
+
+    // Nhóm tài khoản 4: Nguồn vốn khác
+    OWNER_EQUITY("411", "Vốn góp của chủ sở hữu"),
+    FINANCIAL_RESERVES("412", "Quỹ dự phòng tài chính"),
+    BUSINESS_DEVELOPMENT_FUNDS("413", "Quỹ phát triển sản xuất, kinh doanh"),
+    INVESTMENT_DEVELOPMENT_FUNDS("414", "Quỹ đầu tư phát triển"),
+
+    // Nhóm tài khoản 5: Doanh thu
+    SALES_REVENUE("511", "Doanh thu bán hàng và cung cấp dịch vụ"),
+    MERCHANDISE_SALES("512", "Doanh thu bán hàng hóa"),
+    SERVICE_REVENUE("513", "Doanh thu cung cấp dịch vụ"),
+    ASSET_DISPOSAL_REVENUE("515", "Doanh thu từ chuyển nhượng tài sản"),
+    OTHER_REVENUE("516", "Doanh thu khác"),
+    FINANCIAL_REVENUE("517", "Doanh thu hoạt động tài chính"),
+
+    // Nhóm tài khoản 6: Chi phí
+    COST_OF_GOODS_SOLD("611", "Giá vốn hàng bán"),
+    SELLING_EXPENSES("612", "Chi phí bán hàng"),
+    PRODUCTION_COST("621", "Chi phí sản xuất"),
+    ADMINISTRATIVE_EXPENSES("622", "Chi phí quản lý doanh nghiệp"),
+    OTHER_ADMIN_EXPENSES("623", "Chi phí quản lý khác"),
+    INTEREST_EXPENSES("625", "Chi phí lãi vay"),
+    ADMINISTRATIVE_FEES("627", "Chi phí hành chính"),
+    LABOR_COST("631", "Chi phí nhân viên"),
+    MATERIAL_COST("632", "Chi phí vật liệu"),
+
+    // Nhóm tài khoản 7: Lợi nhuận
+    OPERATING_PROFIT("711", "Lợi nhuận từ hoạt động sản xuất, kinh doanh"),
+    FINANCIAL_PROFIT("712", "Lợi nhuận từ hoạt động tài chính"),
+    OTHER_PROFIT("713", "Lợi nhuận khác"),
+
+    // Nhóm tài khoản 8: Thuế và các khoản phải nộp
+    VAT_PAYABLE("811", "Thuế giá trị gia tăng phải nộp"),
+    PERSONAL_INCOME_TAX_PAYABLE("812", "Thuế thu nhập cá nhân phải nộp"),
+    CORPORATE_TAX_PAYABLE("813", "Thuế thu nhập doanh nghiệp phải nộp"),
+
+    // Nhóm tài khoản 9: Các khoản phải thu, phải trả
+    ACCOUNTS_RECEIVABLE("911", "Các khoản phải thu"),
+    ACCOUNTS_PAYABLE("912", "Các khoản phải trả");

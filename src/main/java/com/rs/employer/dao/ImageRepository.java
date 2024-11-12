@@ -11,9 +11,9 @@ import com.rs.employer.model.others.Image;
 @Repository
 
 public interface ImageRepository extends JpaRepository<Image, UUID> {
-    public List<Image> findAllByProductsId(Long productId);
+    public List<Image> findAllByProducts_ProductId(Long productId);
 
-    public List<Image> findByfileType(String filetype);
+    public List<Image> findAllByFileType(String filetype);
 
-    public List<Image> findByfileName(String filename);
+    public List<Image> findAllByFileName(String filename);
 }

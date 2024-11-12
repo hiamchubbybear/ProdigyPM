@@ -1,11 +1,11 @@
 package com.rs.employer.controller;
 
+import com.rs.employer.model.others.Category;
 import com.rs.employer.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.rs.employer.apirespone.ApiRespone;
-import com.rs.employer.model.warehouse.Category;
 
 @RestController
 @RequestMapping("/api/category")

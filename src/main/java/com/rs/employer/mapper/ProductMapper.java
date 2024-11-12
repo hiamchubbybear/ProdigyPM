@@ -11,7 +11,7 @@ import com.rs.employer.model.warehouse.Product;
 public interface ProductMapper {
     ProductRespone toProductRespone(ProductRequest request);
     @Mapping(ignore = true , target = "images" )
-    @Mapping(ignore = true , target = "carts" )
+    @Mapping(ignore = true , target = "status" )
     @Mapping(ignore= true ,target = "category")
     Product toProduct(ProductRequest request);
 

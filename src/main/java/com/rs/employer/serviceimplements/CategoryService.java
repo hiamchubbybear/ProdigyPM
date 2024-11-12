@@ -2,6 +2,7 @@ package com.rs.employer.serviceimplements;
 
 import java.util.List;
 
+import com.rs.employer.model.others.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.rs.employer.dao.CategoryRepository;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
-import com.rs.employer.model.warehouse.Category;
 import com.rs.employer.service.ICategoryService;
 @Service
 public class CategoryService implements ICategoryService {
@@ -18,7 +18,7 @@ public class CategoryService implements ICategoryService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public Category addCategory(Category request) {
-        if (!categoryRepository.existsById(request.getId())) {
+        if (!categoryRepository.existsById(request.getCategoryId())) {
             return categoryRepository.save(request);
         } else {
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
@@ -43,7 +43,7 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public Category getCategoryByName(String name) {
-        return categoryRepository.findByName(name);
+        return categoryRepository.findByCategoryName(name);
     }
     @Override
     public Category getCategoryById(Long id) {

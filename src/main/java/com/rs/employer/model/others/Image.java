@@ -7,13 +7,7 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.rs.employer.model.warehouse.Product;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Image {
@@ -28,7 +22,7 @@ public class Image {
     @Lob
     private Blob image;
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_image")
     @JsonIgnore
     private Product products;
 

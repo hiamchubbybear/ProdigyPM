@@ -7,15 +7,15 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.rs.employer.model.manufacture.BOM;
+import com.rs.employer.model.others.Category;
 import com.rs.employer.model.others.Image;
-import com.rs.employer.model.customer.Cart;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -25,40 +25,50 @@ import jakarta.persistence.Table;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
+    private Long productId;
+    private String productName;
     private String brand;
     private BigDecimal price;
-    private int inventory;
+    private Integer quantity;
+    private Integer status;
+    @OneToMany(mappedBy = "product")
+    private Set<Inventory> inventories;
     private String description;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "categoryId")
     private Category category;
     private Instant createAt;
     private Instant updateAt;
     @OneToMany(mappedBy = "products", targetEntity = Image.class)
     @JsonIgnore
     private List<Image> images;
-    @ManyToMany
-    @JsonIgnore
-    private Set<Cart> carts;
     @ManyToOne
     @JoinColumn(name = "resource_id", nullable = false)
     private Resources resources;
-    public Long getId() {
-        return id;
+    @OneToMany(mappedBy = "product")
+    private Set<ProductOrder> productOrders;
+    @OneToMany(mappedBy = "product")
+    // Bill of material
+    private Set<BOM> bom;
+
+
+    public Product() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getProductId() {
+        return productId;
     }
 
-    public String getName() {
-        return name;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getBrand() {
@@ -77,12 +87,28 @@ public class Product {
         this.price = price;
     }
 
-    public int getInventory() {
-        return inventory;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setInventory(int inventory) {
-        this.inventory = inventory;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Set<Inventory> getInventories() {
+        return inventories;
+    }
+
+    public void setInventories(Set<Inventory> inventories) {
+        this.inventories = inventories;
     }
 
     public String getDescription() {
@@ -125,31 +151,45 @@ public class Product {
         this.images = images;
     }
 
-    public Set<Cart> getCarts() {
-        return carts;
+    public Resources getResources() {
+        return resources;
     }
 
-    public void setCarts(Set<Cart> carts) {
-        this.carts = carts;
+    public void setResources(Resources resources) {
+        this.resources = resources;
     }
 
-    public Product() {
+    public Set<ProductOrder> getProductOrders() {
+        return productOrders;
     }
 
-    public Product(Long id, String name, String brand, BigDecimal price, int inventory, String description,
-                   Category category, Instant createAt, Instant updateAt, List<Image> images, Set<Cart> carts) {
-        this.id = id;
-        this.name = name;
+    public void setProductOrders(Set<ProductOrder> productOrders) {
+        this.productOrders = productOrders;
+    }
+
+    public Set<BOM> getBom() {
+        return bom;
+    }
+
+    public void setBom(Set<BOM> bom) {
+        this.bom = bom;
+    }
+
+    public Product(Long productId, String productName, String brand, BigDecimal price, Integer quantity, Integer status, Set<Inventory> inventories, String description, Category category, Instant createAt, Instant updateAt, List<Image> images, Resources resources, Set<ProductOrder> productOrders, Set<BOM> bom) {
+        this.productId = productId;
+        this.productName = productName;
         this.brand = brand;
         this.price = price;
-        this.inventory = inventory;
+        this.quantity = quantity;
+        this.status = status;
+        this.inventories = inventories;
         this.description = description;
         this.category = category;
         this.createAt = createAt;
         this.updateAt = updateAt;
         this.images = images;
-        this.carts = carts;
+        this.resources = resources;
+        this.productOrders = productOrders;
+        this.bom = bom;
     }
-
-
 }

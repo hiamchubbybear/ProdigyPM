@@ -63,7 +63,7 @@ public class ImageService implements IImageService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_PRODUCT_MANAGE')")
     public List<Image> getAllImagesById(Long productId) {
-        return imageRepository.findAllByProductsId(productId);
+        return imageRepository.findAllByProducts_ProductId(productId);
     }
 
     @Override
@@ -89,13 +89,13 @@ public class ImageService implements IImageService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Image> getImageByProductID(Long productId) {
-        return imageRepository.findAllByProductsId(productId);
+        return imageRepository.findAllByProducts_ProductId(productId);
     }
 
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Image> getImageByFileType(String fileType) {
-        List<Image> images = imageRepository.findByfileType(fileType);
+        List<Image> images = imageRepository.findAllByFileType(fileType);
         if (!images.isEmpty())
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         else
@@ -105,7 +105,7 @@ public class ImageService implements IImageService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Image> getImageByFileName(String fileName) {
-        List<Image> images = imageRepository.findByfileName(fileName);
+        List<Image> images = imageRepository.findAllByFileName(fileName);
         if (!images.isEmpty())
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         return images;
@@ -114,7 +114,7 @@ public class ImageService implements IImageService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List<ImageDTO> saveImage(List<MultipartFile> file, Long productId) throws SQLException {
-        Product product = productRepository.findProductById(productId);
+        Product product = productRepository.findByProductId(productId);
         if (product == null) throw new AppException(ErrorCode.PRODUCT_NOTFOUND);
         List<ImageDTO> savedImageDto = new ArrayList<>();
         for (MultipartFile fileItem : file) {
@@ -127,7 +127,7 @@ public class ImageService implements IImageService {
                 image.setFileName(fileItem.getOriginalFilename());
                 image.setImage(new SerialBlob(fileItem.getBytes()));
                 image.setProducts(product);
-                System.out.println("Product ID  is "  + product.getId() );
+                System.out.println("Product ID  is "  + product.getProductId());
                 String buildDownloadUrl = "/api/images/image/download/";
                 String downloadUrl = buildDownloadUrl + image.getId();
                 System.out.println("String download is " + downloadUrl);

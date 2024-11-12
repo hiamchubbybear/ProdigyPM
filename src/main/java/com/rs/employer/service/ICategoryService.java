@@ -1,8 +1,9 @@
 package com.rs.employer.service;
 
+import com.rs.employer.model.others.Category;
+
 import java.util.List;
 
-import com.rs.employer.model.warehouse.Category;
 
 
 public interface  ICategoryService {
