@@ -15,7 +15,7 @@ public class JournalEntry {
     private Integer status;
     @ManyToOne
     @JoinColumn(name = "createBy")
-    private Customer createdBy; // Quan hệ many-to-one với bảng Users
+    private Customer createdBy;
     private java.time.LocalDateTime createdDate;
     @OneToMany(mappedBy = "journalEntry")
     private Set<JournalEntryDetail> details;

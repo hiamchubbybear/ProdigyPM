@@ -3,6 +3,7 @@ package com.rs.employer.model.account;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 
 @Entity
 public class JournalEntryDetail {
@@ -17,6 +18,25 @@ public class JournalEntryDetail {
     private ChartOfAccounts account;
     private java.math.BigDecimal debit;
     private java.math.BigDecimal credit;
+    private Currency currency;
+
+
+    public JournalEntryDetail(Integer entryDetailId, JournalEntry journalEntry, ChartOfAccounts account, BigDecimal debit, BigDecimal credit, Currency currency) {
+        this.entryDetailId = entryDetailId;
+        this.journalEntry = journalEntry;
+        this.account = account;
+        this.debit = debit;
+        this.credit = credit;
+        this.currency = currency;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
 
     public JournalEntryDetail() {
     }
