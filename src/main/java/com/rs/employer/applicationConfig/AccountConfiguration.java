@@ -1,6 +1,6 @@
 package com.rs.employer.applicationConfig;
 
-import com.rs.employer.dao.AccountRepository;
+import com.rs.employer.dao.customer.AccountRepository;
 import com.rs.employer.enums.AccountEnum;
 import com.rs.employer.enums.AccountingParrentEnum;
 import com.rs.employer.model.account.ChartOfAccounts;

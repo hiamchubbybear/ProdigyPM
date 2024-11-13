@@ -15,9 +15,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.rs.employer.dao.CustomerRepo;
-import com.rs.employer.dao.PermissionRepository;
-import com.rs.employer.dao.RoleRepository;
+import com.rs.employer.dao.customer.CustomerRepo;
+import com.rs.employer.dao.customer.PermissionRepository;
+import com.rs.employer.dao.customer.RoleRepository;
 import com.rs.employer.enums.PermissionEnum;
 
 @org.springframework.context.annotation.Configuration

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.Auth.RoleRequest;
 
-import com.rs.employer.serviceimplements.RoleService;
+import com.rs.employer.serviceimplements.customer.RoleService;
 
 @RestController
 @RequestMapping("/api/role")

@@ -2,8 +2,7 @@ package com.rs.employer.controller.auth;
 
 import java.text.ParseException;
 
-import com.rs.employer.dao.CustomerRepo;
-import com.rs.employer.dto.Request.ActivateRequestAccount;
+import com.rs.employer.dao.customer.CustomerRepo;
 import com.rs.employer.dto.Respone.LoginInactiveAccountRespone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +12,7 @@ import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.Auth.AuthenticationRequest;
 import com.rs.employer.dto.Request.Auth.IntrospectRequest;
 import com.rs.employer.dto.Request.Auth.LogoutRequest;
-import com.rs.employer.dto.Respone.AuthenticationRespone;
-import com.rs.employer.serviceimplements.AuthenticationService;
+import com.rs.employer.serviceimplements.customer.AuthenticationService;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/auth")
