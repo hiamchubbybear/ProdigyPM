@@ -12,6 +12,5 @@ import java.util.List;
 public interface ChartOfAccountRepository extends JpaRepository<ChartOfAccounts,String> {
     @Query("SELECT c.balance from ChartOfAccounts c where c.parentAccount.accountName= :name and c.accountId =:id")
     public List<ChartOfAccounts> findByAccountName(@Param("name") String name , @Param("id") String id);
-//    @Query("UPDATE c.bla")
 
 }

@@ -7,6 +7,7 @@ import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.account.ChartOfAccounts;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationRunner;
@@ -20,7 +21,7 @@ import java.beans.Transient;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-
+@Slf4j
 @Configuration
 public class AccountConfiguration {
 
@@ -126,14 +127,14 @@ public class AccountConfiguration {
         return args -> {
             for (AccountingParrentEnum parrentEnum : AccountingParrentEnum.values()) {
                 if (!accountRepository.existsById(parrentEnum.getDescription())) {
-                    ChartOfAccounts chartOfAccounts = new ChartOfAccounts(parrentEnum.getDescription()
+                ChartOfAccounts chartOfAccounts = new ChartOfAccounts(parrentEnum.getDescription()
                             , parrentEnum.getGroup(), "P", null
                             , null, BigDecimal.ZERO
                     );
                     accountRepository.save(chartOfAccounts);
+                    System.out.println("Đã lưu "  +chartOfAccounts.getAccountId());
                 }
             }
         };
     }
 }
-

@@ -1,5 +1,7 @@
 package com.rs.employer.model.account;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,6 +18,7 @@ public class ChartOfAccounts {
     @ManyToOne
     @JoinColumn(name = "parent_account")
     private ChartOfAccounts parentAccount;
+    @JsonIgnore
     @OneToMany(mappedBy = "parentAccount")
     private List<ChartOfAccounts> childrenAccounts;
     private java.math.BigDecimal balance;

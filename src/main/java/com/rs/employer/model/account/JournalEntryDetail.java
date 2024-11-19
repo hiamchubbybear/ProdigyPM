@@ -1,5 +1,8 @@
 package com.rs.employer.model.account;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -11,9 +14,11 @@ public class JournalEntryDetail {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer entryDetailId;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "journalEntry_Detail")
     private JournalEntry journalEntry;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "account_journeydetail")
     private ChartOfAccounts account;
     private java.math.BigDecimal debit;

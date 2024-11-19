@@ -1,25 +1,21 @@
-package com.rs.employer.model.account;
+package com.rs.employer.dto.Request;
 
-import com.rs.employer.model.customer.Customer;
-import jakarta.persistence.*;
+import com.rs.employer.model.account.JournalEntryDetail;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
-@Entity
-public class JournalEntry {
-    @Id
+
+public class JournalEntryRequest {
     private Integer entryId;
-    private java.time.LocalDate entryDate;
+    private LocalDate entryDate;
     private String description;
     private Integer status;
-    @ManyToOne
-    @JoinColumn(name = "createBy")
-    private Customer createdBy;
-    private java.time.LocalDateTime createdDate;
-    @OneToMany(mappedBy = "journalEntry")
+    private String createBy;
+    private LocalDateTime createdDate;
     private Set<JournalEntryDetail> details;
-    public JournalEntry() {
+
+    public JournalEntryRequest() {
     }
 
     public Integer getEntryId() {
@@ -54,12 +50,12 @@ public class JournalEntry {
         this.status = status;
     }
 
-    public Customer getCreatedBy() {
-        return createdBy;
+    public String getCreateBy() {
+        return createBy;
     }
 
-    public void setCreatedBy(Customer createdBy) {
-        this.createdBy = createdBy;
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
     }
 
     public LocalDateTime getCreatedDate() {
@@ -77,13 +73,12 @@ public class JournalEntry {
     public void setDetails(Set<JournalEntryDetail> details) {
         this.details = details;
     }
-
-    public JournalEntry(Integer entryId, LocalDate entryDate, String description, Integer status, Customer createdBy, LocalDateTime createdDate, Set<JournalEntryDetail> details) {
+    public JournalEntryRequest(Integer entryId, LocalDate entryDate, String description, Integer status, String createBy, LocalDateTime createdDate, Set<JournalEntryDetail> details) {
         this.entryId = entryId;
         this.entryDate = entryDate;
         this.description = description;
         this.status = status;
-        this.createdBy = createdBy;
+        this.createBy = createBy;
         this.createdDate = createdDate;
         this.details = details;
     }
