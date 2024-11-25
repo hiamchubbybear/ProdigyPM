@@ -1,6 +1,5 @@
 package com.rs.employer.dto.Respone;
 
-import com.rs.employer.model.customer.Cart;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Size;
 
@@ -19,12 +18,11 @@ public class CustomerUpdateRespone {
     private String status;
     private Instant update;
     private LocalDate dob;
-    private Cart cart;
 
     public CustomerUpdateRespone() {
     }
 
-    public CustomerUpdateRespone(String password, String email, String name, String address, String role, boolean gender, String status, Instant update, LocalDate dob, Cart cart) {
+    public CustomerUpdateRespone(String password, String email, String name, String address, String role, boolean gender, String status, Instant update, LocalDate dob) {
         this.password = password;
         this.email = email;
         this.name = name;
@@ -34,7 +32,6 @@ public class CustomerUpdateRespone {
         this.status = status;
         this.update = update;
         this.dob = dob;
-        this.cart = cart;
     }
 
     public @Size(min = 2, message = "PASSWORD_INVALID") String getPassword() {
@@ -109,11 +106,4 @@ public class CustomerUpdateRespone {
         this.dob = dob;
     }
 
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
 }

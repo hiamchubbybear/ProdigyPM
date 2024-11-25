@@ -8,7 +8,6 @@ import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.JournalEntryMapper;
 import com.rs.employer.model.account.JournalEntry;
 import com.rs.employer.model.customer.Customer;
-import com.rs.employer.serviceimplements.customer.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +51,7 @@ public class JournalEntryService {
         return journalEntryRepository.findByCreatedByUsername(username);
     }
 
-    public Optional<JournalEntry> getJournalEntryByCustomer(Customer customer) {
+    public Optional<JournalEntry> getJournalEntryByCustomer(String customer) {
         return journalEntryRepository.findByCreatedBy(customer);
     }
 
@@ -78,7 +77,7 @@ public class JournalEntryService {
 
     public JournalEntry createJournalEntry(JournalEntryRequest journalEntry) {
         JournalEntry entry = journalEntryMapper.toJournalEntry(journalEntry);
-        entry.setCreatedBy(customerRepo.findByUsername(journalEntry.getCreateBy()).get());
+        entry.setCreatedBy(journalEntry.getCreateBy());
         return journalEntryRepository.save(entry);
     }
 

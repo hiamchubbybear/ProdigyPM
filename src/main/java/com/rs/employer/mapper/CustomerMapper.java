@@ -15,7 +15,6 @@ public interface CustomerMapper {
     CustomerRespone toCustomerRespone(CustomerRequest request);
 
     @Mapping(target = "roles", ignore = true)
-    @Mapping(target = "cart", ignore = true)
     Customer toCustomer(CustomerRequest request);
 
     @Mapping(target = "role", ignore = true)

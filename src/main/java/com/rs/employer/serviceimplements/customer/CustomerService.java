@@ -1,6 +1,10 @@
 
 package com.rs.employer.serviceimplements.customer;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.*;
 
@@ -10,7 +14,6 @@ import com.rs.employer.dto.Request.ForgotAccountRequest;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
 import com.rs.employer.dto.Respone.*;
 import com.rs.employer.email.EmailService;
-import com.rs.employer.model.customer.Cart;
 import com.rs.employer.model.customer.Customer;
 import com.rs.employer.model.customer.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
-import com.rs.employer.dao.others.CartRepository;
 import com.rs.employer.dao.customer.CustomerRepo;
 import com.rs.employer.dao.customer.RoleRepository;
 import com.rs.employer.dto.Request.User.CustomerRequest;
@@ -41,21 +43,20 @@ public class CustomerService implements ICustomerService {
 
     private final CustomerRepo customerRepository;
     private final RoleRepository roleRepository;
-    private final CartRepository cartRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomerMapper mapper;
     private final CustomerRepo customerRepo;
     private final AuthenticationService authenticationService;
     private final EmailService emailService;
     private final Instant now = Instant.now();
+
     @Autowired
     public CustomerService(CustomerRepo customerRepository, RoleRepository roleRepository,
-                           CartRepository cartRepository, PasswordEncoder passwordEncoder,
+                            PasswordEncoder passwordEncoder,
                            CustomerMapper mapper, CustomerRepo customerRepo,
                            AuthenticationService authenticationService, EmailService emailService) {
         this.customerRepository = customerRepository;
         this.roleRepository = roleRepository;
-        this.cartRepository = cartRepository;
         this.passwordEncoder = passwordEncoder;
         this.mapper = mapper;
         this.customerRepo = customerRepo;
@@ -90,22 +91,13 @@ public class CustomerService implements ICustomerService {
         else {
             var role = roleRepository.findAllById(customer.getRole());
             customer.setPassword(passwordEncoder.encode(customer.getPassword()));
-            if (!cartRepository.existsByOwner(customer.getUsername()))
-                createCart(customer);
             Customer customer1 = mapper.toCustomer(customer);
             customer1.setCreate(now);
             customer1.setUpdate(now);
             customer1.setRoles(new HashSet<>(role));
-            customer1.setCart(cartRepository.findByOwner(customer.getUsername()));
             return customerRepository.save(customer1);
         }
     }
-
-    private Cart createCart(CustomerRequest customer) {
-        Cart cart = new Cart(now, now, customer.getUsername());
-        return cartRepository.save(cart);
-    }
-
     @Override
     @PostAuthorize("returnObject.username == authentication.name")
     public CustomerInfoDTO updateCustomer(CustomerInfoDTO customer) {
@@ -120,7 +112,7 @@ public class CustomerService implements ICustomerService {
                 existingCustomer.setAddress(customer.getAddress());
                 existingCustomer.setGender(customer.isGender());
                 existingCustomer.setStatus(customer.isStatus());
-                   customerRepository.save(existingCustomer);
+                customerRepository.save(existingCustomer);
                 return customer;
             }
             throw new AppException(ErrorCode.USER_NOTFOUND);
@@ -153,8 +145,8 @@ public class CustomerService implements ICustomerService {
     public CustomerInfoDTO getMyInfo() {
         var user = SecurityContextHolder.getContext();
         String name = user.getAuthentication().getName();
-        Customer customer =  customerRepository.findByUsername(name).orElse(new Customer());
-        return new CustomerInfoDTO(name,customer.getEmail(),customer.getName(), customer.getAddress(),
+        Customer customer = customerRepository.findByUsername(name).orElse(new Customer());
+        return new CustomerInfoDTO(name, customer.getEmail(), customer.getName(), customer.getAddress(),
                 customer.isGender(), customer.isStatus());
     }
 
@@ -193,7 +185,6 @@ public class CustomerService implements ICustomerService {
             customer.setStatus(customer.getStatus());
             customer.setUpdate(now);
             customer.setDob(request.getDob());
-            customer.setCart(null);
             return customerRepo.save(customer);
         } else {
             throw new AppException(ErrorCode.USER_NOTFOUND);
@@ -262,13 +253,13 @@ public class CustomerService implements ICustomerService {
                     append("http://localhost:3000/api/customer/resetpwd?").
                     append(token).toString();
             emailService.sendResetPasswordLink(email, "", link);
-            return new ForgotAccountRespone(true, "Your auth link sent to your email" , token);
+            return new ForgotAccountRespone(true, "Your auth link sent to your email", token);
         }
-        return new ForgotAccountRespone(false , "Failed" , "null");
+        return new ForgotAccountRespone(false, "Failed", "null");
     }
 
     @Override
-    public ByteArrayResource userImage(String username) {
+    public ByteArrayResource userImage(String username) throws IOException {
         Optional<Customer> customerOpt = customerRepository.findByUsername(username);
         if (customerOpt.isPresent()) {
             Customer customer = customerOpt.get();
@@ -276,7 +267,9 @@ public class CustomerService implements ICustomerService {
             if (image != null) {
                 return new ByteArrayResource(image);
             } else {
-                throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+                Path path = Paths.get("src/main/resources/Default-Profile-Picture-Download-PNG-Image.png");
+                byte[] imageBytes = Files.readAllBytes(path);
+                return new ByteArrayResource(imageBytes);
             }
         } else {
             throw new AppException(ErrorCode.USER_NOTFOUND);

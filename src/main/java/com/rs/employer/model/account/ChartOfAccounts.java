@@ -11,7 +11,6 @@ import java.util.List;
 @Entity
 public class ChartOfAccounts {
     @Id
-//    @GeneratedValue( strategy = GenerationType.AUTO)
     private String accountId;
     private String accountName;
     private String accountType;

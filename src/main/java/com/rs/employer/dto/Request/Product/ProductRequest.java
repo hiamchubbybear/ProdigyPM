@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.rs.employer.model.customer.Cart;
 import com.rs.employer.model.others.Category;
 import com.rs.employer.model.others.Image;
 
@@ -32,7 +31,6 @@ private Instant updateAt;
 private List<Image> images;
 @ManyToMany
 @JsonIgnore
-private Set<Cart> carts;
 public Long getId() {
     return id;
 }
@@ -93,14 +91,9 @@ public List<Image> getImages() {
 public void setImages(List<Image> images) {
     this.images = images;
 }
-public Set<Cart> getCarts() {
-    return carts;
-}
-public void setCarts(Set<Cart> carts) {
-    this.carts = carts;
-}
+
 public ProductRequest(Long id, String name, String brand, BigDecimal price, int inventory, String description,
-        Category category, Instant createAt, Instant updateAt, List<Image> images, Set<Cart> carts) {
+        Category category, Instant createAt, Instant updateAt, List<Image> images) {
     this.id = id;
     this.name = name;
     this.brand = brand;
@@ -111,7 +104,6 @@ public ProductRequest(Long id, String name, String brand, BigDecimal price, int 
     this.createAt = createAt;
     this.updateAt = updateAt;
     this.images = images;
-    this.carts = carts;
 }
 public ProductRequest() {
 }

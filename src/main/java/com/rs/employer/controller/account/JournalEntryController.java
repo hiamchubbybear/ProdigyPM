@@ -60,7 +60,7 @@ public class JournalEntryController {
     }
 
     @GetMapping("/by-customer")
-    public ApiRespone<Optional<JournalEntry>> getJournalEntryByCustomer(@RequestBody Customer customer) {
+    public ApiRespone<Optional<JournalEntry>> getJournalEntryByCustomer(@PathVariable String customer) {
         Optional<JournalEntry> journalEntry = journalEntryService.getJournalEntryByCustomer(customer);
         return new ApiRespone<>(journalEntry);
     }

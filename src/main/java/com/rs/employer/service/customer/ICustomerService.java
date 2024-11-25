@@ -1,5 +1,6 @@
 package com.rs.employer.service.customer;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.UUID;
@@ -31,5 +32,5 @@ public interface ICustomerService {
     public List<Customer> listAllSort(String sort);
     public ActivateAccountRespone activateRequest(ActivateRequestToken treq) throws ParseException, JOSEException;
     public ForgotAccountRespone forgotAccount(ForgotAccountRequest request) throws JOSEException;
-    public ByteArrayResource userImage(String username );
+    public ByteArrayResource userImage(String username ) throws IOException;
 }

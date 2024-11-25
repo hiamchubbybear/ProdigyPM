@@ -62,9 +62,6 @@ public class Customer {
   @Column(name = "dob")
   @JsonIgnore
   private LocalDate dob;
-  @OneToOne
-//   @JoinColumn(name = "cart", referencedColumnName = "id")
-  private Cart cart;
   String resetToken;
   @Lob
   @Column(name = "image", columnDefinition = "LONGBLOB")
@@ -72,7 +69,7 @@ public class Customer {
   @JsonIgnore
   private byte[] image;
 
-  public Customer(UUID uuid, String username, String password, String email, String name, String address, Set<Role> roles, boolean gender, boolean status, Instant create, Instant update, LocalDate dob, Cart cart, String resetToken, byte[] image) {
+  public Customer(UUID uuid, String username, String password, String email, String name, String address, Set<Role> roles, boolean gender, boolean status, Instant create, Instant update, LocalDate dob, String resetToken, byte[] image) {
     this.uuid = uuid;
     this.username = username;
     this.password = password;
@@ -85,7 +82,6 @@ public class Customer {
     this.create = create;
     this.update = update;
     this.dob = dob;
-    this.cart = cart;
     this.resetToken = resetToken;
     this.image = image;
   }
@@ -106,7 +102,7 @@ public class Customer {
     return resetToken;
   }
 
-  public Customer(UUID uuid, String username, String password, String email, String name, String address, Set<Role> roles, boolean gender, boolean status, Instant create, Instant update, LocalDate dob, Cart cart, String resetToken) {
+  public Customer(UUID uuid, String username, String password, String email, String name, String address, Set<Role> roles, boolean gender, boolean status, Instant create, Instant update, LocalDate dob, String resetToken) {
     this.uuid = uuid;
     this.username = username;
     this.password = password;
@@ -119,7 +115,6 @@ public class Customer {
     this.create = create;
     this.update = update;
     this.dob = dob;
-    this.cart = cart;
     this.resetToken = resetToken;
   }
 
@@ -127,22 +122,6 @@ public class Customer {
     this.resetToken = resetToken;
   }
 
-  public Customer(UUID uuid, @NotNull @Size(min = 8, max = 20, message = "USERNAME_INVALID") String username, String email,
-                  @Size(min = 8, message = "PASSWORD_INVALID") @NotBlank String password, String name, String address,
-                  Set<Role> roles, boolean gender, boolean status, Instant create, Instant update, LocalDate dob) {
-    this.uuid = uuid;
-    this.username = username;
-      this.email = email;
-      this.password = password;
-    this.name = name;
-    this.address = address;
-    this.roles = roles;
-    this.gender = gender;
-    this.status = status;
-    this.create = create;
-    this.update = update;
-    this.dob = dob;
-  }
 
   public UUID getUuid() {
     return uuid;
@@ -166,7 +145,7 @@ public class Customer {
 
   public Customer(UUID uuid, @NotNull @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username, String email,
                   @Size(min = 8, message = "PASSWORD_INVALID") String password, String name, String address, Set<Role> roles,
-                  boolean gender, boolean status, Instant create, Instant update, LocalDate dob, Cart cart) {
+                  boolean gender, boolean status, Instant create, Instant update, LocalDate dob) {
     this.uuid = uuid;
     this.username = username;
       this.email = email;
@@ -179,7 +158,6 @@ public class Customer {
     this.create = create;
     this.update = update;
     this.dob = dob;
-    this.cart = cart;
   }
 
   public void setPassword(String password) {
@@ -257,12 +235,6 @@ public class Customer {
   }
   public void setEmail(String email) {
     this.email = email;
-  }
-  public Cart getCart() {
-    return cart;
-  }
-  public void setCart(Cart cart) {
-    this.cart = cart;
   }
 
 }

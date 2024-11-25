@@ -17,8 +17,9 @@ public enum AccountingParrentEnum {
         REVENUE("Revenue", "Revenue"), // Doanh thu
 
         // Group: Expenses
-        EXPENSES("Expenses", "Expenses"); // Chi phí
-
+        EXPENSES("Expenses", "Expenses"), // Chi phí
+        ASSETS("Assets", "Assets"), // Parent for Asset Groups
+        LIABILITIES("Liabilities", "Liabilities");
         private final String description;
         private final String group;
 

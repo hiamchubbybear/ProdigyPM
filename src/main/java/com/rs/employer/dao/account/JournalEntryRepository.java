@@ -14,10 +14,10 @@ import java.util.Optional;
 
 @Repository
 public interface JournalEntryRepository extends JpaRepository<JournalEntry, Integer> {
-    @Query("SELECT je FROM JournalEntry je WHERE je.createdBy.username = :username")
+    @Query("SELECT je FROM JournalEntry je WHERE je.createdBy = :username")
     Optional<JournalEntry> findByCreatedByUsername(String username);
 
-    Optional<JournalEntry> findByCreatedBy(Customer createdBy);
+    Optional<JournalEntry> findByCreatedBy(String createdBy);
 
     List<JournalEntry> findByEntryDate(java.time.LocalDate entryDate);
 

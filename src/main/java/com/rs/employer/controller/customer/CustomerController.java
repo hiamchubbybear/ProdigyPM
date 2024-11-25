@@ -1,6 +1,8 @@
 package com.rs.employer.controller.customer;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.Base64;
 import java.util.List;
@@ -123,12 +125,8 @@ public class CustomerController {
     }
     @GetMapping(path = "/image")
     @PostAuthorize("#username == authentication.name")
-    public ApiRespone<ImageRespone> getImage(@RequestParam(name = "username") String username) throws IOException {
+    public ApiRespone<?> getImage(@RequestParam(name = "username") String username) throws IOException {
                 String imageResource = Base64.getEncoder().encodeToString(customerImplement.userImage(username).getByteArray());
-        if (imageResource == null) {
-            System.out.println("Cannot find image");
-            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
-        }
         return new ApiRespone<>(new ImageRespone(imageResource,username));
     }
 
