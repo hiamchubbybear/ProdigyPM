@@ -10,6 +10,14 @@ public class JournalEntryDetailRequestDTO {
     private BigDecimal debit;
     private BigDecimal credit;
     private String currency;
+    public JournalEntryDetailRequestDTO(Integer entryDetailId, Integer journalEntryId, String chartOfAccountCode, BigDecimal debit, BigDecimal credit, String currency) {
+        this.entryDetailId = entryDetailId;
+        this.journalEntryId = journalEntryId;
+        this.chartOfAccountCode = chartOfAccountCode;
+        this.debit = debit;
+        this.credit = credit;
+        this.currency = currency;
+    }
 
     public Integer getEntryDetailId() {
         return entryDetailId;

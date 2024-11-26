@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -18,13 +20,18 @@ import java.util.List;
 public class ChartOfAccountController {
 
     private ChartOfAccountService chartOfAccountService;
+
     @Autowired
     public ChartOfAccountController(ChartOfAccountService chartOfAccountService) {
         this.chartOfAccountService = chartOfAccountService;
     }
 
     @GetMapping("/all")
-    public ApiRespone<List<ChartOfAccounts>> getAll() {
-            return new ApiRespone<>(chartOfAccountService.getAllChartOfAccounts());
+    public ApiRespone<List<String>> getAll() {
+        List<String> res = chartOfAccountService.getAllChartOfAccounts().stream()
+                .filter((account) -> !"P".equals(account.getAccountType()))
+                .map((account) -> account.getAccountName()
+        ).collect(Collectors.toList());
+        return new ApiRespone<>(res);
     }
 }

@@ -17,7 +17,7 @@ public interface JournalEntryRepository extends JpaRepository<JournalEntry, Inte
     @Query("SELECT je FROM JournalEntry je WHERE je.createdBy = :username")
     Optional<JournalEntry> findByCreatedByUsername(String username);
 
-    Optional<JournalEntry> findByCreatedBy(String createdBy);
+    Optional<List<JournalEntry>> findAllByCreatedBy(String createdBy);
 
     List<JournalEntry> findByEntryDate(java.time.LocalDate entryDate);
 

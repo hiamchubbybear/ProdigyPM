@@ -2,21 +2,25 @@ package com.rs.employer.model.account;
 
 import com.rs.employer.model.customer.Customer;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 @Entity
 public class JournalEntry {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer entryId;
     private java.time.LocalDate entryDate;
     private String description;
     private Integer status;
     private String createdBy;
+    @CreatedDate
     private java.time.LocalDateTime createdDate;
     @OneToMany(mappedBy = "journalEntry")
-    private Set<JournalEntryDetail> details;
+    private List<JournalEntryDetail> details;
     public JournalEntry() {
     }
 
@@ -68,15 +72,15 @@ public class JournalEntry {
         this.createdDate = createdDate;
     }
 
-    public Set<JournalEntryDetail> getDetails() {
+    public List<JournalEntryDetail> getDetails() {
         return details;
     }
 
-    public void setDetails(Set<JournalEntryDetail> details) {
+    public void setDetails(List<JournalEntryDetail> details) {
         this.details = details;
     }
 
-    public JournalEntry(Integer entryId, LocalDate entryDate, String description, Integer status, String createdBy, LocalDateTime createdDate, Set<JournalEntryDetail> details) {
+    public JournalEntry(Integer entryId, LocalDate entryDate, String description, Integer status, String createdBy, LocalDateTime createdDate, List<JournalEntryDetail> details) {
         this.entryId = entryId;
         this.entryDate = entryDate;
         this.description = description;

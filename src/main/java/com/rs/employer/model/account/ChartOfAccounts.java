@@ -20,7 +20,6 @@ public class ChartOfAccounts {
     @JsonIgnore
     @OneToMany(mappedBy = "parentAccount")
     private List<ChartOfAccounts> childrenAccounts;
-    private java.math.BigDecimal balance;
 
     public ChartOfAccounts() {
     }
@@ -65,20 +64,11 @@ public class ChartOfAccounts {
         this.childrenAccounts = childrenAccounts;
     }
 
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    public ChartOfAccounts(String accountId, String accountName, String accountType, ChartOfAccounts parentAccount, List<ChartOfAccounts> childrenAccounts, BigDecimal balance) {
+    public ChartOfAccounts(String accountId, String accountName, String accountType, ChartOfAccounts parentAccount, List<ChartOfAccounts> childrenAccounts) {
         this.accountId = accountId;
         this.accountName = accountName;
         this.accountType = accountType;
         this.parentAccount = parentAccount;
         this.childrenAccounts = childrenAccounts;
-        this.balance = balance;
     }
 }
