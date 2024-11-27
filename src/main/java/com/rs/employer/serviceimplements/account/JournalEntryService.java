@@ -8,7 +8,10 @@ import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.JournalEntryMapper;
 import com.rs.employer.model.account.JournalEntry;
 import com.rs.employer.model.customer.Customer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,7 @@ import java.util.Optional;
 @Service
 public class JournalEntryService {
 
+	private static final Logger log = LoggerFactory.getLogger(JournalEntryService.class);
 	private JournalEntryRepository journalEntryRepository;
 	private JournalEntryMapper journalEntryMapper;
 	private CustomerRepo customerRepo;
@@ -34,13 +38,13 @@ public class JournalEntryService {
 		this.customerRepo = customerRepo;
 	}
 
-
-	public List<JournalEntry> getAllJournalEntries() {
+	public List<JournalEntry> getAllJournalEntries(String creator) {
 		String createBy = SecurityContextHolder.getContext().getAuthentication().getName();
-		Optional<List<JournalEntry>> optionalJournalEntries = journalEntryRepository.findAllByCreatedBy(createBy);
-		return journalEntryRepository.findAllByCreatedBy(createBy).orElseThrow(()
-				-> new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION));
-
+		log.info(createBy);
+//		if(creator.equals(createBy)) {
+			return journalEntryRepository.findAllByCreatedBy(creator).orElseThrow(()
+					-> new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION));
+//		} else throw new AppException(ErrorCode.USER_NOTFOUND);
 	}
 
 	public JournalEntry getJournalEntryById(Integer id) {
@@ -83,14 +87,18 @@ public class JournalEntryService {
 	}
 
 	public JournalEntry createJournalEntry(JournalEntryRequest journalEntry) {
-		String createBy = SecurityContextHolder.getContext().getAuthentication().getName();
-		JournalEntry entry = journalEntryMapper.toJournalEntry(journalEntry);
-		if (!customerRepo.existsByUsername(createBy))
-			throw new AppException(ErrorCode.USER_NOTFOUND);
-		else
-			entry.setCreatedBy(createBy);
-		entry.setCreatedDate(LocalDateTime.now());
-		return journalEntryRepository.save(entry);
+		try {
+			String createBy = SecurityContextHolder.getContext().getAuthentication().getName();
+			JournalEntry entry = journalEntryMapper.toJournalEntry(journalEntry);
+			if (!customerRepo.existsByUsername(createBy) || journalEntryRepository.existsByEntryDate(journalEntry.getEntryDate()))
+				throw new AppException(ErrorCode.NOT_FOUND_OR_EXISTED);
+			else
+				entry.setCreatedBy(createBy);
+			entry.setCreatedDate(LocalDateTime.now());
+			return journalEntryRepository.save(entry);
+		}catch(Exception e) {
+			throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+		}
 	}
 
 

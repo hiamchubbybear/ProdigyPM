@@ -11,6 +11,11 @@ import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -77,22 +82,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request -> request
-                .requestMatchers(PUBLIC_ENDPOINT)
-                .permitAll()
-                .requestMatchers(USER_ENDPOINT)
-                .permitAll()
-                // .hasAnyAuthority("SCOPE_USER", "SCOPE_ADMIN")
-                .requestMatchers(VENDOR_ENDPOINT)
-                .permitAll()
-                // .hasAnyAuthority("SCOPE_VENDOR", "SCOPE_ADMIN")
-                .requestMatchers(SUPPLIER_ENDPOINT)
-                .permitAll()
-                // .hasAnyAuthority("SCOPE_SUPPLIER", "SCOPE_ADMIN")
-                .requestMatchers(ADMIN_ENDPOINT)
-                .permitAll()
-//                 .hasAuthority("ADMIN")
+//                .requestMatchers(PUBLIC_ENDPOINT)
+//                .permitAll()
+//                .requestMatchers(USER_ENDPOINT)
+//                .permitAll()
+//
+//                .requestMatchers(VENDOR_ENDPOINT)
+//                .permitAll()
+//
+//                .requestMatchers(SUPPLIER_ENDPOINT)
+//                .permitAll()
+//
+//                .requestMatchers(ADMIN_ENDPOINT)
+//                .requestMatchers("/*/**")
                 .anyRequest()
-                .authenticated());
+                .permitAll());
+//                 .hasAuthority("ADMIN")
+//                .anyRequest()
+//                .authenticated());
 
         httpSecurity.csrf(CsrfConfigurer -> CsrfConfigurer.disable());
         httpSecurity.oauth2ResourceServer(
@@ -105,5 +112,11 @@ public class SecurityConfig {
     JwtDecoder jwtDecoder() {
         SecretKeySpec key = new SecretKeySpec(SIGNER_KEY.getBytes(), "HS256");
         return NimbusJwtDecoder.withSecretKey(key).macAlgorithm(MacAlgorithm.HS256).build();
+    }
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedHeader("*");
+        return null;
     }
 }

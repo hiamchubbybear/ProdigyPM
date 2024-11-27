@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface JournalEntryRepository extends JpaRepository<JournalEntry, Integer> {
     @Query("SELECT je FROM JournalEntry je WHERE je.createdBy = :username")
     Optional<JournalEntry> findByCreatedByUsername(String username);
-
+    Boolean existsByEntryDate(LocalDate date);
     Optional<List<JournalEntry>> findAllByCreatedBy(String createdBy);
 
     List<JournalEntry> findByEntryDate(java.time.LocalDate entryDate);

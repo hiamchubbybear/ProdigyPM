@@ -74,4 +74,5 @@ public class JournalEntryRequest {
         this.createdDate = createdDate;
         this.details = details;
     }
+
 }

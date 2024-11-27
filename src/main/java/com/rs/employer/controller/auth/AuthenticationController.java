@@ -31,7 +31,7 @@ public class AuthenticationController {
           var  status = customerRepo.findStatusByUsernameAndEmail(username);
           var email = customerRepo.findEmailByUsername(username);
           System.out.println(status);
-          if(customerRepo.existsByUsernameAndEmail(username,email) && status == true
+      if(customerRepo.existsByUsernameAndEmail(username,email) && status == true
                   || username.equals("admin")) {
                return new ApiRespone<>(authen.authentication(authenticated));
           } else {
