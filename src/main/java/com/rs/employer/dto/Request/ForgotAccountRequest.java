@@ -1,18 +1,13 @@
 package com.rs.employer.dto.Request;
 
 public class ForgotAccountRequest {
-     String username;
      String email;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public ForgotAccountRequest() {
     }
 
     public String getEmail() {
+
         return email;
     }
 
@@ -20,11 +15,7 @@ public class ForgotAccountRequest {
         this.email = email;
     }
 
-    public ForgotAccountRequest(String username, String newPassword, String email) {
-        this.username = username;
+    public ForgotAccountRequest(String email) {
         this.email = email;
-    }
-
-    public ForgotAccountRequest() {
     }
 }

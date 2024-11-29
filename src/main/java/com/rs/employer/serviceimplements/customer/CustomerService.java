@@ -5,10 +5,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.time.Instant;
 import java.util.*;
 
 import com.nimbusds.jose.JOSEException;
+import com.rs.employer.dao.customer.TokenRepository;
+import com.rs.employer.dao.customer.TokenService;
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.dto.Request.ForgotAccountRequest;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
@@ -36,6 +39,8 @@ import com.rs.employer.service.customer.ICustomerService;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.swing.text.html.Option;
+
 @Service
 @Slf4j
 
@@ -49,12 +54,14 @@ public class CustomerService implements ICustomerService {
     private final AuthenticationService authenticationService;
     private final EmailService emailService;
     private final Instant now = Instant.now();
+    private final TokenRepository tokenRepository;
+    private final TokenService tokenService;
 
     @Autowired
     public CustomerService(CustomerRepo customerRepository, RoleRepository roleRepository,
-                            PasswordEncoder passwordEncoder,
+                           PasswordEncoder passwordEncoder,
                            CustomerMapper mapper, CustomerRepo customerRepo,
-                           AuthenticationService authenticationService, EmailService emailService) {
+                           AuthenticationService authenticationService, EmailService emailService, TokenRepository tokenRepository, TokenService tokenService) {
         this.customerRepository = customerRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -62,19 +69,25 @@ public class CustomerService implements ICustomerService {
         this.customerRepo = customerRepo;
         this.authenticationService = authenticationService;
         this.emailService = emailService;
+        this.tokenRepository = tokenRepository;
+        this.tokenService = tokenService;
     }
 
 
     @Override
     public RegisterRespone register(RegisterRequest registerRequest) {
         try {
-            if (!(customerRepository.existsByEmail(registerRequest.getEmail()) || customerRepository.existsByUsername(registerRequest.getUsername()))) {
+            if (!(customerRepository.existsByEmail(registerRequest.getEmail()) && !customerRepository.existsByUsername(registerRequest.getUsername()))) {
                 Customer customer = new Customer();
                 customer.setUsername(registerRequest.getUsername());
                 customer.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
                 customer.setEmail(registerRequest.getEmail());
                 customer.setCreate(now);
                 customerRepository.save(customer);
+                var token = tokenService.checkTokenAndRegenerateToken(registerRequest.getEmail());
+                System.out.println("Token đã gửi là  " +token);
+                emailService.sendActivateToken(registerRequest.getEmail(),
+                        "Activate Token",token);
                 return new RegisterRespone(registerRequest.getUsername(), registerRequest.getPassword(), registerRequest.getEmail());
             }
         } catch (Exception e) {
@@ -98,6 +111,7 @@ public class CustomerService implements ICustomerService {
             return customerRepository.save(customer1);
         }
     }
+
     @Override
     @PostAuthorize("returnObject.username == authentication.name")
     public CustomerInfoDTO updateCustomer(CustomerInfoDTO customer) {
@@ -219,41 +233,55 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public ActivateAccountRespone activateRequest(ActivateRequestToken token) {
-        try {
-            var context = SecurityContextHolder.getContext().getAuthentication();
-            if (context != null && context.getPrincipal() instanceof Jwt) {
-                Jwt jwt = (Jwt) (context.getPrincipal());
-                String email = jwt.getClaim("email");
-                var name = jwt.getSubject();
-                if (token.getToken().equals(jwt.getId())) {
-                    if (customerRepository.existsByUsernameAndEmail(name, email)
-                            && customerRepo.findStatusByUsernameAndEmail(name) != true) {
-                        return (customerRepository.updateStatus(name) > 0)
-                                ? new ActivateAccountRespone(true)
-                                : new ActivateAccountRespone(false);
-                    }
-                } else {
-                    throw new AppException(ErrorCode.ACTIVATED_FAILED);
-                }
-            }
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
-        }
-        return new ActivateAccountRespone(false);
+    public ActivateAccountRespone activateRequest(ActivateRequestToken treq) throws ParseException, JOSEException {
+        if(tokenService.compareToken(treq.getToken() ,treq.getEmail())) {
+            Optional<Customer> foundCustomer = customerRepository.findByEmail(treq.getEmail());
+            System.out.println("Found customer: " + foundCustomer.get());
+            Customer customer = foundCustomer.get();
+            return customerRepository.updateStatus(customer.getUsername()) > 0 ?
+                    new ActivateAccountRespone(true) : new ActivateAccountRespone(false)
+                    ;
+        } else throw new AppException(ErrorCode.ACTIVATED_FAILED);
     }
 
+//    @Override
+//    public ActivateAccountRespone activateRequest(ActivateRequestToken token) {
+//        try {
+//            var context = SecurityContextHolder.getContext().getAuthentication();
+//            if (context != null && context.getPrincipal() instanceof Jwt) {
+//                Jwt jwt = (Jwt) (context.getPrincipal());
+//                String email = jwt.getClaim("email");
+//                var name = jwt.getSubject();
+//                if (token.getToken().equals(jwt.getId())) {
+//                    if (customerRepository.existsByUsernameAndEmail(name, email)
+//                            && customerRepo.findStatusByUsernameAndEmail(name) != true) {
+//                        return (customerRepository.updateStatus(name) > 0)
+//                                ? new ActivateAccountRespone(true)
+//                                : new ActivateAccountRespone(false);
+//                    }
+//                } else {
+//                    throw new AppException(ErrorCode.ACTIVATED_FAILED);
+//                }
+//            }
+//        } catch (Exception e) {
+//            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+//        }
+//        return new ActivateAccountRespone(false);
+//    }
+
+
     @Override
-    public ForgotAccountRespone forgotAccount(ForgotAccountRequest request) throws JOSEException {
-        var email = request.getEmail();
-        String token = authenticationService.ResetPasswordToken(request.getUsername(), request.getEmail());
+    public ForgotAccountRespone forgotAccount(String email) throws JOSEException {
+        var object = customerRepo.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION));
+        var token = tokenRepository.findTokenByCustomerEmailAndUsed(email,false);
+//        String token = authenticationService.ResetPasswordToken(username, email);
         if (customerRepository.existsByUsernameAndEmail
-                (request.getUsername(), request.getEmail())) {
-            String link = new StringBuilder().
-                    append("http://localhost:3000/api/customer/resetpwd?").
+                (object.getUsername(), email)) {
+            String toClient = new StringBuilder().
                     append(token).toString();
-            emailService.sendResetPasswordLink(email, "", link);
-            return new ForgotAccountRespone(true, "Your auth link sent to your email", token);
+            emailService.sendResetPasswordLink(email, "", toClient);
+            System.out.println();
+            return new ForgotAccountRespone(true, "Your reset token sent to your email" ,  toClient);
         }
         return new ForgotAccountRespone(false, "Failed", "null");
     }
@@ -276,5 +304,14 @@ public class CustomerService implements ICustomerService {
         }
     }
 
+    public boolean confirmForgotPasswordCode(String passcode, String email) {
+        var customer = customerRepository.findByEmail(email).get();
+        var token = tokenRepository.findTokenByCustomerEmailAndUsed(email,false);
+        if (customer != null) {
+            if (passcode.equals(token)) {
+                return true;
+            } else return false;
+        } else throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+    }
 
 }

@@ -118,8 +118,8 @@ public class CustomerController {
 
 
     @PostMapping(path = "/resetpwd")
-    public ApiRespone<ForgotAccountRespone> resetPassword(@RequestBody ForgotAccountRequest request) throws JOSEException {
-        return new ApiRespone(customerImplement.forgotAccount(request));
+    public ApiRespone<ForgotAccountRespone> resetPassword(@RequestParam String email) throws JOSEException {
+        return new ApiRespone(customerImplement.forgotAccount(email));
     }
     @PostMapping("/upload")
 
@@ -139,5 +139,9 @@ public class CustomerController {
                 String imageResource = Base64.getEncoder().encodeToString(customerImplement.userImage(username).getByteArray());
         return new ApiRespone<>(new ImageRespone(imageResource,username));
     }
-
+    @PostMapping(path = "/cfpwd/{passcode}/{email}")
+//    public ApiRespone<Boolean> confirmForgotPassword (@RequestParam String passcode , @RequestParam String email) {
+        public ApiRespone<Boolean> confirmForgotPassword (@PathVariable String passcode , @PathVariable String email) {
+        return new ApiRespone<>(customerImplement.confirmForgotPasswordCode(passcode , email));
+    }
 }

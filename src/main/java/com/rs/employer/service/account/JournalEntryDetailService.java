@@ -52,7 +52,6 @@ public class JournalEntryDetailService {
 
     public JournalEntryDetail createJournalEntryDetail(JournalEntryDetailRequestDTO journalEntryRequest) {
         String authenticator  = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println("Người dùng là "  +authenticator);
         JournalEntryDetail journalEntryDetail = journalEntryDetailMapper.map(journalEntryRequest);
         if(!customerRepo.existsByUsername(authenticator))
             throw new AppException(ErrorCode.USER_NOTFOUND);

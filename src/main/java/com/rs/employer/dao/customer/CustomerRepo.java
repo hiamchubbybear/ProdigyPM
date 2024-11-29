@@ -23,8 +23,7 @@ public interface CustomerRepo extends JpaRepository<Customer, UUID> {
     boolean existsByEmail(String email);
     @Query("SELECT c FROM Customer c WHERE c.username = :username")
     Optional<Customer> findByUsername(@Param("username") String username);
-
-
+    Optional<Customer> findByEmail(String email);
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Customer c WHERE c.username = :username AND c.email = :email")
     boolean existsByUsernameAndEmail(@Param("username") String username,@Param("email") String email);
 
@@ -46,10 +45,10 @@ public interface CustomerRepo extends JpaRepository<Customer, UUID> {
     @Query("SELECT c.image FROM Customer c WHERE c.username = :username")
     Optional<byte[]> findImageByUsername(@Param("username") String username);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE Customer c SET c.resetToken = :resetToken WHERE c.username = :username")
-    void updateResetToken(@Param("username") String username, @Param("resetToken") String resetToken);
+//    @Modifying
+//    @Transactional
+//    @Query("UPDATE Customer c SET c.token = :resetToken WHERE c.username = :username")
+//    void updateResetToken(@Param("username") String username, @Param("resetToken") String resetToken);
     @Query(value = "select " +
             "w.product_id as Product_Id, " +
             "w.name_product as Product_Name, " +

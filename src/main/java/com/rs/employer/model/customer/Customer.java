@@ -62,29 +62,13 @@ public class Customer {
   @Column(name = "dob")
   @JsonIgnore
   private LocalDate dob;
-  String resetToken;
+  @OneToMany(mappedBy = "customer" , cascade = CascadeType.ALL , orphanRemoval = true)
+  private Set<Token> token;
   @Lob
   @Column(name = "image", columnDefinition = "LONGBLOB")
   @Nullable
   @JsonIgnore
   private byte[] image;
-
-  public Customer(UUID uuid, String username, String password, String email, String name, String address, Set<Role> roles, boolean gender, boolean status, Instant create, Instant update, LocalDate dob, String resetToken, byte[] image) {
-    this.uuid = uuid;
-    this.username = username;
-    this.password = password;
-    this.email = email;
-    this.name = name;
-    this.address = address;
-    this.roles = roles;
-    this.gender = gender;
-    this.status = status;
-    this.create = create;
-    this.update = update;
-    this.dob = dob;
-    this.resetToken = resetToken;
-    this.image = image;
-  }
 
   public byte[] getImage() {
     return image;
@@ -98,11 +82,16 @@ public class Customer {
     return status;
   }
 
-  public String getResetToken() {
-    return resetToken;
+
+  public Set<Token> getToken() {
+    return token;
   }
 
-  public Customer(UUID uuid, String username, String password, String email, String name, String address, Set<Role> roles, boolean gender, boolean status, Instant create, Instant update, LocalDate dob, String resetToken) {
+  public void setToken(Set<Token> token) {
+    this.token = token;
+  }
+
+  public Customer(UUID uuid, String username, String password, String email, String name, String address, Set<Role> roles, boolean gender, boolean status, Instant create, Instant update, LocalDate dob, Set<Token> token, @Nullable byte[] image) {
     this.uuid = uuid;
     this.username = username;
     this.password = password;
@@ -115,13 +104,9 @@ public class Customer {
     this.create = create;
     this.update = update;
     this.dob = dob;
-    this.resetToken = resetToken;
+    this.token = token;
+    this.image = image;
   }
-
-  public void setResetToken(String resetToken) {
-    this.resetToken = resetToken;
-  }
-
 
   public UUID getUuid() {
     return uuid;

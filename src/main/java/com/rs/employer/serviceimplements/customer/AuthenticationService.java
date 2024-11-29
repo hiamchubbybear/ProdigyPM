@@ -66,7 +66,6 @@ public class AuthenticationService {
         if (!authenticated)
             throw new AppException(ErrorCode.USER_UNAUTHENTICATED);
         else {
-//            if(repo.findStatusByUsernameAndEmail())
             var token = generateToken(user);
             AuthenticationRespone aps = new AuthenticationRespone();
             aps.setToken(token);
@@ -142,7 +141,7 @@ public class AuthenticationService {
     public String ResetPasswordToken(String username , String email ) throws JOSEException {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
         long token = 100000L + new Random().nextInt(900000);
-        repo.updateResetToken(username,String.valueOf(token));
+//        repo.updateResetToken(username,String.valueOf(token));
         System.out.println("Update token to reset token" + token);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject(username).issuer("Chessy")
                 .claim("email", email)

@@ -18,13 +18,16 @@ public enum ErrorCode {
     PRODUCT_EXISTED(1007, "Product existed", HttpStatus.BAD_REQUEST),
     RUNTIME_ERROR(1005, "Run time error", HttpStatus.TOO_MANY_REQUESTS),
     PRODUCT_EXISTED_CART(1009, "Product added into cart", HttpStatus.NOT_ACCEPTABLE),
-    CATEGORY_NOTFOUND(1011, "Category not found" , HttpStatus.NOT_FOUND),
-    BRAND_NOTFOUND(1013, "Brand not found" , HttpStatus.NOT_FOUND),
-    IMAGES_NOTFOUND(1012, "Images not found" , HttpStatus.NOT_FOUND),
+    CATEGORY_NOTFOUND(1011, "Category not found", HttpStatus.NOT_FOUND),
+    BRAND_NOTFOUND(1013, "Brand not found", HttpStatus.NOT_FOUND),
+    IMAGES_NOTFOUND(1012, "Images not found", HttpStatus.NOT_FOUND),
     CART_NOT_FOUNT(1010, "Cart not exists or can't be find ", HttpStatus.NOT_ACCEPTABLE),
-    USEREXISTED_OR_USERIDEXISTED(1008, "Userid  existed or Username existed", HttpStatus.BAD_REQUEST) ,
-    NOT_FOUND_OR_EXISTED(1014, "Can not found or  existed", HttpStatus.CONFLICT) ,
-    ACTIVATED_FAILED(1003, "Activated failed", HttpStatus.CONFLICT),;
+    USEREXISTED_OR_USERIDEXISTED(1008, "Userid  existed or Username existed", HttpStatus.BAD_REQUEST),
+    NOT_FOUND_OR_EXISTED(1014, "Can not found or  existed", HttpStatus.CONFLICT),
+    ACTIVATED_FAILED(1003, "Activated failed", HttpStatus.CONFLICT),
+    TOKEN_NOTFOUND(1015, "Token not found or expired", HttpStatus.NOT_FOUND),
+    TOKEN_INVALID(1015, "Token is used or has expired", HttpStatus.NOT_ACCEPTABLE),
+    NOT_MATCH(1016, "Account doesn't match with system", HttpStatus.NOT_ACCEPTABLE);
 
     private int code;
     private String status;

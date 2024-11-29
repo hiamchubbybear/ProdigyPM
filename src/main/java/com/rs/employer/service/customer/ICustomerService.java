@@ -31,6 +31,6 @@ public interface ICustomerService {
     public Customer registerUser(UUID id, String password, String login);
     public List<Customer> listAllSort(String sort);
     public ActivateAccountRespone activateRequest(ActivateRequestToken treq) throws ParseException, JOSEException;
-    public ForgotAccountRespone forgotAccount(ForgotAccountRequest request) throws JOSEException;
+    public ForgotAccountRespone forgotAccount(String request) throws JOSEException;
     public ByteArrayResource userImage(String username ) throws IOException;
 }
