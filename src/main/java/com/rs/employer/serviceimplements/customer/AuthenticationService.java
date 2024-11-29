@@ -66,6 +66,7 @@ public class AuthenticationService {
         if (!authenticated)
             throw new AppException(ErrorCode.USER_UNAUTHENTICATED);
         else {
+//            if(repo.findStatusByUsernameAndEmail())
             var token = generateToken(user);
             AuthenticationRespone aps = new AuthenticationRespone();
             aps.setToken(token);

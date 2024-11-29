@@ -3,6 +3,8 @@ package com.rs.employer.dao.account;
 
 import com.rs.employer.model.account.JournalEntry;
 import com.rs.employer.model.customer.Customer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,7 +20,7 @@ public interface JournalEntryRepository extends JpaRepository<JournalEntry, Inte
     Optional<JournalEntry> findByCreatedByUsername(String username);
     Boolean existsByEntryDate(LocalDate date);
     Optional<List<JournalEntry>> findAllByCreatedBy(String createdBy);
-
+    Page<JournalEntry> findByCreatedBy(String createBy , Pageable pageable);
     List<JournalEntry> findByEntryDate(java.time.LocalDate entryDate);
 
     List<JournalEntry> findByStatus(Integer status);

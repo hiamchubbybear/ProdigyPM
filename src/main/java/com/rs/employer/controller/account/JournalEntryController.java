@@ -1,11 +1,15 @@
 package com.rs.employer.controller.account;
-
 import com.rs.employer.apirespone.ApiRespone;
+import com.rs.employer.dao.account.JournalEntryRepository;
 import com.rs.employer.dto.Request.JournalEntryRequest;
+
 import com.rs.employer.model.account.JournalEntry;
 import com.rs.employer.model.customer.Customer;
 import com.rs.employer.serviceimplements.account.JournalEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,18 +22,41 @@ import java.util.Optional;
 @RequestMapping(value = "/api/journal-entries")
 public class JournalEntryController {
     private final JournalEntryService journalEntryService;
+    private final JournalEntryRepository journalEntryRepository;
 
     @Autowired
-    public JournalEntryController(JournalEntryService journalEntryService) {
+    public JournalEntryController(JournalEntryService journalEntryService, JournalEntryRepository journalEntryRepository) {
         this.journalEntryService = journalEntryService;
+        this.journalEntryRepository = journalEntryRepository;
+    }
+    @GetMapping("/all")
+    public ApiRespone<List<JournalEntry>> getAll () {
+        return new ApiRespone<>(journalEntryRepository.findAll());
     }
 
+    /**
+     *
+     * @param createBy
+     * @param page
+     * @param size
+     * @exception : when user doesn't map with sub on bearer token
+     * @apiNote 
+     * @return : a page formated journal entry objects
+     */
     @GetMapping("/createBy")
-//    @PostAuthorize("returnObject.stream().allMatch(entry -> entry.createdBy == authentication.principal.username)")
-    public ApiRespone<List<JournalEntry>> getAllJournalEntries(@RequestParam String createBy) {
-        List<JournalEntry> journalEntries = journalEntryService.getAllJournalEntries(createBy);
+    public ApiRespone<Page<JournalEntry>> getAllJournalEntries(
+            @RequestParam String createBy,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        System.out.println("createBy: " + createBy);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<JournalEntry> journalEntries = journalEntryService.getAllJournalEntries(createBy, pageable);
         return new ApiRespone<>(journalEntries);
     }
+
+
+
 
     @GetMapping("/{entryId}")
     public ApiRespone<JournalEntry> getJournalEntryById(@PathVariable Integer entryId) {

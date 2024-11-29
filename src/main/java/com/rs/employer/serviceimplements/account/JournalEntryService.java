@@ -11,10 +11,11 @@ import com.rs.employer.model.customer.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,13 +39,10 @@ public class JournalEntryService {
 		this.customerRepo = customerRepo;
 	}
 
-	public List<JournalEntry> getAllJournalEntries(String creator) {
+	public Page<JournalEntry> getAllJournalEntries(String creator, Pageable pageable) {
 		String createBy = SecurityContextHolder.getContext().getAuthentication().getName();
 		log.info(createBy);
-//		if(creator.equals(createBy)) {
-			return journalEntryRepository.findAllByCreatedBy(creator).orElseThrow(()
-					-> new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION));
-//		} else throw new AppException(ErrorCode.USER_NOTFOUND);
+			return journalEntryRepository.findByCreatedBy(creator, pageable);
 	}
 
 	public JournalEntry getJournalEntryById(Integer id) {

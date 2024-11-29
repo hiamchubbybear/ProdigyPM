@@ -4,9 +4,13 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.AbstractConfiguredSecurityBuilder;
+import org.springframework.security.config.annotation.SecurityBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -14,13 +18,14 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SecurityConfig {
+public class SecurityConfig  {
     private final String[] PUBLIC_ENDPOINT = {
             "/api/customer/add",
             "/api/customer/hello",
@@ -100,7 +105,7 @@ public class SecurityConfig {
 //                 .hasAuthority("ADMIN")
 //                .anyRequest()
 //                .authenticated());
-
+        httpSecurity.cors(AbstractHttpConfigurer::disable);
         httpSecurity.csrf(CsrfConfigurer -> CsrfConfigurer.disable());
         httpSecurity.oauth2ResourceServer(
                 oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
@@ -119,4 +124,5 @@ public class SecurityConfig {
         configuration.addAllowedHeader("*");
         return null;
     }
+
 }

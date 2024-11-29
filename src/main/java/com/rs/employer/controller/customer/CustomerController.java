@@ -90,14 +90,22 @@ public class CustomerController {
 
         return  new ApiRespone(customerImplement.listAllSort(value));
     }
+
+    /**
+     *
+     * @param customer
+     * @return
+     */
     @PostMapping(path = "/register")
     public ApiRespone<Customer> registerCustomer(@RequestBody RegisterRequest customer) {
         return new ApiRespone(customerImplement.register(customer));
     }
+
     @PutMapping(path = "/updateUser")
     public ApiRespone<Customer> updateCustomerData(@RequestBody CustomerUpdateRespone customer) {
         return new ApiRespone(customerImplement.customerRequest(customer));
     }
+
     @PostMapping(path = "/activate")
     public ApiRespone<ActivateAccountRespone> activateAccount(
             @RequestBody ActivateRequestToken request
@@ -107,6 +115,8 @@ public class CustomerController {
         }
         return new ApiRespone<>(customerImplement.activateRequest(request));
     }
+
+
     @PostMapping(path = "/resetpwd")
     public ApiRespone<ForgotAccountRespone> resetPassword(@RequestBody ForgotAccountRequest request) throws JOSEException {
         return new ApiRespone(customerImplement.forgotAccount(request));
