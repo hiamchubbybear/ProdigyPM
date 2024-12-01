@@ -1,38 +1,22 @@
 package com.rs.employer.dto.Request;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class JournalEntryDetailRequestDTO {
 
-    private Integer entryDetailId;
-    private Integer journalEntryId;
+    private LocalDate journalEntryDate;
     private String chartOfAccountCode;
     private BigDecimal debit;
     private BigDecimal credit;
     private String currency;
-    public JournalEntryDetailRequestDTO(Integer entryDetailId, Integer journalEntryId, String chartOfAccountCode, BigDecimal debit, BigDecimal credit, String currency) {
-        this.entryDetailId = entryDetailId;
-        this.journalEntryId = journalEntryId;
-        this.chartOfAccountCode = chartOfAccountCode;
-        this.debit = debit;
-        this.credit = credit;
-        this.currency = currency;
+
+    public LocalDate getJournalEntryDate() {
+        return journalEntryDate;
     }
 
-    public Integer getEntryDetailId() {
-        return entryDetailId;
-    }
-
-    public void setEntryDetailId(Integer entryDetailId) {
-        this.entryDetailId = entryDetailId;
-    }
-
-    public Integer getJournalEntryId() {
-        return journalEntryId;
-    }
-
-    public void setJournalEntryId(Integer journalEntryId) {
-        this.journalEntryId = journalEntryId;
+    public void setJournalEntryDate(LocalDate journalEntryDate) {
+        this.journalEntryDate = journalEntryDate;
     }
 
     public String getChartOfAccountCode() {
@@ -64,6 +48,14 @@ public class JournalEntryDetailRequestDTO {
     }
 
     public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public JournalEntryDetailRequestDTO(LocalDate journalEntryDate, String chartOfAccountCode, BigDecimal debit, BigDecimal credit, String currency) {
+        this.journalEntryDate = journalEntryDate;
+        this.chartOfAccountCode = chartOfAccountCode;
+        this.debit = debit;
+        this.credit = credit;
         this.currency = currency;
     }
 }

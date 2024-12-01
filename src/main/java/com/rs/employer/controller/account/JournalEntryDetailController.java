@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/journal-entry-detail")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class JournalEntryDetailController {
     private final JournalEntryDetailService journalEntryDetailService;
 
@@ -34,9 +35,8 @@ public class JournalEntryDetailController {
     }
 
     @PostMapping
-    public ApiRespone<JournalEntryDetail> createJournalEntryDetail(@RequestBody JournalEntryDetailRequestDTO journalEntryDetail) {
-        JournalEntryDetail createdJournalEntryDetail = journalEntryDetailService.createJournalEntryDetail(journalEntryDetail);
-        return new ApiRespone<>(createdJournalEntryDetail);
+    public ApiRespone<Boolean> createJournalEntryDetail(@RequestBody JournalEntryDetailRequestDTO journalEntryDetail) {
+        return new ApiRespone<>(journalEntryDetailService.createJournalEntryDetail(journalEntryDetail));
     }
 
     @PutMapping("/{id}")

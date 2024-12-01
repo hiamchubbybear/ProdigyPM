@@ -64,8 +64,8 @@ public class JournalEntryService {
 		return journalEntryRepository.findByCreatedByUsername(username);
 	}
 
-	public List<JournalEntry> getJournalEntriesByDate(LocalDate entryDate) {
-		return journalEntryRepository.findByEntryDate(entryDate);
+	public JournalEntry getJournalEntriesByDate(LocalDate entryDate) {
+		return journalEntryRepository.findByEntryDate(entryDate).get();
 	}
 
 	public List<JournalEntry> getJournalEntriesByStatus(Integer status) {
@@ -109,6 +109,9 @@ public class JournalEntryService {
 
 	public Optional<JournalEntry> getJournalEntryByCustomer(String customer) {
 		return null;
+	}
+	public List<Integer> findAllJournalEntryIds() {
+		return journalEntryRepository.findAllEntryIds();
 	}
 }
 

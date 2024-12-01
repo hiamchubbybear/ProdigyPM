@@ -27,7 +27,7 @@ public class TokenService {
         this.customerRepo = customerRepo;
     }
     public String checkTokenAndRegenerateToken(String email) {
-        Token tk = tokenRepository.findTokenByCustomerEmail(email).orElse(null);
+        Token tk = tokenRepository.findTokenByCustomerEmailAndUsed(email,false).orElse(null);
         if (tk == null || tk.isUsed() || tk.getExpireDate().isBefore(LocalDateTime.now())) {
             return generateTokenAndSave(email);
         }
@@ -51,7 +51,6 @@ public class TokenService {
 
         return newToken;
     }
-
     public Boolean compareToken(String token, String email) {
         Optional<Token> optionalToken = tokenRepository.findTokenByCustomerEmailAndUsed(email,false);
         if (optionalToken.isEmpty()) {

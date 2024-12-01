@@ -21,14 +21,13 @@ public interface JournalEntryRepository extends JpaRepository<JournalEntry, Inte
     Boolean existsByEntryDate(LocalDate date);
     Optional<List<JournalEntry>> findAllByCreatedBy(String createdBy);
     Page<JournalEntry> findByCreatedBy(String createBy , Pageable pageable);
-    List<JournalEntry> findByEntryDate(java.time.LocalDate entryDate);
 
     List<JournalEntry> findByStatus(Integer status);
-
     List<JournalEntry> findByDescriptionContaining(String description);
-
+    Optional<JournalEntry> findByEntryDate(LocalDate date);
     List<JournalEntry> findByEntryDateBetween(java.time.LocalDate fromDate, java.time.LocalDate toDate);
-
+    @Query("SELECT j.entryId FROM JournalEntry j ")
+    List<Integer> findAllEntryIds();
     @Query("SELECT j FROM JournalEntry j WHERE j.createdBy = :createdBy AND j.entryDate BETWEEN :startDate AND :endDate")
     List<JournalEntry> findJournalEntriesByCustomerAndDateRange(@Param("createdBy") Customer createdBy,
                                                                 @Param("startDate") LocalDate startDate,

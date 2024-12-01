@@ -273,16 +273,15 @@ public class CustomerService implements ICustomerService {
     @Override
     public ForgotAccountRespone forgotAccount(String email) throws JOSEException {
         var object = customerRepo.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION));
-        var token = tokenRepository.findTokenByCustomerEmailAndUsed(email,false);
-//        String token = authenticationService.ResetPasswordToken(username, email);
+         String token = tokenService.checkTokenAndRegenerateToken(email);
         if (customerRepository.existsByUsernameAndEmail
                 (object.getUsername(), email)) {
-            String toClient = new StringBuilder().
-                    append(token).toString();
-            emailService.sendResetPasswordLink(email, "", toClient);
-            System.out.println();
-            return new ForgotAccountRespone(true, "Your reset token sent to your email" ,  toClient);
-        }
+                String toClient = new StringBuilder().
+                        append(token).toString();
+                emailService.sendResetPasswordLink(email, "", toClient);
+                System.out.println();
+                return new ForgotAccountRespone(true, "Your reset token sent to your email" ,  toClient);
+            }
         return new ForgotAccountRespone(false, "Failed", "null");
     }
 

@@ -3,20 +3,25 @@ package com.rs.employer.service.account;
 import com.rs.employer.dao.account.ChartOfAccountRepository;
 import com.rs.employer.dao.account.JournalEntryDetailRepository;
 import com.rs.employer.dao.account.JournalEntryRepository;
+import com.rs.employer.dao.customer.AccountRepository;
 import com.rs.employer.dao.customer.CustomerRepo;
 import com.rs.employer.dto.Request.JournalEntryDetailRequestDTO;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.JournalEntryDetailMapper;
+import com.rs.employer.model.account.JournalEntry;
 import com.rs.employer.model.account.JournalEntryDetail;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class JournalEntryDetailService {
@@ -25,18 +30,20 @@ public class JournalEntryDetailService {
     private final ChartOfAccountRepository chartOfAccountRepository;
     private final JournalEntryRepository journalEntryRepository;
     private final CustomerRepo customerRepo;
+    private final AccountRepository accountRepository;
 
     @Autowired
     public JournalEntryDetailService(JournalEntryDetailRepository journalEntryDetailRepository,
                                      JournalEntryDetailMapper journalEntryDetailMapper,
                                      ChartOfAccountRepository chartOfAccountRepository,
                                      JournalEntryRepository journalEntryRepository,
-                                     CustomerRepo customerRepo) {
+                                     CustomerRepo customerRepo, AccountRepository accountRepository) {
         this.journalEntryDetailRepository = journalEntryDetailRepository;
         this.journalEntryDetailMapper = journalEntryDetailMapper;
         this.chartOfAccountRepository = chartOfAccountRepository;
         this.journalEntryRepository = journalEntryRepository;
         this.customerRepo = customerRepo;
+        this.accountRepository = accountRepository;
     }
 
 
@@ -48,18 +55,33 @@ public class JournalEntryDetailService {
     public Optional<JournalEntryDetail> getJournalEntryDetailById(Integer id) {
         return journalEntryDetailRepository.findById(id);
     }
-
-
-    public JournalEntryDetail createJournalEntryDetail(JournalEntryDetailRequestDTO journalEntryRequest) {
-        String authenticator  = SecurityContextHolder.getContext().getAuthentication().getName();
+    @Transactional
+    public Boolean createJournalEntryDetail(JournalEntryDetailRequestDTO journalEntryRequest) {
+        String authenticator = SecurityContextHolder.getContext().getAuthentication().getName();
         JournalEntryDetail journalEntryDetail = journalEntryDetailMapper.map(journalEntryRequest);
-        if(!customerRepo.existsByUsername(authenticator))
-            throw new AppException(ErrorCode.USER_NOTFOUND);
         journalEntryDetail.setCreateDate(LocalDate.now());
         journalEntryDetail.setCreateBy(authenticator);
-        journalEntryDetail.setJournalEntry(journalEntryRepository.findById(journalEntryRequest.getJournalEntryId()).get());
-        journalEntryDetail.setAccount(chartOfAccountRepository.findById(journalEntryRequest.getChartOfAccountCode()).get());
-        return journalEntryDetailRepository.save(journalEntryDetail);
+        var account = accountRepository.findByAccountId(journalEntryRequest.getChartOfAccountCode());
+        if (account == null) {
+            throw new IllegalArgumentException("Account không tồn tại!");
+        }
+        journalEntryDetail.setAccount(account);
+        JournalEntry journal = journalEntryRepository.findByEntryDate(journalEntryDetail.getCreateDate())
+                .orElseGet(() -> {
+                    JournalEntry newJournalEntry = new JournalEntry(
+                            Integer.MAX_VALUE,
+                            journalEntryRequest.getJournalEntryDate(),
+                            null,
+                            0,
+                            authenticator,
+                            LocalDateTime.now(),
+                            List.of(journalEntryDetail)
+                    );
+                    return journalEntryRepository.save(newJournalEntry);
+                });
+        journalEntryDetail.setJournalEntry(journal);
+        journalEntryDetailRepository.save(journalEntryDetail);
+        return true;
     }
 
 

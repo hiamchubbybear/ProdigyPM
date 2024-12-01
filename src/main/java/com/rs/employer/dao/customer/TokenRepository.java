@@ -10,7 +10,6 @@ import java.util.Optional;
 @Repository
 public interface TokenRepository extends JpaRepository<Token, Long> {
         Optional<Token> findByToken(String token);
-
         void deleteByExpireDateBefore(LocalDateTime now);
         Optional<Token> findTokenByCustomerEmailAndUsed(String username , boolean used);
         boolean existsByToken(String newToken);

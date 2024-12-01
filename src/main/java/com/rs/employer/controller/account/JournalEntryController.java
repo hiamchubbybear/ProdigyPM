@@ -95,8 +95,8 @@ public class JournalEntryController {
 //    }
 
     @GetMapping("/entryDate")
-    public ApiRespone<List<JournalEntry>> getJournalEntriesByDate(@RequestParam String entryDate) {
-        List<JournalEntry> journalEntries = journalEntryService.getJournalEntriesByDate(LocalDate.parse(entryDate));
+    public ApiRespone<JournalEntry> getJournalEntriesByDate(@RequestParam String entryDate) {
+        JournalEntry journalEntries = journalEntryService.getJournalEntriesByDate(LocalDate.parse(entryDate));
         return new ApiRespone<>(journalEntries);
     }
 
@@ -125,5 +125,9 @@ public class JournalEntryController {
             @RequestParam LocalDate endDate) {
         List<JournalEntry> journalEntries = journalEntryService.getJournalEntriesByCustomerAndDateRange(customer, startDate, endDate);
         return new ApiRespone<>(journalEntries);
+    }
+    @GetMapping("/all-id")
+    public ApiRespone<List<Integer>> getAllJournalEntries() {
+        return new ApiRespone<>(journalEntryService.findAllJournalEntryIds());
     }
 }
