@@ -11,11 +11,9 @@ public class JournalEntryRequest {
     private LocalDate entryDate;
     private String description;
     private Integer status;
+    private String createBy;
     private LocalDateTime createdDate;
-    private Set<JournalEntryDetail> details;
 
-    public JournalEntryRequest() {
-    }
 
     public Integer getEntryId() {
         return entryId;
@@ -49,8 +47,6 @@ public class JournalEntryRequest {
         this.status = status;
     }
 
-
-
     public LocalDateTime getCreatedDate() {
         return createdDate;
     }
@@ -59,20 +55,20 @@ public class JournalEntryRequest {
         this.createdDate = createdDate;
     }
 
-    public Set<JournalEntryDetail> getDetails() {
-        return details;
+    public String getCreateBy() {
+        return createBy;
     }
 
-    public void setDetails(Set<JournalEntryDetail> details) {
-        this.details = details;
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
     }
-    public JournalEntryRequest(Integer entryId, LocalDate entryDate, String description, Integer status, LocalDateTime createdDate, Set<JournalEntryDetail> details) {
+
+    public JournalEntryRequest(Integer entryId, LocalDate entryDate, String description, Integer status, String createBy, LocalDateTime createdDate) {
         this.entryId = entryId;
         this.entryDate = entryDate;
         this.description = description;
         this.status = status;
+        this.createBy = createBy;
         this.createdDate = createdDate;
-        this.details = details;
     }
-
 }

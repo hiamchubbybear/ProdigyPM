@@ -42,7 +42,7 @@ public class JournalEntryService {
 	public Page<JournalEntry> getAllJournalEntries(String creator, Pageable pageable) {
 		String createBy = SecurityContextHolder.getContext().getAuthentication().getName();
 		log.info(createBy);
-			return journalEntryRepository.findByCreatedBy(creator, pageable);
+			return journalEntryRepository.findByCreatedByUsername(creator, pageable);
 	}
 
 	public JournalEntry getJournalEntryById(Integer id) {
@@ -52,12 +52,24 @@ public class JournalEntryService {
 
 
 	public JournalEntry updateJournalEntry(Integer id, JournalEntryRequest req) {
-		if (!journalEntryRepository.existsById(id)) {
-			throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+		JournalEntry journalEntry = journalEntryRepository.findById(req.getEntryId()).orElseThrow(() -> new AppException(ErrorCode.RESOURCE_NOT_FOUND));
+		try {
+			if (!customerRepo.existsByName(req.getCreateBy())) {
+				throw new AppException(ErrorCode.USER_NOTFOUND);
+			}
+			if (req.getEntryDate() != null) {
+				journalEntry.setEntryDate(req.getEntryDate());
+			}
+			if (req.getDescription() != null) {
+				journalEntry.setDescription(req.getDescription());
+			}
+			if (req.getCreateBy() != null) {
+				journalEntry.setCreatedBy(customerRepo.findByUsername(req.getCreateBy()).get());
+			}
+		}catch(Exception e){
+				throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
 		}
-		JournalEntry res = journalEntryMapper.toJournalEntry(req);
-		res.setEntryId(id);
-		return journalEntryRepository.save(res);
+		return journalEntryRepository.save(journalEntry);
 	}
 
 	public Optional<JournalEntry> getJournalEntryByUsername(String username) {
@@ -91,7 +103,7 @@ public class JournalEntryService {
 			if (!customerRepo.existsByUsername(createBy) || journalEntryRepository.existsByEntryDate(journalEntry.getEntryDate()))
 				throw new AppException(ErrorCode.NOT_FOUND_OR_EXISTED);
 			else
-				entry.setCreatedBy(createBy);
+				entry.setCreatedBy(customerRepo.findByUsername(createBy).get());
 			entry.setCreatedDate(LocalDateTime.now());
 			return journalEntryRepository.save(entry);
 		}catch(Exception e) {

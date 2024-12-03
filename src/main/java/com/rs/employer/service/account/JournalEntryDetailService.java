@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -57,10 +58,12 @@ public class JournalEntryDetailService {
     }
     @Transactional
     public Boolean createJournalEntryDetail(JournalEntryDetailRequestDTO journalEntryRequest) {
-        String authenticator = SecurityContextHolder.getContext().getAuthentication().getName();
+//        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+////        String sub = ((Jwt) authentication.getPrincipal()).getClaim("sub");
+//        System.out.println("Người tạo là "  +  username);
         JournalEntryDetail journalEntryDetail = journalEntryDetailMapper.map(journalEntryRequest);
         journalEntryDetail.setCreateDate(LocalDate.now());
-        journalEntryDetail.setCreateBy(authenticator);
+        journalEntryDetail.setCreateBy(journalEntryRequest.getCreateBy());
         var account = accountRepository.findByAccountId(journalEntryRequest.getChartOfAccountCode());
         if (account == null) {
             throw new IllegalArgumentException("Account không tồn tại!");
@@ -73,7 +76,7 @@ public class JournalEntryDetailService {
                             journalEntryRequest.getJournalEntryDate(),
                             null,
                             0,
-                            authenticator,
+                            customerRepo.findByUsername(journalEntryRequest.getCreateBy()).get(),
                             LocalDateTime.now(),
                             List.of(journalEntryDetail)
                     );

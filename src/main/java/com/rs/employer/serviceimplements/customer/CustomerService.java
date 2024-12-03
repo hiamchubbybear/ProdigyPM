@@ -116,6 +116,7 @@ public class CustomerService implements ICustomerService {
     @PostAuthorize("returnObject.username == authentication.name")
     public CustomerInfoDTO updateCustomer(CustomerInfoDTO customer) {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("Tên của người dùng cập nhật là " + username);
         Optional<Customer> customerOptional = customerRepository.findByUsername(username);
 
         if (customerOptional.isPresent()) {
@@ -199,6 +200,7 @@ public class CustomerService implements ICustomerService {
             customer.setStatus(customer.getStatus());
             customer.setUpdate(now);
             customer.setDob(request.getDob());
+            System.out.println("Đã cập nht thông tin của "  + name);
             return customerRepo.save(customer);
         } else {
             throw new AppException(ErrorCode.USER_NOTFOUND);

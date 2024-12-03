@@ -88,12 +88,6 @@ public class JournalEntryController {
         return new ApiRespone<>(journalEntry);
     }
 
-//    @GetMapping("/createdBy")
-//    public ApiRespone<Optional<JournalEntry>> getJournalEntryByCustomer(@RequestParam String customer) {
-//        Optional<JournalEntry> journalEntry = journalEntryService.getJournalEntryByCustomer(customer);
-//        return new ApiRespone<>(journalEntry);
-//    }
-
     @GetMapping("/entryDate")
     public ApiRespone<JournalEntry> getJournalEntriesByDate(@RequestParam String entryDate) {
         JournalEntry journalEntries = journalEntryService.getJournalEntriesByDate(LocalDate.parse(entryDate));

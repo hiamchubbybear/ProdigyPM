@@ -64,5 +64,5 @@ public interface CustomerRepo extends JpaRepository<Customer, UUID> {
             "w.unit_product as Product_Unit " +
             "from schema_product w", nativeQuery = true)
     List<Product> getAllProductDetail();
-
+    boolean existsByName(String name);
 }

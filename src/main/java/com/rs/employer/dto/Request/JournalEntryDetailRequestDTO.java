@@ -10,6 +10,24 @@ public class JournalEntryDetailRequestDTO {
     private BigDecimal debit;
     private BigDecimal credit;
     private String currency;
+    private String createBy;
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public JournalEntryDetailRequestDTO(LocalDate journalEntryDate, String chartOfAccountCode, BigDecimal debit, BigDecimal credit, String currency, String createBy) {
+        this.journalEntryDate = journalEntryDate;
+        this.chartOfAccountCode = chartOfAccountCode;
+        this.debit = debit;
+        this.credit = credit;
+        this.currency = currency;
+        this.createBy = createBy;
+    }
 
     public LocalDate getJournalEntryDate() {
         return journalEntryDate;
@@ -48,14 +66,6 @@ public class JournalEntryDetailRequestDTO {
     }
 
     public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public JournalEntryDetailRequestDTO(LocalDate journalEntryDate, String chartOfAccountCode, BigDecimal debit, BigDecimal credit, String currency) {
-        this.journalEntryDate = journalEntryDate;
-        this.chartOfAccountCode = chartOfAccountCode;
-        this.debit = debit;
-        this.credit = credit;
         this.currency = currency;
     }
 }

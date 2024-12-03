@@ -118,7 +118,17 @@ public class AuthenticationService {
             throw new RuntimeException(e);
         }
     }
+    public String extractUsernameFromToken(String token) throws ParseException, JOSEException {
+        JWSVerifier verifier = new MACVerifier(signer_key.getBytes());
+        SignedJWT signedJWT = SignedJWT.parse(token);
 
+        if (signedJWT.verify(verifier)) {
+            JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
+            return claims.getSubject();
+        } else {
+            throw new AppException(ErrorCode.USER_UNAUTHENTICATED);
+        }
+    }
     public String EmailVerification(AuthenticationRequest customer)  {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
         String email = repo.findEmailByUsername(customer.getUsername());

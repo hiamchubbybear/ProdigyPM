@@ -17,7 +17,8 @@ public class JournalEntry {
     private java.time.LocalDate entryDate;
     private String description;
     private Integer status;
-    private String createdBy;
+    @ManyToOne
+    private Customer createdBy;
     @CreatedDate
     private java.time.LocalDateTime createdDate;
     @OneToMany(mappedBy = "journalEntry")
@@ -57,11 +58,11 @@ public class JournalEntry {
         this.status = status;
     }
 
-    public String getCreatedBy() {
+    public Customer getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(Customer createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -81,7 +82,7 @@ public class JournalEntry {
         this.details = details;
     }
 
-    public JournalEntry(Integer entryId, LocalDate entryDate, String description, Integer status, String createdBy, LocalDateTime createdDate, List<JournalEntryDetail> details) {
+    public JournalEntry(Integer entryId, LocalDate entryDate, String description, Integer status, Customer createdBy, LocalDateTime createdDate, List<JournalEntryDetail> details) {
         this.entryId = entryId;
         this.entryDate = entryDate;
         this.description = description;
