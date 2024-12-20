@@ -6,7 +6,7 @@ import com.rs.employer.model.customer.Role;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dto.Request.Auth.RoleRequest;
-import com.rs.employer.dto.Respone.RoleRespone;
+import com.rs.employer.dto.Response.RoleRespone;
 @Service
 public interface IRoleService {
     public RoleRespone addRole(RoleRequest role);

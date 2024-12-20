@@ -19,7 +19,7 @@ public class Payroll {
     private BigDecimal allowance;
     private BigDecimal deductions;
     private BigDecimal netsalary;
-    private BigDecimal status;
+    private String status;
     @ManyToOne
     @JoinColumn(name = "manage")
     private Customer customer;

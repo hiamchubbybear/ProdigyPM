@@ -1,4 +1,4 @@
-package com.rs.employer.dto.Respone;
+package com.rs.employer.dto.Response;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -6,7 +6,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class CustomerRespone {
+public class CustomerResponse {
     private String name;
     private String address;
     private String username;
@@ -98,11 +98,11 @@ public class CustomerRespone {
         this.dob = dob;
     }
 
-    public CustomerRespone() {
+    public CustomerResponse() {
     }
 
-    public CustomerRespone(String name, String address, String username, Set<RoleRespone> role, boolean gender,
-            String password, String status, LocalDate dob, Instant create, Instant update) {
+    public CustomerResponse(String name, String address, String username, Set<RoleRespone> role, boolean gender,
+                            String password, String status, LocalDate dob, Instant create, Instant update) {
         this.name = name;
         this.address = address;
         this.username = username;

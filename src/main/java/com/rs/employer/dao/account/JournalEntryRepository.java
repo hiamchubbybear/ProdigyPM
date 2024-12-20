@@ -31,7 +31,7 @@ public interface JournalEntryRepository extends JpaRepository<JournalEntry, Inte
     List<JournalEntry> findJournalEntriesByCustomerAndDateRange(@Param("createdBy") Customer createdBy,
                                                                 @Param("startDate") LocalDate startDate,
                                                                 @Param("endDate") LocalDate endDate);
-
+    JournalEntry findByEntryIdAndAndCreatedBy(Integer id, Customer createdBy);
 }
 
 

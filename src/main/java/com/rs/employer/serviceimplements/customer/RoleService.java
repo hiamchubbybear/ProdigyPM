@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.rs.employer.dao.customer.PermissionRepository;
 import com.rs.employer.dao.customer.RoleRepository;
 import com.rs.employer.dto.Request.Auth.RoleRequest;
-import com.rs.employer.dto.Respone.RoleRespone;
+import com.rs.employer.dto.Response.RoleRespone;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.service.customer.IRoleService;

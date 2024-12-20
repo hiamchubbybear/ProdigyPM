@@ -4,7 +4,7 @@ import java.text.ParseException;
 
 import com.rs.employer.dao.customer.CustomerRepo;
 import com.rs.employer.dao.customer.TokenService;
-import com.rs.employer.dto.Respone.LoginInactiveAccountRespone;
+import com.rs.employer.dto.Response.LoginInactiveAccountRespone;
 import com.rs.employer.email.EmailService;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;

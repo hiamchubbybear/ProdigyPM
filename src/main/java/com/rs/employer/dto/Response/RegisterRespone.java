@@ -1,8 +1,4 @@
-package com.rs.employer.dto.Respone;
-
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+package com.rs.employer.dto.Response;
 
 public class RegisterRespone {
     private String username;

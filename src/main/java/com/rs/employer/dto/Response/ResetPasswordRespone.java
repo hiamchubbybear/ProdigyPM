@@ -1,4 +1,4 @@
-package com.rs.employer.dto.Respone;
+package com.rs.employer.dto.Response;
 public class ResetPasswordRespone {
     boolean isSuccess;
     String message;

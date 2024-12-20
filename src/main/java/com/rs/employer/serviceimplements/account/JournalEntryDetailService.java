@@ -1,4 +1,4 @@
-package com.rs.employer.service.account;
+package com.rs.employer.serviceimplements.account;
 
 import com.rs.employer.dao.account.ChartOfAccountRepository;
 import com.rs.employer.dao.account.JournalEntryDetailRepository;
@@ -6,6 +6,7 @@ import com.rs.employer.dao.account.JournalEntryRepository;
 import com.rs.employer.dao.customer.AccountRepository;
 import com.rs.employer.dao.customer.CustomerRepo;
 import com.rs.employer.dto.Request.JournalEntryDetailRequestDTO;
+import com.rs.employer.dto.Response.BalanceMonthlyResponse;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.JournalEntryDetailMapper;
@@ -13,22 +14,20 @@ import com.rs.employer.model.account.JournalEntry;
 import com.rs.employer.model.account.JournalEntryDetail;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 @Service
 public class JournalEntryDetailService {
     private final JournalEntryDetailRepository journalEntryDetailRepository;
     private final JournalEntryDetailMapper journalEntryDetailMapper;
-    private final ChartOfAccountRepository chartOfAccountRepository;
     private final JournalEntryRepository journalEntryRepository;
     private final CustomerRepo customerRepo;
     private final AccountRepository accountRepository;
@@ -41,7 +40,6 @@ public class JournalEntryDetailService {
                                      CustomerRepo customerRepo, AccountRepository accountRepository) {
         this.journalEntryDetailRepository = journalEntryDetailRepository;
         this.journalEntryDetailMapper = journalEntryDetailMapper;
-        this.chartOfAccountRepository = chartOfAccountRepository;
         this.journalEntryRepository = journalEntryRepository;
         this.customerRepo = customerRepo;
         this.accountRepository = accountRepository;
@@ -56,11 +54,9 @@ public class JournalEntryDetailService {
     public Optional<JournalEntryDetail> getJournalEntryDetailById(Integer id) {
         return journalEntryDetailRepository.findById(id);
     }
+
     @Transactional
     public Boolean createJournalEntryDetail(JournalEntryDetailRequestDTO journalEntryRequest) {
-//        var username = SecurityContextHolder.getContext().getAuthentication().getName();
-////        String sub = ((Jwt) authentication.getPrincipal()).getClaim("sub");
-//        System.out.println("Người tạo là "  +  username);
         JournalEntryDetail journalEntryDetail = journalEntryDetailMapper.map(journalEntryRequest);
         journalEntryDetail.setCreateDate(LocalDate.now());
         journalEntryDetail.setCreateBy(journalEntryRequest.getCreateBy());
@@ -100,8 +96,43 @@ public class JournalEntryDetailService {
 
 
     public void deleteJournalEntryDetail(Integer id) {
-        if(journalEntryRepository.existsById(id))
-        journalEntryDetailRepository.deleteById(id);
+        if (journalEntryRepository.existsById(id))
+            journalEntryDetailRepository.deleteById(id);
         else throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+    }
+
+    public BalanceMonthlyResponse budgeRespone(int year) {
+        BalanceMonthlyResponse response = new BalanceMonthlyResponse();
+        for (int month = 1; month <= 12; month++) {
+            Month currentMonth = Month.of(month);
+            List<JournalEntryDetail> details = findEntriesByMonthAndYear(year, currentMonth);
+
+            double totalCredit = 0;
+            double totalDebit = 0;
+            double balance = 0;
+
+            // Tính tổng debit, credit và balance cho tháng
+            for (JournalEntryDetail detail : details) {
+                totalDebit += detail.getDebit().doubleValue();
+                totalCredit += detail.getCredit().doubleValue();
+            }
+
+            balance = totalCredit - totalDebit;
+
+            // Tạo dữ liệu cho tháng
+            BalanceMonthlyResponse.MonthData monthData = new BalanceMonthlyResponse.MonthData(
+                    currentMonth.name(), totalCredit, totalDebit, balance);
+
+            // Cập nhật dữ liệu vào response
+            response.getMonths()[month - 1] = monthData;
+        }
+        return response;
+    }
+
+    private List<JournalEntryDetail> findEntriesByMonthAndYear(int year, Month month) {
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate endOfMonth = startOfMonth.with(TemporalAdjusters.lastDayOfMonth());
+
+        return journalEntryDetailRepository.findAllByCreateDateBetween(startOfMonth, endOfMonth);
     }
 }

@@ -1,9 +1,9 @@
-package com.rs.employer.dto.Respone;
+package com.rs.employer.dto.Response;
 
-public class ActivateAccountRespone {
+public class ActivateAccountResponse {
     boolean isActivated = false;
 
-    public ActivateAccountRespone(boolean isActivated) {
+    public ActivateAccountResponse(boolean isActivated) {
         this.isActivated = isActivated;
     }
 
@@ -11,7 +11,7 @@ public class ActivateAccountRespone {
         return isActivated;
     }
 
-    public ActivateAccountRespone() {
+    public ActivateAccountResponse() {
     }
 
     public void setActivated(boolean activated) {

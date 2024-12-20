@@ -13,9 +13,8 @@ import com.nimbusds.jose.JOSEException;
 import com.rs.employer.dao.customer.TokenRepository;
 import com.rs.employer.dao.customer.TokenService;
 import com.rs.employer.dto.Request.ActivateRequestToken;
-import com.rs.employer.dto.Request.ForgotAccountRequest;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
-import com.rs.employer.dto.Respone.*;
+import com.rs.employer.dto.Response.*;
 import com.rs.employer.email.EmailService;
 import com.rs.employer.model.customer.Customer;
 import com.rs.employer.model.customer.Role;
@@ -26,7 +25,6 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import com.rs.employer.dao.customer.CustomerRepo;
@@ -38,8 +36,6 @@ import com.rs.employer.mapper.CustomerMapper;
 import com.rs.employer.service.customer.ICustomerService;
 
 import lombok.extern.slf4j.Slf4j;
-
-import javax.swing.text.html.Option;
 
 @Service
 @Slf4j
@@ -119,7 +115,7 @@ public class CustomerService implements ICustomerService {
         System.out.println("Tên của người dùng cập nhật là " + username);
         Optional<Customer> customerOptional = customerRepository.findByUsername(username);
 
-        if (customerOptional.isPresent()) {
+    if (customerOptional.isPresent()) {
             Customer existingCustomer = customerOptional.get();
             if (username.equals(customer.getUsername())) {
                 existingCustomer.setEmail(customer.getEmail());
@@ -146,11 +142,11 @@ public class CustomerService implements ICustomerService {
 
     @Override
     @PostAuthorize("returnObject.username == authentication.name")
-    public CustomerRespone listCustomerById(UUID id) {
+    public CustomerResponse listCustomerById(UUID id) {
         Optional<Customer> eOptional = Optional.ofNullable(
                 customerRepository.findById(id)
                         .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND)));
-        CustomerRespone customer1 = mapper.toCustomerRespone(eOptional.get());
+        CustomerResponse customer1 = mapper.toCustomerRespone(eOptional.get());
         if (customer1 != null) {
             return customer1;
         } else
@@ -235,19 +231,19 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public ActivateAccountRespone activateRequest(ActivateRequestToken treq) throws ParseException, JOSEException {
+    public ActivateAccountResponse activateRequest(ActivateRequestToken treq) throws ParseException, JOSEException {
         if(tokenService.compareToken(treq.getToken() ,treq.getEmail())) {
             Optional<Customer> foundCustomer = customerRepository.findByEmail(treq.getEmail());
             System.out.println("Found customer: " + foundCustomer.get());
             Customer customer = foundCustomer.get();
             return customerRepository.updateStatus(customer.getUsername()) > 0 ?
-                    new ActivateAccountRespone(true) : new ActivateAccountRespone(false)
+                    new ActivateAccountResponse(true) : new ActivateAccountResponse(false)
                     ;
         } else throw new AppException(ErrorCode.ACTIVATED_FAILED);
     }
 
 //    @Override
-//    public ActivateAccountRespone activateRequest(ActivateRequestToken token) {
+//    public ActivateAccountResponse activateRequest(ActivateRequestToken token) {
 //        try {
 //            var context = SecurityContextHolder.getContext().getAuthentication();
 //            if (context != null && context.getPrincipal() instanceof Jwt) {
@@ -258,8 +254,8 @@ public class CustomerService implements ICustomerService {
 //                    if (customerRepository.existsByUsernameAndEmail(name, email)
 //                            && customerRepo.findStatusByUsernameAndEmail(name) != true) {
 //                        return (customerRepository.updateStatus(name) > 0)
-//                                ? new ActivateAccountRespone(true)
-//                                : new ActivateAccountRespone(false);
+//                                ? new ActivateAccountResponse(true)
+//                                : new ActivateAccountResponse(false);
 //                    }
 //                } else {
 //                    throw new AppException(ErrorCode.ACTIVATED_FAILED);
@@ -268,7 +264,7 @@ public class CustomerService implements ICustomerService {
 //        } catch (Exception e) {
 //            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
 //        }
-//        return new ActivateAccountRespone(false);
+//        return new ActivateAccountResponse(false);
 //    }
 
 

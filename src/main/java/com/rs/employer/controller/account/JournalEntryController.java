@@ -71,8 +71,8 @@ public class JournalEntryController {
     }
 
     @PutMapping()
-    public ApiRespone<JournalEntry> updateJournalEntry(@RequestParam Integer entryId, @RequestBody JournalEntryRequest journalEntry) {
-        JournalEntry updatedJournalEntry = journalEntryService.updateJournalEntry(entryId, journalEntry);
+    public ApiRespone<JournalEntry> updateJournalEntry( @RequestBody JournalEntryRequest journalEntry) {
+        JournalEntry updatedJournalEntry = journalEntryService.updateJournalEntry(journalEntry);
         return new ApiRespone<>(updatedJournalEntry);
     }
 

@@ -27,7 +27,9 @@ public enum ErrorCode {
     ACTIVATED_FAILED(1003, "Activated failed", HttpStatus.CONFLICT),
     TOKEN_NOTFOUND(1015, "Token not found or expired", HttpStatus.NOT_FOUND),
     TOKEN_INVALID(1015, "Token is used or has expired", HttpStatus.NOT_ACCEPTABLE),
-    NOT_MATCH(1016, "Account doesn't match with system", HttpStatus.NOT_ACCEPTABLE), RESOURCE_NOT_FOUND(1017, "Resource not found", HttpStatus.NOT_FOUND);
+    NOT_MATCH(1016, "Account doesn't match with system", HttpStatus.NOT_ACCEPTABLE), RESOURCE_NOT_FOUND(1017, "Resource not found", HttpStatus.NOT_FOUND),
+    EMPLOYEE_NOT_FOUND(1017, "Employee not found", HttpStatus.NOT_FOUND ),
+    DEPARTMENT_NOT_FOUND(1018, "Department not found", HttpStatus.NOT_FOUND );
 
     private int code;
     private String status;

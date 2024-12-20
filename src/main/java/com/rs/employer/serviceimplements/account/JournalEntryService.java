@@ -51,12 +51,10 @@ public class JournalEntryService {
 	}
 
 
-	public JournalEntry updateJournalEntry(Integer id, JournalEntryRequest req) {
+	public JournalEntry updateJournalEntry( JournalEntryRequest req) {
+		System.out.println(req.getEntryId().toString());
 		JournalEntry journalEntry = journalEntryRepository.findById(req.getEntryId()).orElseThrow(() -> new AppException(ErrorCode.RESOURCE_NOT_FOUND));
-		try {
-			if (!customerRepo.existsByName(req.getCreateBy())) {
-				throw new AppException(ErrorCode.USER_NOTFOUND);
-			}
+
 			if (req.getEntryDate() != null) {
 				journalEntry.setEntryDate(req.getEntryDate());
 			}
@@ -66,9 +64,16 @@ public class JournalEntryService {
 			if (req.getCreateBy() != null) {
 				journalEntry.setCreatedBy(customerRepo.findByUsername(req.getCreateBy()).get());
 			}
-		}catch(Exception e){
-				throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
-		}
+			if (req.getDescription() != null) {
+				journalEntry.setDescription(req.getDescription());
+			}
+			if(req.getStatus() != null) {
+				journalEntry.setStatus(req.getStatus());
+			}
+
+//		}catch(Exception e){
+//				throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+//		}
 		return journalEntryRepository.save(journalEntry);
 	}
 

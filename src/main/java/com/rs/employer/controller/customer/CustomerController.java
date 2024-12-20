@@ -1,8 +1,6 @@
 package com.rs.employer.controller.customer;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.Base64;
 import java.util.List;
@@ -10,9 +8,8 @@ import java.util.UUID;
 import com.nimbusds.jose.JOSEException;
 import com.rs.employer.dao.customer.CustomerRepo;
 import com.rs.employer.dto.Request.ActivateRequestToken;
-import com.rs.employer.dto.Request.ForgotAccountRequest;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
-import com.rs.employer.dto.Respone.*;
+import com.rs.employer.dto.Response.*;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.customer.Customer;
@@ -107,7 +104,7 @@ public class CustomerController {
     }
 
     @PostMapping(path = "/activate")
-    public ApiRespone<ActivateAccountRespone> activateAccount(
+    public ApiRespone<ActivateAccountResponse> activateAccount(
             @RequestBody ActivateRequestToken request
     ) throws ParseException, JOSEException {
         if (request == null || request.getToken() == null) {

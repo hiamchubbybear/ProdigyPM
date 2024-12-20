@@ -13,7 +13,6 @@ public class JournalEntry {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer entryId;
-    @Column(unique = true)
     private java.time.LocalDate entryDate;
     private String description;
     private Integer status;
