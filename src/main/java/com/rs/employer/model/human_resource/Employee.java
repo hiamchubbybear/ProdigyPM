@@ -1,5 +1,6 @@
 package com.rs.employer.model.human_resource;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rs.employer.model.others.Department;
 import jakarta.persistence.*;
 
@@ -11,6 +12,7 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer employeeId;
+
     private String employeeCode;
     private String employeeName;
     private Date dob;
@@ -24,6 +26,7 @@ public class Employee {
     private String position;
     private Date startDate;
     private Integer status;
+    @JsonIgnore
     @OneToMany(mappedBy = "employee")
     private Set<Payroll> payrolls;
 

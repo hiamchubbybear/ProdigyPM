@@ -84,11 +84,11 @@ public class Payroll {
         this.netsalary = netsalary;
     }
 
-    public BigDecimal getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(BigDecimal status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -108,7 +108,7 @@ public class Payroll {
         this.createDate = createDate;
     }
 
-    public Payroll(Long payrollId, Employee employee, String period, BigDecimal basicSalary, BigDecimal allowance, BigDecimal deductions, BigDecimal netsalary, BigDecimal status, Customer customer, Date createDate) {
+    public Payroll(Long payrollId, Employee employee, String period, BigDecimal basicSalary, BigDecimal allowance, BigDecimal deductions, BigDecimal netsalary, String status, Customer customer, Date createDate) {
         this.payrollId = payrollId;
         this.employee = employee;
         this.period = period;

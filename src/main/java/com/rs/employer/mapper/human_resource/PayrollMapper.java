@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface PayrollMapper {
-    @Mapping(target = "employeeName" , ignore = true)
-    @Mapping(target = "customerId" , ignore = true)
+    @Mapping(target = "employee" , ignore = true)
+    @Mapping(target = "customer" , ignore = true)
     Payroll payrollFromPayRollRequest(PayrollRequest payrollRequest);
 }

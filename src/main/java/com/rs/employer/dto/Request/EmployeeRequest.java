@@ -4,8 +4,6 @@ import lombok.Setter;
 
 import java.util.Date;
 import java.util.Set;
-//    private Department department;
-//    private Set<Payroll> payrolls;
 public class EmployeeRequest {
     private Integer employeeId;
     private String employeeCode;
@@ -15,11 +13,11 @@ public class EmployeeRequest {
     private String address;
     private String phoneNumber;
     private String email;
-    String departmentName;
+    private String departmentName;
     private String position;
     private Date startDate;
     private Integer status;
-    private Set<String> payrolls;
+    private Set<Long> payrolls;
 
     public EmployeeRequest() {
     }
@@ -120,15 +118,15 @@ public class EmployeeRequest {
         this.status = status;
     }
 
-    public Set<String> getPayrolls() {
+    public Set<Long> getPayrolls() {
         return payrolls;
     }
 
-    public void setPayrolls(Set<String> payrolls) {
+    public void setPayrolls(Set<Long> payrolls) {
         this.payrolls = payrolls;
     }
 
-    public EmployeeRequest(Integer employeeId, String employeeCode, String employeeName, Date dob, Integer gender, String address, String phoneNumber, String email, String departmentName, String position, Date startDate, Integer status, Set<String> payrolls) {
+    public EmployeeRequest(Integer employeeId, String employeeCode, String employeeName, Date dob, Integer gender, String address, String phoneNumber, String email, String departmentName, String position, Date startDate, Integer status, Set<Long> payrolls) {
         this.employeeId = employeeId;
         this.employeeCode = employeeCode;
         this.employeeName = employeeName;

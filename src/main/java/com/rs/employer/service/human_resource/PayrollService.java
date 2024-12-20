@@ -34,74 +34,69 @@ public class PayrollService {
         this.employeeRepository = employeeRepository;
     }
 
-    // Lấy tất cả Payrolls
+
     public List<Payroll> getAllPayrolls() {
         return payrollRepository.findAll();
     }
 
-    // Lấy Payroll theo ID
+
     public Payroll getPayrollById(Long id) {
         return payrollRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION));
     }
 
-    // Tạo Payroll mới
+
     public Payroll createPayroll(PayrollRequest payrollRequest) {
-        // Chuyển đổi từ PayrollRequest thành Payroll entity
+
         Payroll payroll = payrollMapper.payrollFromPayRollRequest(payrollRequest);
 
-        // Lấy Employee và Customer từ các repo
-        Employee employee = employeeRepository.findByEmployeeName(payrollRequest.getEmployeeName())
-                .orElseThrow(() -> new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION));
-        Customer customer = customerRepo.findByUsername(payrollRequest.getCustomerName())
-                .orElseThrow(() -> new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION));
 
-        // Gán Employee và Customer vào Payroll
+        Employee employee = employeeRepository.findByEmployeeName(payrollRequest.getEmployeeName())
+                .orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
+        Customer customer = customerRepo.findByUsername(payrollRequest.getCustomerName())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+
+
         payroll.setEmployee(employee);
         payroll.setCustomer(customer);
-
-        // Tính lương thực nhận
         payroll.setNetsalary(calculateNetSalary(payroll.getBasicSalary(), payroll.getAllowance(), payroll.getDeductions()));
-
-        // Lưu Payroll vào cơ sở dữ liệu
         payroll.setCreateDate(new Date());
         return payrollRepository.save(payroll);
     }
 
-    // Cập nhật Payroll
     public Payroll updatePayroll(PayrollRequest payrollRequest, Long id) {
-        // Tìm Payroll hiện tại từ ID
+
         Payroll existingPayroll = payrollRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION));
 
-        // Cập nhật các trường thông tin
+
         existingPayroll.setPeriod(payrollRequest.getPeriod());
         existingPayroll.setBasicSalary(payrollRequest.getBasicSalary());
         existingPayroll.setAllowance(payrollRequest.getAllowance());
         existingPayroll.setDeductions(payrollRequest.getDeductions());
         existingPayroll.setStatus(payrollRequest.getStatus());
 
-        // Tính lại lương thực nhận
+
         existingPayroll.setNetsalary(calculateNetSalary(existingPayroll.getBasicSalary(),
                 existingPayroll.getAllowance(),
                 existingPayroll.getDeductions()));
 
-        // Cập nhật thời gian cập nhật
+
         existingPayroll.setCreateDate(new Date());
 
         return payrollRepository.save(existingPayroll);
     }
 
-    // Xóa Payroll
+
     public void deletePayroll(Long id) {
         Payroll payroll = payrollRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION));
         payrollRepository.delete(payroll);
     }
 
-    // Tính toán lương thực nhận (sau khi trừ phụ cấp và khấu trừ)
+
     private BigDecimal calculateNetSalary(BigDecimal basicSalary, BigDecimal allowance, BigDecimal deductions) {
-        // Tính lương thực nhận sau khi cộng phụ cấp và trừ khấu trừ
+
         if (basicSalary == null || allowance == null || deductions == null) {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
         }
@@ -109,14 +104,14 @@ public class PayrollService {
         return totalSalary;
     }
 
-    // Lấy Payroll của nhân viên theo tên
+
     public List<Payroll> getPayrollByEmployeeName(String employeeName) {
         Employee employee = employeeRepository.findByEmployeeName(employeeName)
                 .orElseThrow(() -> new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION));
         return payrollRepository.findByEmployee(employee);
     }
 
-    // Tìm kiếm Payroll theo các bộ lọc
+
     public List<Payroll> searchPayrolls(Map<String, String> filters) {
         String employeeName = filters.get("employeeName");
         String customerName = filters.get("customerName");
@@ -133,6 +128,6 @@ public class PayrollService {
                     .orElseThrow(() -> new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION));
             return payrollRepository.findByCustomerAndStatus(customer, status);
         }
-        return payrollRepository.findAll(); // Trả về tất cả nếu không có bộ lọc
+        return payrollRepository.findAll();
     }
 }

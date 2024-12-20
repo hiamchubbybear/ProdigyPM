@@ -17,23 +17,11 @@ public class PayrollRequest {
     private BigDecimal allowance;
     private BigDecimal deductions;
     private BigDecimal netsalary;
-    private BigDecimal status;
+    private String status;
     private String customerName;
     private Date date;
 
     public PayrollRequest() {
-    }
-
-    public PayrollRequest(String employeeName, String period, BigDecimal basicSalary, BigDecimal allowance, BigDecimal deductions, BigDecimal netsalary, BigDecimal status, String customerName, Date date) {
-        this.employeeName = employeeName;
-        this.period = period;
-        this.basicSalary = basicSalary;
-        this.allowance = allowance;
-        this.deductions = deductions;
-        this.netsalary = netsalary;
-        this.status = status;
-        this.customerName = customerName;
-        this.date = date;
     }
 
     public String getEmployeeName() {
@@ -84,11 +72,11 @@ public class PayrollRequest {
         this.netsalary = netsalary;
     }
 
-    public BigDecimal getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(BigDecimal status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -108,7 +96,8 @@ public class PayrollRequest {
         this.date = date;
     }
 
-    public PayrollRequest(String period, BigDecimal basicSalary, BigDecimal allowance, BigDecimal deductions, BigDecimal netsalary, BigDecimal status, String customerName, Date date) {
+    public PayrollRequest(String employeeName, String period, BigDecimal basicSalary, BigDecimal allowance, BigDecimal deductions, BigDecimal netsalary, String status, String customerName, Date date) {
+        this.employeeName = employeeName;
         this.period = period;
         this.basicSalary = basicSalary;
         this.allowance = allowance;
