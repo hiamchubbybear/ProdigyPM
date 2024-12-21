@@ -4,7 +4,7 @@ import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.JournalEntryDetailRequestDTO;
 import com.rs.employer.dto.Response.BalanceMonthlyResponse;
 import com.rs.employer.model.account.JournalEntryDetail;
-import com.rs.employer.serviceimplements.account.JournalEntryDetailService;
+import com.rs.employer.service.account.JournalEntryDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

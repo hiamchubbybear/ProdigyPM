@@ -6,7 +6,7 @@ import com.rs.employer.dao.human_resource.PayrollRepository;
 import com.rs.employer.dto.Request.human_resource.PayrollRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
-import com.rs.employer.mapper.human_resource.PayrollMapper;
+import com.rs.employer.mapper.PayrollMapper;
 import com.rs.employer.model.customer.Customer;
 import com.rs.employer.model.human_resource.Employee;
 import com.rs.employer.model.human_resource.Payroll;

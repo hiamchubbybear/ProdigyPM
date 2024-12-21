@@ -5,7 +5,7 @@ import com.rs.employer.dao.human_resource.EmployeeRepository;
 import com.rs.employer.dao.human_resource.PayrollRepository;
 import com.rs.employer.dao.others.DepartmentRepository;
 import com.rs.employer.dto.Request.EmployeeRequest;
-import com.rs.employer.mapper.human_resource.EmployeeMapper;
+import com.rs.employer.mapper.EmployeeMapper;
 import com.rs.employer.model.human_resource.Employee;
 import com.rs.employer.model.human_resource.Payroll;
 import com.rs.employer.globalexception.AppException;

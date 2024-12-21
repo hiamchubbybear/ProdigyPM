@@ -1,6 +1,7 @@
 package com.rs.employer.model.temp;
 
 import com.rs.employer.model.customer.Customer;
+import com.rs.employer.model.sale.Order;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -12,28 +13,18 @@ public class Shipment {
     @Id
     private int shipId;
     @OneToOne(mappedBy = "")
-            Customer customerId;
+    Customer customerId;
     Date dateShip;
     String address;
     String city;
     String state;
     String zipCode;
-    @OneToMany(mappedBy = "shipment")
-    Set<Order> order;
-
-    public Shipment(int shipId, Customer customerId, Date dateShip, String address, String city, String state, String zipCode, Set<Order> order) {
-        this.shipId = shipId;
-        this.customerId = customerId;
-        this.dateShip = dateShip;
-        this.address = address;
-        this.city = city;
-        this.state = state;
-        this.zipCode = zipCode;
-        this.order = order;
-    }
 
     public Shipment() {
+
     }
+//    @OneToMany(mappedBy = "shipment")
+//    Set<Order> order;
 
     public int getShipId() {
         return shipId;
@@ -91,11 +82,13 @@ public class Shipment {
         this.zipCode = zipCode;
     }
 
-    public Set<Order> getOrder() {
-        return order;
-    }
-
-    public void setOrder(Set<Order> order) {
-        this.order = order;
+    public Shipment(int shipId, Customer customerId, Date dateShip, String address, String city, String state, String zipCode) {
+        this.shipId = shipId;
+        this.customerId = customerId;
+        this.dateShip = dateShip;
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
     }
 }

@@ -5,12 +5,11 @@ import com.rs.employer.dto.Request.JournalEntryRequest;
 
 import com.rs.employer.model.account.JournalEntry;
 import com.rs.employer.model.customer.Customer;
-import com.rs.employer.serviceimplements.account.JournalEntryService;
+import com.rs.employer.service.account.JournalEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;

@@ -18,7 +18,7 @@ import com.rs.employer.dto.Request.Resources.ResourcesRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.warehouse.Resources;
-import com.rs.employer.serviceimplements.warehouse.ResourcesService;
+import com.rs.employer.service.warehouse.ResourcesService;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping(path = "/api/resources")

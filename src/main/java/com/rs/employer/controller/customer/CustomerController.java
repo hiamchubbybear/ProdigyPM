@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.User.CustomerRequest;
-import com.rs.employer.serviceimplements.customer.CustomerService;
+import com.rs.employer.service.customer.customer.CustomerService;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;

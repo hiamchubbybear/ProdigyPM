@@ -19,7 +19,7 @@ import com.rs.employer.dto.Request.Product.ProductRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.warehouse.Product;
-import com.rs.employer.serviceimplements.warehouse.ProductService;
+import com.rs.employer.service.warehouse.ProductService;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController

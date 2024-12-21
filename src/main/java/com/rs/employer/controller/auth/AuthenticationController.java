@@ -16,7 +16,7 @@ import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.Auth.AuthenticationRequest;
 import com.rs.employer.dto.Request.Auth.IntrospectRequest;
 import com.rs.employer.dto.Request.Auth.LogoutRequest;
-import com.rs.employer.serviceimplements.customer.AuthenticationService;
+import com.rs.employer.service.customer.customer.AuthenticationService;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController

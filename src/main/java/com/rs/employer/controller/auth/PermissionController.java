@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.rs.employer.apirespone.ApiRespone;
 import com.rs.employer.dto.Request.Auth.PermissionRequest;
 
-import com.rs.employer.serviceimplements.customer.PermissionService;
+import com.rs.employer.service.customer.customer.PermissionService;
 
 @RestController
 

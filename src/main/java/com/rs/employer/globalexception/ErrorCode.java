@@ -5,8 +5,7 @@ import org.springframework.http.HttpStatusCode;
 
 public enum ErrorCode {
     USER_NOTFOUND(1002, "User not found", HttpStatus.INTERNAL_SERVER_ERROR),
-    USERNAME_INVALID(1003, "Username must be at least 4 characters and less than 20 characters",
-            HttpStatus.BAD_REQUEST),
+    USERNAME_INVALID(1003, "Username must be at least 4 characters and less than 20 characters", HttpStatus.BAD_REQUEST),
     USERNAME_EXISTS_OR_EMAIL_EXISTS(1004, "Username or email already exists", HttpStatus.CONFLICT),
     PASSWORD_INVALID(1004, "Password must be at least 8 characters", HttpStatus.BAD_REQUEST),
     UNCATEGORIZE_EXCEPTION(999, "Uncategorize Exception", HttpStatus.INTERNAL_SERVER_ERROR),
@@ -27,9 +26,13 @@ public enum ErrorCode {
     ACTIVATED_FAILED(1003, "Activated failed", HttpStatus.CONFLICT),
     TOKEN_NOTFOUND(1015, "Token not found or expired", HttpStatus.NOT_FOUND),
     TOKEN_INVALID(1015, "Token is used or has expired", HttpStatus.NOT_ACCEPTABLE),
-    NOT_MATCH(1016, "Account doesn't match with system", HttpStatus.NOT_ACCEPTABLE), RESOURCE_NOT_FOUND(1017, "Resource not found", HttpStatus.NOT_FOUND),
-    EMPLOYEE_NOT_FOUND(1017, "Employee not found", HttpStatus.NOT_FOUND ),
-    DEPARTMENT_NOT_FOUND(1018, "Department not found", HttpStatus.NOT_FOUND );
+    NOT_MATCH(1016, "Account doesn't match with system", HttpStatus.NOT_ACCEPTABLE),
+    RESOURCE_NOT_FOUND(1017, "Resource not found", HttpStatus.NOT_FOUND),
+    EMPLOYEE_NOT_FOUND(1017, "Employee not found", HttpStatus.NOT_FOUND),
+    DEPARTMENT_NOT_FOUND(1018, "Department not found", HttpStatus.NOT_FOUND),
+    BOM_NOTFOUND(1019, "BOM not found", HttpStatus.NOT_FOUND),
+    SUPPLIER_NOTFOUND(1019, "Supplier not found", HttpStatus.NOT_FOUND),
+    PURCHASE_ORDER_NOTFOUND(1020,"Purchase not found" , HttpStatus.NOT_FOUND );
 
     private int code;
     private String status;
