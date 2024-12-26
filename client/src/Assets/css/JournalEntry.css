@@ -1,0 +1,38 @@
+/* Center the content vertically and horizontally */
+.content-journal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Cascadia Code', sans-serif;
+  padding: 20px;
+}
+
+/* Style for the form */
+form {
+  text-align: center;
+}
+
+/* Style for the input and select fields */
+input,
+select {
+  padding: 8px;
+  margin: 10px 0;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Style for the submit button */
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3; /* Darker shade when hovering */
+}

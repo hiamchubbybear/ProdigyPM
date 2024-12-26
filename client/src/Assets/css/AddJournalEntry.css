@@ -1,0 +1,57 @@
+.journal-entry-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #EAEAEA;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-family: "Cascadia Code", sans-serif;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+    color: #1D6F85;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #1D6F85;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #FFF;
+    color: #333;
+    transition: border-color 0.3s;
+  }
+
+  .form-group input:focus {
+    border-color: #3A9FBF;
+    outline: none;
+  }
+
+  .submit-btn {
+    padding: 10px 20px;
+    background-color: #1D6F85;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .submit-btn:hover {
+    background-color: #3A9FBF;
+  }
+
+  .submit-btn:active {
+    background-color: #006F8E;
+  }

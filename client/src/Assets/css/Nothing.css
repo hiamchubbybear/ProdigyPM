@@ -1,0 +1,20 @@
+.container1 {
+    position: relative; /* Đảm bảo vị trí của ảnh dựa vào container này */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh; /* Để container bao phủ toàn bộ màn hình nếu cần */
+    background-color: white;
+    margin-top: -20px;
+    overflow: hidden;
+}
+
+.container1 img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20%;
+    height: auto;
+    transform: translate(-50%, -50%); /* Căn giữa cả chiều ngang và chiều dọc */
+}

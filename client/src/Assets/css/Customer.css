@@ -1,0 +1,57 @@
+.customer-details {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: auto;
+    margin: 0 auto;
+    font-family: "Cascadia Code", sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: auto;
+}
+.customer-item {
+    list-style-type: none;
+    padding: 5px;
+    margin: 5px;
+}
+.images {
+    justify-content: last baseline;
+}
+
+
+.customer-item li {
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 16px;
+}
+
+
+.customer-item strong {
+    font-weight: bold;
+    color: #333;
+}
+
+
+.customer-item li:last-child {
+    border-bottom: none;
+}
+
+.error, .loading {
+    text-align: center;
+    font-size: 18px;
+    color: #777;
+    padding: 40px;
+}
+.btn-update {
+
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+.btn-update:hover {
+    background-color: #0396A6;
+}

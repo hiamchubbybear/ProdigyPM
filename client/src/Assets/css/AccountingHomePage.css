@@ -1,0 +1,132 @@
+/* Sidebar chính */
+.sidebar {
+    background-color: #EAEAEA; /* Màu nền sidebar */
+    height: 100vh; /* Chiều cao toàn màn hình */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: width 0.3s ease, padding 0.3s ease;
+    overflow: hidden; /* Đảm bảo không bị tràn nội dung */
+    position: fixed; /* Sidebar cố định ở bên trái */
+    top: 0;
+    left: 0;
+  }
+
+  /* Trạng thái mở rộng */
+  .sidebar.expanded {
+    width: 250px;
+    padding: 20px;
+  }
+
+  /* Trạng thái thu gọn */
+  .sidebar.collapsed {
+    width: 50px;
+    padding: 10px;
+  }
+
+  /* Sidebar ẩn hoàn toàn trên màn hình nhỏ */
+  .sidebar.hidden {
+    width: 0;
+    padding: 0;
+    transition: width 0.3s ease, padding 0.3s ease;
+  }
+
+  /* Nút toggle nhỏ */
+  .toggle-button-small {
+    background-image: url("../image/sidebar_collapse.svg"); /* Đường dẫn ảnh */
+    background-size: contain; /* Đảm bảo ảnh vừa khít với kích thước nút */
+    background-repeat: no-repeat; /* Không lặp lại ảnh */
+    background-position: center; /* Căn giữa ảnh */
+    border: none; /* Loại bỏ đường viền */
+    width: 30px; /* Đặt kích thước nút khớp với ảnh */
+    height: 30px;
+    cursor: pointer; /* Hiển thị con trỏ khi hover */
+    transition: transform 0.3s ease; /* Hiệu ứng phóng to nhẹ khi hover */
+    padding: 0; /* Đảm bảo không có padding bên trong */
+    margin: 10px auto; /* Căn giữa nút */
+    background-color: transparent; /* Loại bỏ nền xanh */
+  }
+
+  .toggle-button-small:hover {
+    transform: scale(1.1); /* Phóng to nhẹ khi hover */
+  }
+
+  /* Nội dung chính */
+  .main-content {
+    flex: 1;
+    padding: 20px;
+    margin-left: 250px; /* Khoảng cách mặc định khi sidebar mở rộng */
+    transition: margin-left 0.3s ease;
+    font-family: "Cascadia Code", sans-serif;
+  }
+
+  /* Tương tác giữa Sidebar và Main Content */
+  .sidebar.expanded + .main-content {
+    margin-left: 250px;
+  }
+
+  .sidebar.collapsed + .main-content {
+    margin-left: 50px;
+  }
+
+  .sidebar.hidden + .main-content {
+    margin-left: 0;
+  }
+
+  /* Với màn hình nhỏ (dưới 768px) */
+  @media (max-width: 768px) {
+    .sidebar {
+      position: absolute;
+      z-index: 1000;
+      height: 100vh;
+    }
+
+    .sidebar.hidden {
+      transform: translateX(-100%);
+    }
+
+    .sidebar.visible {
+      transform: translateX(0);
+      width: 250px;
+    }
+
+    .main-content {
+      margin-left: 0;
+    }
+  }
+
+  /* Link-style: kiểu link cho các mục */
+  .link-style {
+    margin: 10px 0;
+    cursor: pointer;
+    color: #1D6F85; /* Màu chữ mặc định */
+    padding: 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Hiển thị trạng thái khi hover */
+  .link-style:hover {
+    background-color: #D8E4E8; /* Nền sáng hơn khi hover */
+  }
+
+  /* Hiển thị mục đang được chọn */
+  .link-style.active {
+    background-color: #1D6F85; /* Nền xanh đậm */
+    color: white; /* Chữ trắng */
+    font-weight: bold;
+  }
+
+  /* Loại bỏ style mặc định của danh sách */
+  ul {
+    list-style: none; /* Xóa dấu chấm */
+    padding: 0; /* Loại bỏ padding mặc định của ul */
+    margin: 0; /* Loại bỏ margin mặc định của ul */
+  }
+
+  /* Tùy chỉnh khoảng cách giữa các mục */
+  li {
+    margin: 10px 0;
+  }

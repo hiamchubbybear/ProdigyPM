@@ -1,0 +1,22 @@
+.loading {
+    position: fixed;  /* Sử dụng fixed để ảnh luôn ở vị trí cố định */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*height: 100px;*/
+    margin-top: 50px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    overflow: hidden;
+    background-color: white;
+}
+
+.loading img {
+    position: relative;  /* Đặt position là relative để ảnh có thể thay đổi kích thước dễ dàng */
+    width: 100px;  /* Làm ảnh to lên */
+    height: auto;  /* Giữ tỉ lệ ảnh */
+    object-fit: contain;  /* Đảm bảo ảnh không bị méo khi thay đổi kích thước */
+}

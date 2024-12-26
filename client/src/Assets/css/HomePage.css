@@ -1,0 +1,95 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Cascadia Code", sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+    background-color: #0396A6; /* Màu xanh đậm từ sheet màu */
+    color: white;
+    text-align: center;
+}
+
+.hero .hero-content h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.hero .hero-content p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.hero .cta-btn {
+    background-color: #f57c00; /* Màu cam như sheet */
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.hero .cta-btn:hover {
+    background-color: #d75b00; /* Màu cam đậm */
+}
+
+/* Features Section */
+.features {
+    padding: 60px 50px;
+    text-align: center;
+    background-color: #fff;
+}
+
+.features h2 {
+    font-size: 30px;
+    margin-bottom: 40px;
+    color: #333;
+}
+
+.feature-cards {
+    display: flex;
+    justify-content: space-around;
+}
+
+.card {
+    background-color: #f9f9f9; /* Màu nền sáng cho các thẻ */
+    width: 250px;
+    padding: 30px;
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.card p {
+    font-size: 16px;
+    color: #666;
+}
+
+/* Footer */
+.footer {
+    background-color: #2d3e50; /* Màu xanh đậm từ sheet */
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}

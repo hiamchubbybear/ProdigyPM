@@ -1,0 +1,82 @@
+/* Sidebar container */
+.sidebar {
+    background-color: #eaeaea;
+    width: 200px; /* Thu nhỏ sidebar */
+    padding: 10px; /* Giảm padding */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Xóa dấu chấm trong danh sách */
+ul {
+    list-style-type: none; /* Xóa kiểu danh sách mặc định */
+    padding: 0; /* Xóa padding mặc định */
+    margin: 0; /* Xóa margin mặc định */
+}
+
+.menu-item {
+    cursor: pointer;
+    padding: 8px; /* Giảm padding */
+    border-radius: 4px;
+    background-color: #1d6f85;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+/* Thay đổi màu nền khi chọn */
+.menu-item:hover,
+.menu-item.active {
+    background-color: #145a66;
+}
+
+/* Thay đổi màu nền khi chọn submenu */
+.submenu-item.active {
+    background-color: #b3d0d9;
+}
+
+.submenu {
+    padding-left: 15px; /* Giảm khoảng cách bên trái của submenu */
+}
+
+.submenu-item {
+    cursor: pointer;
+    padding: 4px 8px; /* Giảm padding cho submenu item */
+    border-radius: 4px;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+
+/* Thay đổi màu nền khi hover submenu */
+.submenu-item:hover {
+    background-color: #d8e4e8;
+}
+
+.main-content {
+    flex: 1;
+    padding: 15px; /* Giảm padding */
+    margin-left: 200px; /* Thu nhỏ khoảng cách margin */
+    transition: margin-left 0.3s ease;
+}
+
+.menu-item.selected, .submenu-item.selected {
+    background-color: #0396A6; /* Màu nền khi chọn */
+    color: white; /* Màu chữ khi chọn */
+}
+
+.menu-item:hover, .submenu-item:hover {
+    background-color: #145a66; /* Màu nền khi hover */
+    color: white;
+}
+
+/* AccountingPage.css */
+
+/* Account page layout */
+.accounting-page {
+    display: flex;
+    min-height: 100vh; /* Full screen height */
+}
+
+.main-content {
+    flex: 1; /* Take up remaining space */
+    padding: 15px; /* Giảm padding */
+    background-color: #f9f9f9;
+}
