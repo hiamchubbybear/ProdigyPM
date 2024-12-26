@@ -1,4 +1,4 @@
-name: ProdigyPM CICD:
+name: ProdigyPM CICD
   push:
     branches: [ "main" ]
   pull_request:
