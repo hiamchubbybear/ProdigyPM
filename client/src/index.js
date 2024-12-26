@@ -10,11 +10,8 @@ import ActivateAccount from "./Component/Authenticating/ActivateAccount";
 import Login from "./Component/Authenticating/Login.jsx";
 import NavigateToForgot from "./Component/Authenticating/NavigateToForgot";
 import SignUp from "./Component/Authenticating/SignUp.jsx";
-import {
-  default as Customer,
-  default as Dialog,
-} from "./Component/HeaderFooter/Dialog";
 import HomePage from "./Component/HeaderFooter/HomePage";
+import Customer from "./Component/Profile/Customer.jsx";
 import UpdateInfo from "./Component/Profile/UpdateInfo.jsx";
 import AuthProvider from "./Context/Context.jsx";
 import Nothing from "./Error/Nothing/Nothing.js";
@@ -37,7 +34,6 @@ root.render(
             <Route path="activate" element={<ActivateAccount />} />
             <Route path="user/update" element={<UpdateInfo />} />
             <Route path="/user" element={<Customer />} />
-            <Route path="dialog" element={<Dialog />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="error404" element={<Error404 />} />
             <Route path="nothing" element={<Nothing />} />

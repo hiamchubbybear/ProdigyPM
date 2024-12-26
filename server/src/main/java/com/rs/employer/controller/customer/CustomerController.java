@@ -119,7 +119,6 @@ public class CustomerController {
         return new ApiRespone(customerImplement.forgotAccount(email));
     }
     @PostMapping("/upload")
-
     public ApiRespone<String> uploadImage(@RequestParam String username,@RequestParam("file") MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
         byte[] fileBytes = file.getBytes();

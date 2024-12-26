@@ -1,47 +1,101 @@
+/* Reset lại margin, padding, và box-sizing */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
 
+  /* Đặt font mặc định cho body */
   body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4; /* Màu nền tổng thể */
   }
 
+  /* Header */
   .header {
     background-color: #333; /* Màu nền header */
     color: #fff;
-    /* padding: 15px; */
     text-align: center;
-    border: none; /* Loại bỏ viền nếu có */
-    box-shadow: none; /* Loại bỏ bóng nếu có */
+    padding: 15px 20px; /* Thêm padding để tạo không gian */
+    border: none;
+    box-shadow: none;
   }
 
+  /* Nội dung chính */
   .content-container {
     display: flex;
     width: 100%;
-    min-height: calc(100vh - 100px); /* Điều chỉnh để trừ chiều cao header/footer */
+    min-height: calc(100vh - 100px); /* Điều chỉnh chiều cao để trừ chiều cao header/footer */
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 20px; /* Khoảng cách giữa các phần tử */
+    padding: 10px;
   }
 
+  /* Nếu có sidebar */
   .content-container.with-sidebar .main-content {
-    flex: 1;
+    flex: 1; /* Nội dung chính chiếm phần còn lại */
   }
 
+  /* Nếu không có sidebar */
   .content-container.no-sidebar .main-content {
     width: 100%;
   }
 
+  /* Main content */
   .main-content {
     padding: 20px;
-    background-color: #ffffff; /* Màu nền nội dung chính */
+    background-color: #ffffff; /* Màu nền cho nội dung */
+    border-radius: 8px; /* Thêm bo tròn cho các góc */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Thêm bóng nhẹ */
   }
 
+  /* Footer */
   .footer {
     background-color: #333; /* Màu nền footer */
     color: #fff;
     text-align: center;
     padding: 10px;
-    border: none; /* Loại bỏ viền nếu có */
-    box-shadow: none; /* Loại bỏ bóng nếu có */
+    border: none;
+    box-shadow: none;
+  }
+
+  /* Cảnh báo cho thiết bị nhỏ hơn 1024px */
+  @media (max-width: 1023px) {
+    .desktop-only {
+      display: none;
+    }
+
+    .desktop-warning {
+      display: block;
+      background-color: #f44336; /* Màu đỏ cho cảnh báo */
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    /* Thay đổi cấu trúc layout khi màn hình nhỏ hơn */
+    .content-container {
+      flex-direction: column;
+    }
+
+    .main-content {
+      width: 100%;
+      margin-bottom: 20px; /* Thêm khoảng cách dưới cho nội dung */
+    }
+
+    .footer {
+      padding: 20px; /* Tăng padding footer cho không gian thoải mái */
+    }
+  }
+
+  /* Cải thiện responsive cho desktop */
+  @media (min-width: 1024px) {
+    .content-container {
+      flex-direction: row;
+    }
+
+    .main-content {
+      width: auto;
+    }
   }
