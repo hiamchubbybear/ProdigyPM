@@ -1,4 +1,6 @@
 name: ProdigyPM CICD
+
+on:
   push:
     branches: [ "main" ]
   pull_request:
