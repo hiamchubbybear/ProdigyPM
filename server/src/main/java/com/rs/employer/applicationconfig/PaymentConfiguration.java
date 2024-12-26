@@ -1,9 +1,8 @@
-package com.rs.employer.applicationConfig;
+package com.rs.employer.applicationconfig;
 
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.Transient;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;

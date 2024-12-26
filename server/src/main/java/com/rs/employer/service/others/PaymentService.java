@@ -1,7 +1,7 @@
 package com.rs.employer.service.others;
 
 import com.nimbusds.jose.shaded.gson.JsonObject;
-import com.rs.employer.applicationConfig.PaymentConfiguration;
+import com.rs.employer.applicationconfig.PaymentConfiguration;
 import com.rs.employer.dto.Request.PaymentRequest;
 import org.springframework.stereotype.Service;
 

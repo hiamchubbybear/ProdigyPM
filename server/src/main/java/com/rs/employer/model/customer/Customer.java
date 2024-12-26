@@ -16,13 +16,13 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.rs.employer.Validator.DateOfBirth.DobValidator;
+import com.rs.employer.validator.DateOfBirth.DobValidator;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.redis.core.RedisHash;
 
 @Entity
 @DynamicUpdate

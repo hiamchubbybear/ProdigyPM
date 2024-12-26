@@ -1,4 +1,4 @@
-package com.rs.employer.Validator.DateOfBirth;
+package com.rs.employer.validator.DateOfBirth;
 
 import static java.lang.annotation.ElementType.FIELD;
 import java.lang.annotation.Retention;

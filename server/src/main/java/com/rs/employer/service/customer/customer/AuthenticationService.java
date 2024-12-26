@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import com.nimbusds.jose.*;
 import com.rs.employer.dto.Request.ActivateRequestToken;
-import com.rs.employer.email.EmailService;
+import com.rs.employer.service.EmailService;
 import com.rs.employer.model.customer.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;

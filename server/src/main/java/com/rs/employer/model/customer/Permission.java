@@ -3,6 +3,7 @@ package com.rs.employer.model.customer;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.springframework.data.redis.core.RedisHash;
 
 @Entity
 @Table(name = "permission")

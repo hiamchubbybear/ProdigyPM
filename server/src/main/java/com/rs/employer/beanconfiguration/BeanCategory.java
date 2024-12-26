@@ -1,4 +1,4 @@
-package com.rs.employer.BeanConfiguration;
+package com.rs.employer.beanconfiguration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

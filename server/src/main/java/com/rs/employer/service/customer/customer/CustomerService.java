@@ -15,10 +15,11 @@ import com.rs.employer.dao.customer.TokenService;
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
 import com.rs.employer.dto.Response.*;
-import com.rs.employer.email.EmailService;
+import com.rs.employer.service.EmailService;
 import com.rs.employer.model.customer.Customer;
 import com.rs.employer.model.customer.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -81,9 +82,9 @@ public class CustomerService implements ICustomerService {
                 customer.setCreate(now);
                 customerRepository.save(customer);
                 var token = tokenService.checkTokenAndRegenerateToken(registerRequest.getEmail());
-                System.out.println("Token đã gửi là  " +token);
+                System.out.println("Token đã gửi là  " + token);
                 emailService.sendActivateToken(registerRequest.getEmail(),
-                        "Activate Token",token);
+                        "Activate Token", token);
                 return new RegisterRespone(registerRequest.getUsername(), registerRequest.getPassword(), registerRequest.getEmail());
             }
         } catch (Exception e) {
@@ -92,9 +93,14 @@ public class CustomerService implements ICustomerService {
         return null;
     }
 
+    @Cacheable(
+            value = "caching",
+            key = "#customer.username",
+            condition = "#customer != null",
+            unless = "#result == null"
+    )
     @Override
     public Customer addCustomer(CustomerRequest customer) {
-
         if (customerRepository.existsByUsername(customer.getUsername()))
             throw new AppException(ErrorCode.USEREXISTED_OR_USERIDEXISTED);
         else {
@@ -115,7 +121,7 @@ public class CustomerService implements ICustomerService {
         System.out.println("Tên của người dùng cập nhật là " + username);
         Optional<Customer> customerOptional = customerRepository.findByUsername(username);
 
-    if (customerOptional.isPresent()) {
+        if (customerOptional.isPresent()) {
             Customer existingCustomer = customerOptional.get();
             if (username.equals(customer.getUsername())) {
                 existingCustomer.setEmail(customer.getEmail());
@@ -153,12 +159,29 @@ public class CustomerService implements ICustomerService {
             throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
     }
 
+    @Cacheable(
+            value = "userInfoCache",
+            key = "#username",
+            unless = "#result == null"
+    )
     public CustomerInfoDTO getMyInfo() {
-        var user = SecurityContextHolder.getContext();
-        String name = user.getAuthentication().getName();
-        Customer customer = customerRepository.findByUsername(name).orElse(new Customer());
-        return new CustomerInfoDTO(name, customer.getEmail(), customer.getName(), customer.getAddress(),
-                customer.isGender(), customer.isStatus());
+        var user = SecurityContextHolder.getContext().getAuthentication();
+
+        if (user == null) {
+            throw new AppException(ErrorCode.USER_NOTFOUND);
+        }
+
+        Customer customer = customerRepository.findByUsername(user.getName())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+
+        return new CustomerInfoDTO(
+                user.getName(),
+                customer.getEmail(),
+                customer.getName(),
+                customer.getAddress(),
+                customer.isGender(),
+                customer.isStatus()
+        );
     }
 
     public Customer registerUser(UUID id, String password, String login) {
@@ -196,7 +219,7 @@ public class CustomerService implements ICustomerService {
             customer.setStatus(customer.getStatus());
             customer.setUpdate(now);
             customer.setDob(request.getDob());
-            System.out.println("Đã cập nht thông tin của "  + name);
+            System.out.println("Đã cập nht thông tin của " + name);
             return customerRepo.save(customer);
         } else {
             throw new AppException(ErrorCode.USER_NOTFOUND);
@@ -232,7 +255,7 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public ActivateAccountResponse activateRequest(ActivateRequestToken treq) throws ParseException, JOSEException {
-        if(tokenService.compareToken(treq.getToken() ,treq.getEmail())) {
+        if (tokenService.compareToken(treq.getToken(), treq.getEmail())) {
             Optional<Customer> foundCustomer = customerRepository.findByEmail(treq.getEmail());
             System.out.println("Found customer: " + foundCustomer.get());
             Customer customer = foundCustomer.get();
@@ -271,15 +294,15 @@ public class CustomerService implements ICustomerService {
     @Override
     public ForgotAccountRespone forgotAccount(String email) throws JOSEException {
         var object = customerRepo.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION));
-         String token = tokenService.checkTokenAndRegenerateToken(email);
+        String token = tokenService.checkTokenAndRegenerateToken(email);
         if (customerRepository.existsByUsernameAndEmail
                 (object.getUsername(), email)) {
-                String toClient = new StringBuilder().
-                        append(token).toString();
-                emailService.sendResetPasswordLink(email, "", toClient);
-                System.out.println();
-                return new ForgotAccountRespone(true, "Your reset token sent to your email" ,  toClient);
-            }
+            String toClient = new StringBuilder().
+                    append(token).toString();
+            emailService.sendResetPasswordLink(email, "", toClient);
+            System.out.println();
+            return new ForgotAccountRespone(true, "Your reset token sent to your email", toClient);
+        }
         return new ForgotAccountRespone(false, "Failed", "null");
     }
 
@@ -303,7 +326,7 @@ public class CustomerService implements ICustomerService {
 
     public boolean confirmForgotPasswordCode(String passcode, String email) {
         var customer = customerRepository.findByEmail(email).get();
-        var token = tokenRepository.findTokenByCustomerEmailAndUsed(email,false);
+        var token = tokenRepository.findTokenByCustomerEmailAndUsed(email, false);
         if (customer != null) {
             if (passcode.equals(token)) {
                 return true;

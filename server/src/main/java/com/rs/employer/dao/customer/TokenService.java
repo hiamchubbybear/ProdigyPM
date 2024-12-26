@@ -1,16 +1,13 @@
 package com.rs.employer.dao.customer;
 
-import com.rs.employer.email.EmailService;
+import com.rs.employer.service.EmailService;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.customer.Token;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service

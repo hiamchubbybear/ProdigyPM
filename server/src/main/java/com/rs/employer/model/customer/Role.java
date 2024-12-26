@@ -5,6 +5,7 @@ import java.util.Set;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import org.springframework.data.redis.core.RedisHash;
 
 @Entity
 public class Role {

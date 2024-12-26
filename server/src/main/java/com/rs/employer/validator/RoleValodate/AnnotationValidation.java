@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package com.rs.employer.Validator.RoleValodate;
+package com.rs.employer.validator.RoleValodate;
 
 import java.util.Arrays;
 import java.util.List;

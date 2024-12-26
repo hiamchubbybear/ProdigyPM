@@ -1,7 +1,7 @@
 package com.rs.employer.controller.temp;
 
 import com.nimbusds.jose.shaded.gson.JsonObject;
-import com.rs.employer.applicationConfig.PaymentConfiguration;
+import com.rs.employer.applicationconfig.PaymentConfiguration;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

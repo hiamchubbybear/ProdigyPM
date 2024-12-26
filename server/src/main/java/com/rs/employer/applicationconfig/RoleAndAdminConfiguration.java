@@ -1,4 +1,4 @@
-package com.rs.employer.applicationConfig;
+package com.rs.employer.applicationconfig;
 
 
 import java.time.Instant;

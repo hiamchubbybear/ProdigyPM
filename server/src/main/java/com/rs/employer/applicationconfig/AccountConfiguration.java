@@ -1,4 +1,4 @@
-package com.rs.employer.applicationConfig;
+package com.rs.employer.applicationconfig;
 
 import com.rs.employer.dao.customer.AccountRepository;
 import com.rs.employer.enums.AccountEnum;
@@ -8,18 +8,9 @@ import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.account.ChartOfAccounts;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.data.repository.query.Param;
-
-import java.beans.Transient;
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
 
 @Configuration
 public class AccountConfiguration {

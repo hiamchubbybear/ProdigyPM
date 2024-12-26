@@ -1,4 +1,4 @@
-package com.rs.employer.Validator.DateOfBirth;
+package com.rs.employer.validator.DateOfBirth;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
