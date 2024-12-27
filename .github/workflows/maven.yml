@@ -47,9 +47,13 @@ jobs:
       run: |
         docker run -d -p 6379:6379 --name my-redis my-redis-image
         sleep 5 # Đợi một chút để Redis khởi động
-        docker exec -it my-redis redis-cli -a 123456 ping
 
-    # 7. Dọn dẹp
+    # 7. Kiểm tra Redis
+    - name: Check Redis
+      run: |
+        docker exec my-redis redis-cli -a 123456 ping
+
+    # 8. Dọn dẹp
     - name: Stop and remove Redis container
       run: |
         docker stop my-redis
