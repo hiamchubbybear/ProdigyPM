@@ -28,3 +28,29 @@ jobs:
       run: |
         cd server # Chuyển vào thư mục chứa code server
         mvn clean install
+
+    # 4. Cài đặt Docker
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v2
+
+    # 5. Xây dựng hình ảnh Docker cho Redis
+    - name: Build Redis Docker image
+      run: |
+        echo "FROM redis:latest" > Dockerfile
+        echo "ENV REDIS_PASSWORD 123456" >> Dockerfile
+        echo "EXPOSE 6379" >> Dockerfile
+        echo "CMD [\"redis-server\", \"--requirepass\", \"123456\"]" >> Dockerfile
+        docker build -t my-redis-image .
+
+    # 6. Chạy Redis
+    - name: Run Redis
+      run: |
+        docker run -d -p 6379:6379 --name my-redis my-redis-image
+        sleep 5 # Đợi một chút để Redis khởi động
+        docker exec -it my-redis redis-cli -a 123456 ping
+
+    # 7. Dọn dẹp
+    - name: Stop and remove Redis container
+      run: |
+        docker stop my-redis
+        docker rm my-redis

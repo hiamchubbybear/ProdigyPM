@@ -153,27 +153,36 @@ public class CustomerService implements ICustomerService {
 
     @Cacheable(
             value = "userInfoCache",
-            key = "#username",
-            unless = "#result == null"
+            key = "#root.target.getUsername()"
     )
     public CustomerInfoDTO getMyInfo() {
         var user = SecurityContextHolder.getContext().getAuthentication();
-
         if (user == null) {
             throw new AppException(ErrorCode.USER_NOTFOUND);
         }
 
-        Customer customer = customerRepository.findByUsername(user.getName())
+        String username = user.getName();
+        if (username == null) {
+            throw new AppException(ErrorCode.USER_NOTFOUND);
+        }
+
+        Customer customer = customerRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
 
         return new CustomerInfoDTO(
-                user.getName(),
+                username,
                 customer.getEmail(),
                 customer.getName(),
                 customer.getAddress(),
                 customer.isGender(),
                 customer.isStatus()
         );
+    }
+
+
+    public String getUsername() {
+        var user = SecurityContextHolder.getContext().getAuthentication();
+        return user != null ? user.getName() : null;
     }
 
     public Customer registerUser(UUID id, String password, String login) {

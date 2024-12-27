@@ -1,6 +1,11 @@
 package com.rs.employer.dto.Response;
 
-public class CustomerInfoDTO {
+import jakarta.transaction.Transactional;
+
+import java.io.Serializable;
+
+@Transactional
+public class CustomerInfoDTO  implements Serializable {
     String username;
     String email;
     String name;
