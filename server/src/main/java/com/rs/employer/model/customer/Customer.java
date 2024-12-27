@@ -1,5 +1,6 @@
 package com.rs.employer.model.customer;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Set;
@@ -31,7 +32,9 @@ import org.springframework.data.redis.core.RedisHash;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Customer {
+public class Customer implements Serializable {
+  private static final long serialVersionUID = 1L;
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @UuidGenerator
@@ -46,10 +49,9 @@ public class Customer {
   private String email;
   private String name;
   private String address;
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   private Set<Role> roles;
   private boolean gender;
-  @Nullable
   @Column(name = "status")
   private boolean status;
   @Column(name = "create_at", updatable = false)

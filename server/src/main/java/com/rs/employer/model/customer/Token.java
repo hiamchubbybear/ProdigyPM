@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Token {
+    private static final long serialVersionUID = 4L; // Để đảm bảo tính tương thích
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;

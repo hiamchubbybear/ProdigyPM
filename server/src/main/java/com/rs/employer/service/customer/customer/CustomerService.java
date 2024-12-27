@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import com.nimbusds.jose.JOSEException;
@@ -18,6 +19,8 @@ import com.rs.employer.dto.Response.*;
 import com.rs.employer.service.EmailService;
 import com.rs.employer.model.customer.Customer;
 import com.rs.employer.model.customer.Role;
+import jakarta.persistence.Transient;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ByteArrayResource;
@@ -74,7 +77,8 @@ public class CustomerService implements ICustomerService {
     @Override
     public RegisterRespone register(RegisterRequest registerRequest) {
         try {
-            if (!(customerRepository.existsByEmail(registerRequest.getEmail()) && !customerRepository.existsByUsername(registerRequest.getUsername()))) {
+            if (!(customerRepository.existsByEmail(registerRequest.getEmail()) &&
+                    !customerRepository.existsByUsername(registerRequest.getUsername()))) {
                 Customer customer = new Customer();
                 customer.setUsername(registerRequest.getUsername());
                 customer.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
@@ -119,20 +123,15 @@ public class CustomerService implements ICustomerService {
     public CustomerInfoDTO updateCustomer(CustomerInfoDTO customer) {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         System.out.println("Tên của người dùng cập nhật là " + username);
-        Optional<Customer> customerOptional = customerRepository.findByUsername(username);
-
-        if (customerOptional.isPresent()) {
-            Customer existingCustomer = customerOptional.get();
-            if (username.equals(customer.getUsername())) {
-                existingCustomer.setEmail(customer.getEmail());
-                existingCustomer.setName(customer.getName());
-                existingCustomer.setAddress(customer.getAddress());
-                existingCustomer.setGender(customer.isGender());
-                existingCustomer.setStatus(customer.isStatus());
-                customerRepository.save(existingCustomer);
-                return customer;
-            }
-            throw new AppException(ErrorCode.USER_NOTFOUND);
+        Customer existingCustomer = customerRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USEREXISTED_OR_USERIDEXISTED));
+        if (username.equals(customer.getUsername())) {
+            existingCustomer.setEmail(customer.getEmail());
+            existingCustomer.setName(customer.getName());
+            existingCustomer.setAddress(customer.getAddress());
+            existingCustomer.setGender(customer.isGender());
+            existingCustomer.setStatus(customer.isStatus());
+            customerRepository.save(existingCustomer);
+            return customer;
         }
         throw new AppException(ErrorCode.USER_NOTFOUND);
     }
@@ -149,14 +148,7 @@ public class CustomerService implements ICustomerService {
     @Override
     @PostAuthorize("returnObject.username == authentication.name")
     public CustomerResponse listCustomerById(UUID id) {
-        Optional<Customer> eOptional = Optional.ofNullable(
-                customerRepository.findById(id)
-                        .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND)));
-        CustomerResponse customer1 = mapper.toCustomerRespone(eOptional.get());
-        if (customer1 != null) {
-            return customer1;
-        } else
-            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+        return mapper.toCustomerRespone(customerRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND)));
     }
 
     @Cacheable(
@@ -196,35 +188,33 @@ public class CustomerService implements ICustomerService {
 
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
+    @Transactional
+    @Cacheable(value = "customers", key = "'AllCustomers'")
     public List listAllCustomer() {
         return customerRepository.findAll(Sort.by("create").ascending());
     }
 
     @Override
     public Customer customerRequest(CustomerUpdateRespone request) {
-        var user = SecurityContextHolder.getContext();
-        String name = user.getAuthentication().getName();
-        Optional<Customer> customerOptional = customerRepository.findByUsername(name);
-        if (customerOptional.isPresent()) {
-            Customer customer = customerOptional.get();
-            if (((request.getPassword() != null) && (request.getPassword() != customer.getPassword())))
-                customer.setPassword(request.getPassword());
-            if (request.getEmail() != customer.getEmail()) customer.setEmail(request.getEmail());
-            customer.setName(request.getName());
-            customer.setAddress(request.getAddress());
-            Set<Role> setRoles = new HashSet<Role>();
-            setRoles.add(roleRepository.findByName(request.getRole()));
-            customer.setRoles(setRoles);
-            customer.setGender(request.isGender());
-            customer.setStatus(customer.getStatus());
-            customer.setUpdate(now);
-            customer.setDob(request.getDob());
-            System.out.println("Đã cập nht thông tin của " + name);
-            return customerRepo.save(customer);
-        } else {
-            throw new AppException(ErrorCode.USER_NOTFOUND);
-        }
-
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = customerRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+        Optional.ofNullable(request.getPassword())
+                .filter(password -> !password.equals(customer.getPassword()))
+                .ifPresent(customer::setPassword);
+        Optional.ofNullable(request.getEmail())
+                .filter(email -> !email.equals(customer.getEmail()))
+                .ifPresent(customer::setEmail);
+        customer.setName(request.getName());
+        customer.setAddress(request.getAddress());
+        Role role = roleRepository.findByName(request.getRole());
+        customer.setRoles(Set.of(role));
+        customer.setGender(request.isGender());
+        customer.setStatus(customer.getStatus());
+        customer.setUpdate(Instant.now());
+        customer.setDob(request.getDob());
+        System.out.println("Đã cập nhật thông tin của {}" + username);
+        return customerRepository.save(customer);
     }
 
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
@@ -236,15 +226,11 @@ public class CustomerService implements ICustomerService {
     @PreAuthorize("hasAuthority('SCOPE_UPDATE_USER')")
     @PostAuthorize("returnObject.username == authentication.name")
     public Customer updatePassword(UUID id, String password) {
-        Optional<Customer> eCustomer = customerRepository.findById(id);
-        if (eCustomer != null) {
-            Customer customer1 = eCustomer.get();
-            customer1.setPassword(password);
-            customer1.setUpdate(now);
-            customer1.setCreate(customer1.getCreate());
-            return customerRepository.save(customer1);
-        } else
-            throw new AppException(ErrorCode.USERNAME_INVALID);
+        Customer customer1 = customerRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+        customer1.setPassword(password);
+        customer1.setUpdate(now);
+        customer1.setCreate(customer1.getCreate());
+        return customerRepository.save(customer1);
     }
 
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
@@ -264,32 +250,6 @@ public class CustomerService implements ICustomerService {
                     ;
         } else throw new AppException(ErrorCode.ACTIVATED_FAILED);
     }
-
-//    @Override
-//    public ActivateAccountResponse activateRequest(ActivateRequestToken token) {
-//        try {
-//            var context = SecurityContextHolder.getContext().getAuthentication();
-//            if (context != null && context.getPrincipal() instanceof Jwt) {
-//                Jwt jwt = (Jwt) (context.getPrincipal());
-//                String email = jwt.getClaim("email");
-//                var name = jwt.getSubject();
-//                if (token.getToken().equals(jwt.getId())) {
-//                    if (customerRepository.existsByUsernameAndEmail(name, email)
-//                            && customerRepo.findStatusByUsernameAndEmail(name) != true) {
-//                        return (customerRepository.updateStatus(name) > 0)
-//                                ? new ActivateAccountResponse(true)
-//                                : new ActivateAccountResponse(false);
-//                    }
-//                } else {
-//                    throw new AppException(ErrorCode.ACTIVATED_FAILED);
-//                }
-//            }
-//        } catch (Exception e) {
-//            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
-//        }
-//        return new ActivateAccountResponse(false);
-//    }
-
 
     @Override
     public ForgotAccountRespone forgotAccount(String email) throws JOSEException {

@@ -1,5 +1,6 @@
 package com.rs.employer.model.customer;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import jakarta.persistence.Entity;
@@ -8,7 +9,9 @@ import jakarta.persistence.ManyToMany;
 import org.springframework.data.redis.core.RedisHash;
 
 @Entity
-public class Role {
+public class Role  implements Serializable {
+    private static final long serialVersionUID = 2L;
+
     @Id
     private String name;
     private String description;

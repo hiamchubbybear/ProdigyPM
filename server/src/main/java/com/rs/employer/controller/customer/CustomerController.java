@@ -44,6 +44,7 @@ public class CustomerController {
     }
 
     @GetMapping(path = "/all")
+
     public ApiRespone<List<Customer>> getAllUser() {
         return new ApiRespone<>(customerImplement.listAllCustomer());
     }
