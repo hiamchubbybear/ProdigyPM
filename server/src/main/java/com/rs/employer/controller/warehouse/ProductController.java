@@ -30,7 +30,7 @@ public class ProductController {
     @GetMapping(path = "/getbyid/{id}")
     public ApiRespone<Optional<Product>> getUserById(@PathVariable(name = "id") Long ID) {
         ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(repo.getProduct(ID).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_EXISTED)));
+        apiRespone.setData(repo.getProduct(ID).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_ALREADY_EXISTS)));
         return apiRespone;
     }
     @GetMapping(path = "/all")

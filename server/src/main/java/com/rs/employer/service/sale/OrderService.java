@@ -36,7 +36,7 @@ public class OrderService {
 
     public OrderDTO updateOrder(Integer orderId, OrderDTO orderDTO) {
         Order existingOrder = orderRepository.findById(orderId)
-                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND_OR_EXISTED));
+                .orElseThrow(() -> new AppException(ErrorCode.PURCHASE_ORDER_NOT_FOUND));
 
         existingOrder.setOrderNumber(orderDTO.getOrderNumber());
         existingOrder.setOrderDate(orderDTO.getOrderDate());

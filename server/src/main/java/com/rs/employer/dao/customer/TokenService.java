@@ -13,24 +13,24 @@ import java.util.Optional;
 @Service
 public class TokenService {
     public final GenerateTokenService generateTokenService;
-    public final TokenRepository  tokenRepository;
-    private final EmailService emailService;
+    public final TokenRepository tokenRepository;
     private final CustomerRepo customerRepo;
 
-    public TokenService(GenerateTokenService generateTokenService , TokenRepository tokenRepository, EmailService emailService, CustomerRepo customerRepo) {
+    public TokenService(GenerateTokenService generateTokenService, TokenRepository tokenRepository, CustomerRepo customerRepo) {
         this.generateTokenService = generateTokenService;
         this.tokenRepository = tokenRepository;
-        this.emailService = emailService;
         this.customerRepo = customerRepo;
     }
+
     public String checkTokenAndRegenerateToken(String email) {
-        Token tk = tokenRepository.findTokenByCustomerEmailAndUsed(email,false).orElse(null);
-        if (tk == null || tk.isUsed() || tk.getExpireDate().isBefore(LocalDateTime.now())) {
+        Token tk = tokenRepository.findTokenByCustomerEmailAndUsed(email, false).orElse(null);
+        if (tk == null) {
             return generateTokenAndSave(email);
         }
-        tk.setUsed(true);
-        tokenRepository.save(tk);
-        return generateTokenAndSave(email);
+        if (tk.isUsed() || tk.getExpireDate().isBefore(LocalDateTime.now())) {
+            return generateTokenAndSave(email);
+        }
+        return tk.getToken();
     }
 
     private String generateTokenAndSave(String email) {
@@ -43,17 +43,19 @@ public class TokenService {
         newResetToken.setToken(newToken);
         newResetToken.setExpireDate(LocalDateTime.now().plusMinutes(15));
         newResetToken.setUsed(false);
-        newResetToken.setCustomer(customerRepo.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND)));
+        newResetToken.setCustomer(customerRepo.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND)));
         tokenRepository.save(newResetToken);
 
         return newToken;
     }
+
     public Boolean compareToken(String token, String email) {
-        Optional<Token> optionalToken = tokenRepository.findTokenByCustomerEmailAndUsed(email,false);
+        Optional<Token> optionalToken = tokenRepository.findTokenByCustomerEmailAndUsed(email, false);
         if (optionalToken.isEmpty()) {
             return false;
         }
-        if(optionalToken.get().getToken().equals(token)) {
+        if (optionalToken.get().getToken().equals(token)) {
             optionalToken.get().setUsed(true);
             tokenRepository.save(optionalToken.get());
         }

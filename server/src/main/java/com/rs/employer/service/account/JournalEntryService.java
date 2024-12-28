@@ -103,7 +103,7 @@ public class JournalEntryService {
 			String createBy = SecurityContextHolder.getContext().getAuthentication().getName();
 			JournalEntry entry = journalEntryMapper.toJournalEntry(journalEntry);
 			if (!customerRepo.existsByUsername(createBy) || journalEntryRepository.existsByEntryDate(journalEntry.getEntryDate()))
-				throw new AppException(ErrorCode.NOT_FOUND_OR_EXISTED);
+				throw new AppException(ErrorCode.JOURNAL_ENTRY_NOT_FOUND);
 			else
 				entry.setCreatedBy(customerRepo.findByUsername(createBy).get());
 			entry.setCreatedDate(LocalDateTime.now());

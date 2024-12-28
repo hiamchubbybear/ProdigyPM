@@ -40,7 +40,7 @@ public class BOMService {
 
     public BOM updateBOM(Long bomId, BOMRequest bomRequest) {
         BOM existingBOM = bomRepository.findById(bomId)
-                .orElseThrow(() -> new AppException(ErrorCode.BOM_NOTFOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.BOM_NOT_FOUND));
 
         Product product = productRepository.findById(bomRequest.getProductId())
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOTFOUND));
@@ -60,7 +60,7 @@ public class BOMService {
 
     public BOM getBOMById(Long bomId) {
         return bomRepository.findById(bomId)
-                .orElseThrow(() -> new AppException(ErrorCode.BOM_NOTFOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.BOM_NOT_FOUND));
     }
 
     public List<BOM> findBOMsByProductId(Long productId) {
@@ -77,7 +77,7 @@ public class BOMService {
 
     public void deleteBOM(Long bomId) {
         if (!bomRepository.existsById(bomId)) {
-            throw new AppException(ErrorCode.BOM_NOTFOUND);
+            throw new AppException(ErrorCode.BOM_NOT_FOUND);
         }
         bomRepository.deleteById(bomId);
     }

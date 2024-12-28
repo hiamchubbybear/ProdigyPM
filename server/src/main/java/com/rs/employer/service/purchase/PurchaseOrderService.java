@@ -42,7 +42,7 @@ public class PurchaseOrderService {
 
     public PurchaseOrderDTO createPurchaseOrder(PurchaseOrderDTO dto) {
         Supplier supplier = supplierRepository.findById(dto.getSupplierId())
-                .orElseThrow(() -> new AppException(ErrorCode.SUPPLIER_NOTFOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.SUPPLIER_NOT_FOUND));
         PurchaseOrder purchaseOrder = purchaseOrderMapper.toEntity(dto);
         purchaseOrder.setSupplier(supplier);
         return purchaseOrderMapper.toDTO(purchaseOrderRepository.save(purchaseOrder));
@@ -57,7 +57,7 @@ public class PurchaseOrderService {
 
     public PurchaseOrderDTO getPurchaseOrderById(Long id) {
         PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.PURCHASE_ORDER_NOTFOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.PURCHASE_ORDER_NOT_FOUND));
         return purchaseOrderMapper.toDTO(purchaseOrder);
     }
 
@@ -77,16 +77,16 @@ public class PurchaseOrderService {
     @Transactional
     public PurchaseOrderDTO updateStatus(Long id, Integer status) {
         PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.PURCHASE_ORDER_NOTFOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.PURCHASE_ORDER_NOT_FOUND));
         purchaseOrder.setStatus(status);
         return purchaseOrderMapper.toDTO(purchaseOrder);
     }
 
     public PurchaseOrderDTO updatePurchaseOrder(Long id, PurchaseOrderDTO dto) {
         PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.PURCHASE_ORDER_NOTFOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.PURCHASE_ORDER_NOT_FOUND));
         Supplier supplier = supplierRepository.findById(dto.getSupplierId())
-                .orElseThrow(() -> new AppException(ErrorCode.SUPPLIER_NOTFOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.SUPPLIER_NOT_FOUND));
         purchaseOrder.setSupplier(supplier);
         purchaseOrder.setOrderNumber(dto.getOrderNumber());
         purchaseOrder.setOrderDate(dto.getOrderDate());

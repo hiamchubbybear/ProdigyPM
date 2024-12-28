@@ -21,7 +21,7 @@ public class CategoryService implements ICategoryService {
         if (!categoryRepository.existsById(request.getCategoryId())) {
             return categoryRepository.save(request);
         } else {
-            throw new AppException(ErrorCode.PRODUCT_EXISTED);
+            throw new AppException(ErrorCode.PRODUCT_ALREADY_EXISTS);
         }
     }
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")

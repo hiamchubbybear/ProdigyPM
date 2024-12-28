@@ -39,7 +39,7 @@ public class SupplierService {
 
     public SupplierDTO getSupplierById(Integer id) {
         Supplier supplier = supplierRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.SUPPLIER_NOTFOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.SUPPLIER_NOT_FOUND));
         return supplierMapper.toDTO(supplier);
     }
 
@@ -53,7 +53,7 @@ public class SupplierService {
 
     public SupplierDTO updateSupplier(Integer id, SupplierDTO dto) {
         Supplier supplier = supplierRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.SUPPLIER_NOTFOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.SUPPLIER_NOT_FOUND));
         supplier.setSupplierName(dto.getSupplierName());
         supplier.setSupplierCode(dto.getSupplierCode());
         supplier.setSupplierAddress(dto.getSupplierAddress());

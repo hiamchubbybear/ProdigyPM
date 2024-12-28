@@ -66,7 +66,7 @@ public class ProductService implements IProductService {
     @Override
     public Product updateProduct(Long ID, ProductRequest request) {
         if (!productRepository.existsById(ID)) {
-            throw new AppException(ErrorCode.PRODUCT_EXISTED);
+            throw new AppException(ErrorCode.PRODUCT_ALREADY_EXISTS);
         } else {
             Product product = mapper.toProduct(request);
             product.setUpdateAt(now);

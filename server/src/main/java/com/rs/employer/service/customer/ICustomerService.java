@@ -27,7 +27,6 @@ public interface ICustomerService {
     public Customer customerRequest(CustomerUpdateRespone request);
     public CustomerInfoDTO updateCustomer(CustomerInfoDTO customer);
     public Customer updatePassword(UUID id, String pwd);
-    public Customer registerUser(UUID id, String password, String login);
     public List<Customer> listAllSort(String sort);
     public ActivateAccountResponse activateRequest(ActivateRequestToken treq) throws ParseException, JOSEException;
     public ForgotAccountRespone forgotAccount(String request) throws JOSEException;

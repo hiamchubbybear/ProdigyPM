@@ -8,6 +8,7 @@ import java.util.Set;
 import com.rs.employer.model.customer.Customer;
 import com.rs.employer.model.customer.Permission;
 import com.rs.employer.model.customer.Role;
+import com.rs.employer.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.actuate.sbom.SbomEndpoint;
@@ -19,22 +20,20 @@ import com.rs.employer.dao.customer.CustomerRepo;
 import com.rs.employer.dao.customer.PermissionRepository;
 import com.rs.employer.dao.customer.RoleRepository;
 import com.rs.employer.enums.PermissionEnum;
-
 @org.springframework.context.annotation.Configuration
 public class RoleAndAdminConfiguration {
-    private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
-    private final PermissionRepository permissionRepository;
     @Autowired
-    public RoleAndAdminConfiguration(PasswordEncoder passwordEncoder, RoleRepository roleRepository, PermissionRepository permissionRepository) {
-        this.passwordEncoder = passwordEncoder;
-        this.roleRepository = roleRepository;
-        this.permissionRepository = permissionRepository;
-    }
+    PasswordEncoder passwordEncoder;
+    @Autowired
+    RoleRepository roleRepository;
+    @Autowired
+    PermissionRepository permissionRepository;
+    @Autowired
+    EmailService emailService;
 
     @Bean
     @Primary
-    ApplicationRunner createAdmin( @Autowired(required = false) SbomEndpoint sbomEndpoint) {
+    ApplicationRunner createAdmin() {
         return args -> {
             for (PermissionEnum permissionEnum : PermissionEnum.values()) {
                 if (!permissionRepository.existsByName(permissionEnum.name())) {
@@ -74,6 +73,9 @@ public class RoleAndAdminConfiguration {
                     admin.setPassword(passwordEncoder.encode("160304"));
                     admin.setRoles(role1);
                     admin.setStatus(true);
+//                    admin.setStatus("ONLINE");
+//                    emailService.sendActivateToken("ilovepakpak@gmail.com", "Test email", "TOOOOOOO");
+//                    System.out.println("Sent email!");
                     repo.save(admin);
                 }
             }

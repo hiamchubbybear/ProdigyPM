@@ -29,7 +29,7 @@ public class PermissionService implements IPermissionService {
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public Permission addPermission(PermissionRequest request) {
         if (repo.existsById(request.getName())) {
-            throw new AppException(ErrorCode.PRODUCT_EXISTED);
+            throw new AppException(ErrorCode.PRODUCT_ALREADY_EXISTS);
         } else {
             Permission permission = mapper.toPermission(request);
             return repo.save(permission);

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 import com.nimbusds.jose.JOSEException;
 import com.rs.employer.dao.customer.CustomerRepo;
+import com.rs.employer.dto.CustomerAllInfoDTO;
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
 import com.rs.employer.dto.Response.*;
@@ -45,7 +46,7 @@ public class CustomerController {
 
     @GetMapping(path = "/all")
 
-    public ApiRespone<List<Customer>> getAllUser() {
+    public ApiRespone<List<CustomerAllInfoDTO>> getAllUser() {
         return new ApiRespone<>(customerImplement.listAllCustomer());
     }
     @GetMapping(path = "/getbyid/{id}")

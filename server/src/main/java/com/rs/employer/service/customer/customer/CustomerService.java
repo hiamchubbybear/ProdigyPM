@@ -1,4 +1,3 @@
-
 package com.rs.employer.service.customer.customer;
 
 import java.io.IOException;
@@ -7,20 +6,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import com.nimbusds.jose.JOSEException;
 import com.rs.employer.dao.customer.TokenRepository;
 import com.rs.employer.dao.customer.TokenService;
+import com.rs.employer.dto.CustomerAllInfoDTO;
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
 import com.rs.employer.dto.Response.*;
 import com.rs.employer.service.EmailService;
 import com.rs.employer.model.customer.Customer;
 import com.rs.employer.model.customer.Role;
-import jakarta.persistence.Transient;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ByteArrayResource;
@@ -41,17 +41,19 @@ import com.rs.employer.service.customer.ICustomerService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Service
-@Slf4j
+/*
+ @status : done
+ */
 
+@Service
 public class CustomerService implements ICustomerService {
 
+    private static final Logger log = LoggerFactory.getLogger(CustomerService.class);
     private final CustomerRepo customerRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomerMapper mapper;
     private final CustomerRepo customerRepo;
-    private final AuthenticationService authenticationService;
     private final EmailService emailService;
     private final Instant now = Instant.now();
     private final TokenRepository tokenRepository;
@@ -60,43 +62,58 @@ public class CustomerService implements ICustomerService {
     @Autowired
     public CustomerService(CustomerRepo customerRepository, RoleRepository roleRepository,
                            PasswordEncoder passwordEncoder,
-                           CustomerMapper mapper, CustomerRepo customerRepo,
-                           AuthenticationService authenticationService, EmailService emailService, TokenRepository tokenRepository, TokenService tokenService) {
+                           CustomerMapper mapper, CustomerRepo customerRepo, EmailService emailService, TokenRepository tokenRepository, TokenService tokenService) {
         this.customerRepository = customerRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.mapper = mapper;
         this.customerRepo = customerRepo;
-        this.authenticationService = authenticationService;
         this.emailService = emailService;
         this.tokenRepository = tokenRepository;
         this.tokenService = tokenService;
     }
 
-
+    /*
+    @req: Use to create an account without user profile.
+    @par: RegisterRequest Object containing the username, password, and email of the new customer.
+    @des: This method checks if the provided email and username already exist in the system. 
+          If either exists, it throws an exception. If both are unique, it creates a new Customer object, 
+          encodes the password, saves the customer to the database, generates an activation token, 
+          and sends an activation email to the user.
+    */
     @Override
     public RegisterRespone register(RegisterRequest registerRequest) {
-        try {
-            if (!(customerRepository.existsByEmail(registerRequest.getEmail()) &&
-                    !customerRepository.existsByUsername(registerRequest.getUsername()))) {
-                Customer customer = new Customer();
-                customer.setUsername(registerRequest.getUsername());
-                customer.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-                customer.setEmail(registerRequest.getEmail());
-                customer.setCreate(now);
-                customerRepository.save(customer);
-                var token = tokenService.checkTokenAndRegenerateToken(registerRequest.getEmail());
-                System.out.println("Token đã gửi là  " + token);
-                emailService.sendActivateToken(registerRequest.getEmail(),
-                        "Activate Token", token);
-                return new RegisterRespone(registerRequest.getUsername(), registerRequest.getPassword(), registerRequest.getEmail());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (customerRepository.existsByEmail(registerRequest.getEmail())) {
+            throw new AppException(ErrorCode.EMAIL_ALREADY_EXISTS);
         }
-        return null;
+        if (customerRepository.existsByUsername(registerRequest.getUsername())) {
+            throw new AppException(ErrorCode.USERNAME_ALREADY_EXISTS);
+        }
+        Customer newCustomer = new Customer(
+                registerRequest.getUsername(),
+                registerRequest.getEmail(),
+                now,
+                passwordEncoder.encode(registerRequest.getPassword())
+
+        );
+        log.info("Customer created with email: {}", newCustomer);
+        customerRepository.save(newCustomer);
+        log.info("New customer created {}", newCustomer.getEmail() );
+        var token = tokenService.checkTokenAndRegenerateToken(registerRequest.getEmail());
+        log.info("Token đã gửi là: " + token);
+        emailService.sendActivateToken(registerRequest.getEmail(), "Activate Token", token);
+        return new RegisterRespone(registerRequest.getUsername(), registerRequest.getPassword(), registerRequest.getEmail());
+
     }
 
+    /*
+    @req: Use to add a new customer to the system.
+    @par: CustomerRequest Object containing the details of the customer to be added, including username, password, and roles.
+    @des: This method checks if the username already exists in the system. 
+          If it does, it throws an exception. If not, it encodes the password, 
+          maps the CustomerRequest to a Customer object, sets the creation and update timestamps, 
+          assigns roles to the customer, and saves the customer to the database.
+    */
     @Cacheable(
             value = "caching",
             key = "#customer.username",
@@ -106,7 +123,7 @@ public class CustomerService implements ICustomerService {
     @Override
     public Customer addCustomer(CustomerRequest customer) {
         if (customerRepository.existsByUsername(customer.getUsername()))
-            throw new AppException(ErrorCode.USEREXISTED_OR_USERIDEXISTED);
+            throw new AppException(ErrorCode.USERNAME_ALREADY_EXISTS);
         else {
             var role = roleRepository.findAllById(customer.getRole());
             customer.setPassword(passwordEncoder.encode(customer.getPassword()));
@@ -118,12 +135,19 @@ public class CustomerService implements ICustomerService {
         }
     }
 
+    /*
+    @req: Use to update customer information.
+    @par: CustomerInfoDTO Object containing updated customer details.
+    @des: This method retrieves the username from the security context, finds the existing customer by username, 
+          and updates their email, name, address, gender, and status. 
+          It then saves the updated customer back to the database and returns the updated CustomerInfoDTO.
+    */
     @Override
     @PostAuthorize("returnObject.username == authentication.name")
     public CustomerInfoDTO updateCustomer(CustomerInfoDTO customer) {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         System.out.println("Tên của người dùng cập nhật là " + username);
-        Customer existingCustomer = customerRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USEREXISTED_OR_USERIDEXISTED));
+        Customer existingCustomer = customerRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
         if (username.equals(customer.getUsername())) {
             existingCustomer.setEmail(customer.getEmail());
             existingCustomer.setName(customer.getName());
@@ -136,7 +160,12 @@ public class CustomerService implements ICustomerService {
         throw new AppException(ErrorCode.USER_NOTFOUND);
     }
 
-
+    /*
+    @req: Use to delete a customer by their ID.
+    @par: UUID id of the customer to be deleted.
+    @des: This method checks if the customer exists by ID. If they do, it deletes the customer. 
+          If not, it throws an exception indicating the user was not found.
+    */
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_DELETE_MS')")
     public void deleteCustomerById(UUID id) {
@@ -145,16 +174,30 @@ public class CustomerService implements ICustomerService {
         });
     }
 
+    /*
+    @req: Use to retrieve customer information by their ID.
+    @par: UUID id of the customer.
+    @des: This method finds the customer by ID and maps it to a CustomerResponse object. 
+          If the customer is not found, it throws an exception indicating the user was not found.
+    */
     @Override
     @PostAuthorize("returnObject.username == authentication.name")
     public CustomerResponse listCustomerById(UUID id) {
         return mapper.toCustomerRespone(customerRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND)));
     }
 
+    /*
+    @req: Use to get the current user's information.
+    @par: None.
+    @des: This method retrieves the authenticated user's username from the security context, 
+          finds the corresponding customer in the database, and returns their information 
+          as a CustomerInfoDTO. If the user is not found, it throws an exception.
+    */
     @Cacheable(
             value = "userInfoCache",
             key = "#root.target.getUsername()"
     )
+    @PostAuthorize("returnObject.username == authentication.name")
     public CustomerInfoDTO getMyInfo() {
         var user = SecurityContextHolder.getContext().getAuthentication();
         if (user == null) {
@@ -179,30 +222,50 @@ public class CustomerService implements ICustomerService {
         );
     }
 
-
+    /*
+    @req: Use to get the username of the currently authenticated user.
+    @par: None.
+    @des: This method retrieves the username from the security context. 
+          If the user is not authenticated, it returns null.
+    */
     public String getUsername() {
         var user = SecurityContextHolder.getContext().getAuthentication();
         return user != null ? user.getName() : null;
     }
 
-    public Customer registerUser(UUID id, String password, String login) {
-        if (id != null && password != null && login != null) {
-            Customer customer = new Customer();
-            customer.setUsername(login);
-            customer.setPassword(password);
-            return customerRepository.save(customer);
-        } else
-            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
-    }
-
+    /*
+    @req: Use to list all customers in the system.
+    @par: None.
+    @des: This method retrieves all customers from the database, sorts them by creation date, 
+          and maps them to a list of CustomerAllInfoDTO objects for easier consumption.
+    */
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     @Transactional
     @Cacheable(value = "customers", key = "'AllCustomers'")
-    public List listAllCustomer() {
-        return customerRepository.findAll(Sort.by("create").ascending());
+    public List<CustomerAllInfoDTO> listAllCustomer() {
+        List<Customer> ListofCustomer = customerRepository.findAll(Sort.by("create").ascending());
+        return ListofCustomer.stream().map(customer -> new CustomerAllInfoDTO(
+                customer.getUuid(),
+                customer.getUsername(),
+                customer.getEmail(),
+                customer.getName(),
+                customer.getAddress(),
+                customer.isGender(),
+                customer.isStatus(),
+                customer.getCreate(),
+                customer.getDob(),
+                customer.getRoles().stream().map(Role::getName).toString()
+        )).toList();
     }
 
+    /*
+    @req: Use to update the current user's information.
+    @par: CustomerUpdateRespone object containing updated details.
+    @des: This method retrieves the authenticated user's username, finds the corresponding customer, 
+          and updates their password, email, name, address, role, gender, status, 
+          and date of birth. It then saves the updated customer back to the database.
+    */
     @Override
     public Customer customerRequest(CustomerUpdateRespone request) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -226,55 +289,79 @@ public class CustomerService implements ICustomerService {
         return customerRepository.save(customer);
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
-    public List listAllSortByKey(String key) {
-        return customerRepository.findAll(Sort.by(key).ascending());
-    }
-
+    /*
+    @req: Use to update a customer's password by their ID.
+    @par: UUID id of the customer and the new password.
+    @des: This method finds the customer by ID, updates their password and update timestamp, 
+          and saves the changes to the database.
+    */
     @Override
     @PreAuthorize("hasAuthority('SCOPE_UPDATE_USER')")
     @PostAuthorize("returnObject.username == authentication.name")
     public Customer updatePassword(UUID id, String password) {
         Customer customer1 = customerRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
-        customer1.setPassword(password);
+        customer1.setPassword(passwordEncoder.encode(password));
         customer1.setUpdate(now);
-        customer1.setCreate(customer1.getCreate());
         return customerRepository.save(customer1);
     }
 
+    /*
+    @req: Use to list all customers sorted by a specified field.
+    @par: String sort indicating the field to sort by.
+    @des: This method retrieves all customers from the database, sorted by the specified field, 
+          and returns the list of customers.
+    */
+    @Cacheable(value = "customersSorted", key = "#key")
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     @Override
     public List<Customer> listAllSort(String sort) {
         return customerRepository.findAll(Sort.by(sort).ascending());
     }
 
+    /*
+    @req: Use to activate a customer account using a token.
+    @par: ActivateRequestToken object containing the token and email.
+    @des: This method compares the provided token with the stored token for the email. 
+          If they match, it updates the customer's status to activated. 
+          If not, it throws an exception indicating activation failed.
+    */
     @Override
     public ActivateAccountResponse activateRequest(ActivateRequestToken treq) throws ParseException, JOSEException {
         if (tokenService.compareToken(treq.getToken(), treq.getEmail())) {
             Optional<Customer> foundCustomer = customerRepository.findByEmail(treq.getEmail());
-            System.out.println("Found customer: " + foundCustomer.get());
+            System.out.println("Found customer: " + foundCustomer.orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND)));
             Customer customer = foundCustomer.get();
             return customerRepository.updateStatus(customer.getUsername()) > 0 ?
-                    new ActivateAccountResponse(true) : new ActivateAccountResponse(false)
-                    ;
+                    new ActivateAccountResponse(true) : new ActivateAccountResponse(false);
         } else throw new AppException(ErrorCode.ACTIVATED_FAILED);
     }
 
+    /*
+    @req: Use to handle forgotten account requests.
+    @par: String email of the customer requesting a password reset.
+    @des: This method finds the customer by email, generates a reset token, 
+          and sends a reset password link to the customer's email. 
+          If the email does not match any customer, it throws an exception.
+    */
     @Override
-    public ForgotAccountRespone forgotAccount(String email) throws JOSEException {
+    public ForgotAccountRespone forgotAccount(String email) {
         var object = customerRepo.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION));
         String token = tokenService.checkTokenAndRegenerateToken(email);
-        if (customerRepository.existsByUsernameAndEmail
-                (object.getUsername(), email)) {
-            String toClient = new StringBuilder().
-                    append(token).toString();
-            emailService.sendResetPasswordLink(email, "", toClient);
-            System.out.println();
-            return new ForgotAccountRespone(true, "Your reset token sent to your email", toClient);
+        if (customerRepository.existsByUsernameAndEmail(object.getUsername(), email) && !token.isEmpty()) {
+            emailService.sendResetPasswordLink(email, "", token);
+            return new ForgotAccountRespone(true, "Your reset token sent to your email", token);
         }
         return new ForgotAccountRespone(false, "Failed", "null");
     }
 
+    /*
+    @req: Use to retrieve the user's profile image.
+    @par: String username of the customer.
+    @des: This method finds the customer by username, retrieves their image, 
+          or returns a default image if none exists. If the customer is not found, 
+          it throws an exception.
+    */
+    @Cacheable(value = "userImages", key = "#username")
     @Override
     public ByteArrayResource userImage(String username) throws IOException {
         Optional<Customer> customerOpt = customerRepository.findByUsername(username);
@@ -284,8 +371,9 @@ public class CustomerService implements ICustomerService {
             if (image != null) {
                 return new ByteArrayResource(image);
             } else {
-                Path path = Paths.get("src/main/resources/Default-Profile-Picture-Download-PNG-Image.png");
+                Path path = Paths.get("server/src/main/resources/Default-Profile-Picture-Download-PNG-Image.png");
                 byte[] imageBytes = Files.readAllBytes(path);
+                log.info("image saved: {}", imageBytes.length);
                 return new ByteArrayResource(imageBytes);
             }
         } else {
@@ -293,14 +381,16 @@ public class CustomerService implements ICustomerService {
         }
     }
 
+    /*
+    @req: Use to confirm the password reset code.
+    @par: String passcode and String email of the customer.
+    @des: This method checks if the provided passcode matches the stored token for the email. 
+          It returns true if it matches, otherwise returns false.
+    */
     public boolean confirmForgotPasswordCode(String passcode, String email) {
-        var customer = customerRepository.findByEmail(email).get();
         var token = tokenRepository.findTokenByCustomerEmailAndUsed(email, false);
-        if (customer != null) {
-            if (passcode.equals(token)) {
-                return true;
-            } else return false;
-        } else throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+        if (!customerRepository.existsByEmail(email))
+            return false;
+        return token.map(token1 -> token1.getToken().equals(passcode)).orElse(false);
     }
-
 }

@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -23,7 +25,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.redis.core.RedisHash;
 
 @Entity
 @DynamicUpdate
@@ -71,6 +72,10 @@ public class Customer implements Serializable {
   @Nullable
   @JsonIgnore
   private byte[] image;
+
+  public Customer() {
+
+  }
 
   public byte[] getImage() {
     return image;
@@ -218,8 +223,14 @@ public class Customer implements Serializable {
   public String getEmail() {
     return email;
   }
-  public Customer() {
+
+  public Customer(String username, String email, Instant create, String password) {
+    this.username = username;
+    this.email = email;
+    this.create = create;
+    this.password = password;
   }
+
   public void setEmail(String email) {
     this.email = email;
   }
