@@ -44,44 +44,44 @@ public class RoleAndAdminConfiguration {
     }
 
 
-    @Bean
-    @Transactional
-    @Primary
-    public ApplicationRunner createPermissionsAndRoles() {
-        return args -> {
-            log.info("Starting to create permissions...");
-            for (PermissionEnum permissionEnum : PermissionEnum.values()) {
-                if (!permissionRepository.existsByName(permissionEnum.name())) {
-                    Permission permission = new Permission(permissionEnum.name(),
-                            permissionEnum.name().replace("SCOPE_", ""), permissionEnum.getAssigned());
-                    permissionRepository.save(permission);
-                    log.info("Created permission: {}", permissionEnum.name());
-                } else {
-                    log.info("Permission {} already exists.", permissionEnum.name());
-                }
-            }
-            log.info("Finished creating permissions.");
-
-            log.info("Starting to create roles...");
-            for (RoleEnum role : RoleEnum.values()) {
-                if (roleRepository.findAllByName(role.getName())!= null) {
-                    Set<Permission> permissions = new HashSet<>(permissionRepository.findAllByAssigned(role.getName()));
-                    roleRepository.save(new Role(role.getName(), role.getDescription(), permissions));
-                    log.info("Role {} has been created", role.getName());
-                } else {
-                    log.info("Role {} already exists.", role.getName());
-                }
-            }
-            log.info("Finished creating roles.");
-        };
-    }
+//    @Bean
+//    @Transactional
+//    @Primary
+//    public ApplicationRunner createPermissionsAndRoles() {
+//        return args -> {
+//            log.info("Starting to create permissions...");
+//            for (PermissionEnum permissionEnum : PermissionEnum.values()) {
+//                if (!permissionRepository.existsByName(permissionEnum.name())) {
+//                    Permission permission = new Permission(permissionEnum.name(),
+//                            permissionEnum.name().replace("SCOPE_", ""), permissionEnum.getAssigned());
+//                    permissionRepository.save(permission);
+//                    log.info("Created permission: {}", permissionEnum.name());
+//                } else {
+//                    log.info("Permission {} already exists.", permissionEnum.name());
+//                }
+//            }
+//            log.info("Finished creating permissions.");
+//
+//            log.info("Starting to create roles...");
+//            for (RoleEnum role : RoleEnum.values()) {
+//                if (roleRepository.findAllByName(role.getName())!= null) {
+//                    Set<Permission> permissions = new HashSet<>(permissionRepository.findAllByAssigned(role.getName()));
+//                    roleRepository.save(new Role(role.getName(), role.getDescription(), permissions));
+//                    log.info("Role {} has been created", role.getName());
+//                } else {
+//                    log.info("Role {} already exists.", role.getName());
+//                }
+//            }
+//            log.info("Finished creating roles.");
+//        };
+//    }
 
     @Bean
     public ApplicationRunner createAdmin() {
         return args -> {
             if (!repo.findByUsername("admin").isPresent()) {
-                Set<Role> role = roleRepository.findAllByName("ADMIN");
-                log.info("Role đã thêm vào user {}", role.stream().findFirst().get().getName());
+//                Set<Role> role = roleRepository.findAllByName("ADMIN");
+//                log.info("Role đã thêm vào user {}", role.stream().findFirst().get().getName());
 
                 Customer admin = new Customer();
                 admin.setUsername("admin");
@@ -92,7 +92,7 @@ public class RoleAndAdminConfiguration {
                 admin.setEmail("ilovepakpak@gmail.com");
                 admin.setName("Chessy");
                 admin.setPassword(passwordEncoder.encode("160304"));
-                admin.setRoles(role);
+//                admin.setRoles(role);
                 admin.setStatus(true);
                 repo.save(admin);
                 log.info("Admin account created successfully.");

@@ -266,25 +266,25 @@ public class CustomerService implements ICustomerService {
     @des: This method retrieves all customers from the database, sorts them by creation date, 
           and maps them to a list of CustomerAllInfoDTO objects for easier consumption.
     */
-//    @Override
-////    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
-//    @Transactional
-//    @Cacheable(value = "customer", key = "'AllCustomers'")
-//    public List<CustomerAllInfoDTO> listAllCustomer() {
-//        List<Customer> ListofCustomer = customerRepository.findAll(Sort.by("create").ascending());
-//        return ListofCustomer.stream().map(customer -> new CustomerAllInfoDTO(
-//                customer.getUuid(),
-//                customer.getUsername(),
-//                customer.getEmail(),
-//                customer.getName(),
-//                customer.getAddress(),
-//                customer.isGender(),
-//                customer.isStatus(),
-//                customer.getCreate(),
-//                customer.getDob(),
-//                customer.getRoles().stream().map(Role::getName).toString()
-//        )).toList();
-//    }
+    @Override
+//    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
+    @Transactional
+    @Cacheable(value = "customer", key = "'AllCustomers'")
+    public List<CustomerAllInfoDTO> listAllCustomer() {
+        List<Customer> ListofCustomer = customerRepository.findAll(Sort.by("create").ascending());
+        return ListofCustomer.stream().map(customer -> new CustomerAllInfoDTO(
+                customer.getUuid(),
+                customer.getUsername(),
+                customer.getEmail(),
+                customer.getName(),
+                customer.getAddress(),
+                customer.isGender(),
+                customer.isStatus(),
+                customer.getCreate(),
+                customer.getDob(),
+                customer.getRoles().stream().map(Role::getName).toString()
+        )).toList();
+    }
 
     /*
     @req: Use to update the current user's information.
@@ -435,11 +435,11 @@ public class CustomerService implements ICustomerService {
     }
 
     // TEST
-    @Override
-    public List listAllCustomer() {
-        List<Customer> ListofCustomer = customerRepository.findAll(Sort.by("create").ascending());
-        return ListofCustomer;
-    }
+//    @Override
+//    public List listAllCustomer() {
+//        List<Customer> ListofCustomer = customerRepository.findAll(Sort.by("create").ascending());
+//        return ListofCustomer;
+//    }
 }
 
 
