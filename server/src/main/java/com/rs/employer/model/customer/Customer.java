@@ -8,14 +8,14 @@ import java.util.UUID;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Table;
+import jakarta.persistence.criteria.Fetch;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.annotations.*;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -26,13 +26,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.repository.cdi.Eager;
 
 @Entity
-@DynamicUpdate
-@DynamicInsert
 @Table(name = "customer")
-@Getter
-@Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Customer implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -51,12 +48,7 @@ public class Customer implements Serializable {
   private String email;
   private String name;
   private String address;
-  @ManyToMany(cascade = CascadeType.ALL)
-  @JoinTable(
-          name = "customer_roles", // Tên bảng trung gian
-          joinColumns = @JoinColumn(name = "customer_id"), // Cột khóa chính của Customer
-          inverseJoinColumns = @JoinColumn(name = "role_id") // Cột khóa chính của Role
-  )
+  @ManyToMany(fetch = FetchType.EAGER)
   private Set<Role> roles;
   private boolean gender;
   @Column(name = "status")
@@ -141,13 +133,10 @@ public class Customer implements Serializable {
     return password;
   }
 
-  public Customer(UUID uuid, @NotNull @Size(min = 3, max = 20, message = "USERNAME_INVALID") String username, String email,
-                  @Size(min = 8, message = "PASSWORD_INVALID") String password, String name, String address, Set<Role> roles,
-                  boolean gender, boolean status, Instant create, Instant update, LocalDate dob) {
-    this.uuid = uuid;
+  public Customer(String username, String password, String email, String name, String address, Set<Role> roles, boolean gender, boolean status, Instant create, Instant update, LocalDate dob) {
     this.username = username;
-      this.email = email;
-      this.password = password;
+    this.password = password;
+    this.email = email;
     this.name = name;
     this.address = address;
     this.roles = roles;

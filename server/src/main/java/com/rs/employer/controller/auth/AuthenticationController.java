@@ -46,7 +46,7 @@ public class AuthenticationController {
         System.out.println(email);
         if (customerRepo.existsByUsernameAndEmail(username, email)) {
             if (status) {
-                System.out.println("XOng ");
+                System.out.println("Xong");
                 return new ApiRespone<>(authen.authentication(authenticated));
             } else {
 

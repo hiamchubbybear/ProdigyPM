@@ -16,20 +16,7 @@ public class Role implements Serializable {
     private String name;
     private String description;
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "role_permissions",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
     private Set<Permission> permissions;
-
-    @ManyToMany(mappedBy = "roles")
-    private Set<Customer> customers;
-
-    public Set<Customer> getCustomers() {
-        return customers;
-    }
-
     public int getId() {
         return id;
     }
@@ -38,24 +25,12 @@ public class Role implements Serializable {
         this.id = id;
     }
 
-    public void setCustomers(Set<Customer> customers) {
-        this.customers = customers;
-    }
-
-    public Role(int id, String name, String description, Set<Permission> permissions, Set<Customer> customers) {
+    public Role(int id, String name, String description, Set<Permission> permissions) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.permissions = permissions;
-        this.customers = customers;
     }
-    public Role(String name, String description, Set<Permission> permissions, Set<Customer> customers) {
-        this.name = name;
-        this.description = description;
-        this.permissions = permissions;
-        this.customers = customers;
-    }
-
 
     public Role() {
 
