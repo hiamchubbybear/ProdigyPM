@@ -35,13 +35,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class CustomerController {
     private final CustomerService customerImplement;
     private final CustomerRepo customerRepo;
-    private final SystemMetricsAutoConfiguration systemMetricsAutoConfiguration;
 
     @Autowired
-    public CustomerController(CustomerService customerImplement, CustomerRepo customerRepo, SystemMetricsAutoConfiguration systemMetricsAutoConfiguration) {
+    public CustomerController(CustomerService customerImplement, CustomerRepo customerRepo) {
         this.customerImplement = customerImplement;
         this.customerRepo = customerRepo;
-        this.systemMetricsAutoConfiguration = systemMetricsAutoConfiguration;
     }
 
     @GetMapping(path = "/all")
@@ -64,8 +62,7 @@ public class CustomerController {
     @DeleteMapping(path = "/delete/{id}")
     public ApiRespone<Boolean> deleteCustomer(@PathVariable UUID id) {
         customerImplement.deleteCustomerById(id);
-        ApiRespone apiRespone = new ApiRespone<>(true);
-        return apiRespone;
+        return  new ApiRespone<>(true);
     }
     @PutMapping(path = "/update")
     public ApiRespone<CustomerInfoDTO> updatCustomer(
@@ -134,11 +131,10 @@ public class CustomerController {
     @GetMapping(path = "/image")
     @PostAuthorize("#username == authentication.name")
     public ApiRespone<?> getImage(@RequestParam(name = "username") String username) throws IOException {
-                String imageResource = Base64.getEncoder().encodeToString(customerImplement.userImage(username).getByteArray());
+                String imageResource = Base64.getEncoder().encodeToString(customerImplement.userImage(username));
         return new ApiRespone<>(new ImageRespone(imageResource,username));
     }
     @PostMapping(path = "/cfpwd/{passcode}/{email}")
-//    public ApiRespone<Boolean> confirmForgotPassword (@RequestParam String passcode , @RequestParam String email) {
         public ApiRespone<Boolean> confirmForgotPassword (@PathVariable String passcode , @PathVariable String email) {
         return new ApiRespone<>(customerImplement.confirmForgotPasswordCode(passcode , email));
     }

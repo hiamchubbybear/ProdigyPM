@@ -22,7 +22,10 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -82,28 +85,27 @@ public class CustomerService implements ICustomerService {
           and sends an activation email to the user.
     */
     @Override
-    public RegisterRespone register(RegisterRequest registerRequest) {
-        if (customerRepository.existsByEmail(registerRequest.getEmail())) {
+    public RegisterRespone register(RegisterRequest customer) {
+        if (customerRepository.existsByEmail(customer.getEmail())) {
             throw new AppException(ErrorCode.EMAIL_ALREADY_EXISTS);
         }
-        if (customerRepository.existsByUsername(registerRequest.getUsername())) {
+        if (customerRepository.existsByUsername(customer.getUsername())) {
             throw new AppException(ErrorCode.USERNAME_ALREADY_EXISTS);
         }
         Customer newCustomer = new Customer(
-                registerRequest.getUsername(),
-                registerRequest.getEmail(),
+                customer.getUsername(),
+                customer.getEmail(),
                 now,
-                passwordEncoder.encode(registerRequest.getPassword())
+                passwordEncoder.encode(customer.getPassword())
 
         );
-        log.info("Customer created with email: {}", newCustomer);
+        log.info("Customer created with email: {}", newCustomer.getEmail());
         customerRepository.save(newCustomer);
-        log.info("New customer created {}", newCustomer.getEmail() );
-        var token = tokenService.checkTokenAndRegenerateToken(registerRequest.getEmail());
-        log.info("Token đã gửi là: " + token);
-        emailService.sendActivateToken(registerRequest.getEmail(), "Activate Token", token);
-        return new RegisterRespone(registerRequest.getUsername(), registerRequest.getPassword(), registerRequest.getEmail());
-
+        log.info("New customer created {}", newCustomer.getEmail());
+        var token = tokenService.checkTokenAndRegenerateToken(customer.getEmail());
+        log.info("Token sent : " + token);
+        emailService.sendActivateToken(customer.getEmail(), "Activate Token", token);
+        return new RegisterRespone(customer.getUsername(), customer.getPassword(), customer.getEmail());
     }
 
     /*
@@ -115,7 +117,7 @@ public class CustomerService implements ICustomerService {
           assigns roles to the customer, and saves the customer to the database.
     */
     @Cacheable(
-            value = "caching",
+            value = "user",
             key = "#customer.username",
             condition = "#customer != null",
             unless = "#result == null"
@@ -142,6 +144,21 @@ public class CustomerService implements ICustomerService {
           and updates their email, name, address, gender, and status. 
           It then saves the updated customer back to the database and returns the updated CustomerInfoDTO.
     */
+    @Caching(
+            put = {
+                    @CachePut(
+                            value = "customer",
+                            key = "#customer.username",
+                            condition = "#customer != null",
+                            unless = "#result == null"
+                    )
+            },
+            evict = {
+                    @CacheEvict(
+                            value = "customer", key = "'AllCustomers'"
+                    )
+            }
+    )
     @Override
     @PostAuthorize("returnObject.username == authentication.name")
     public CustomerInfoDTO updateCustomer(CustomerInfoDTO customer) {
@@ -194,8 +211,10 @@ public class CustomerService implements ICustomerService {
           as a CustomerInfoDTO. If the user is not found, it throws an exception.
     */
     @Cacheable(
-            value = "userInfoCache",
-            key = "#root.target.getUsername()"
+            value = "customer",
+            key = "#root.target.getUsername()",
+            condition = "#result != null",
+            unless = "null"
     )
     @PostAuthorize("returnObject.username == authentication.name")
     public CustomerInfoDTO getMyInfo() {
@@ -203,7 +222,6 @@ public class CustomerService implements ICustomerService {
         if (user == null) {
             throw new AppException(ErrorCode.USER_NOTFOUND);
         }
-
         String username = user.getName();
         if (username == null) {
             throw new AppException(ErrorCode.USER_NOTFOUND);
@@ -211,7 +229,6 @@ public class CustomerService implements ICustomerService {
 
         Customer customer = customerRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
-
         return new CustomerInfoDTO(
                 username,
                 customer.getEmail(),
@@ -242,7 +259,7 @@ public class CustomerService implements ICustomerService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     @Transactional
-    @Cacheable(value = "customers", key = "'AllCustomers'")
+    @Cacheable(value = "customer", key = "'AllCustomers'")
     public List<CustomerAllInfoDTO> listAllCustomer() {
         List<Customer> ListofCustomer = customerRepository.findAll(Sort.by("create").ascending());
         return ListofCustomer.stream().map(customer -> new CustomerAllInfoDTO(
@@ -322,7 +339,7 @@ public class CustomerService implements ICustomerService {
     @req: Use to activate a customer account using a token.
     @par: ActivateRequestToken object containing the token and email.
     @des: This method compares the provided token with the stored token for the email. 
-          If they match, it updates the customer's status to activated. 
+          If they match, it updates the customer's status to activate.
           If not, it throws an exception indicating activation failed.
     */
     @Override
@@ -361,32 +378,30 @@ public class CustomerService implements ICustomerService {
           or returns a default image if none exists. If the customer is not found, 
           it throws an exception.
     */
-    @Cacheable(value = "userImages", key = "#username")
+    @Cacheable(value = "userImage", key = "#username")
     @Override
-    public ByteArrayResource userImage(String username) throws IOException {
+    public byte[] userImage(String username) throws IOException {
         Optional<Customer> customerOpt = customerRepository.findByUsername(username);
         if (customerOpt.isPresent()) {
             Customer customer = customerOpt.get();
             byte[] image = customer.getImage();
             if (image != null) {
-                return new ByteArrayResource(image);
+                return image; // Trả về byte[]
             } else {
                 Path path = Paths.get("server/src/main/resources/Default-Profile-Picture-Download-PNG-Image.png");
-                byte[] imageBytes = Files.readAllBytes(path);
-                log.info("image saved: {}", imageBytes.length);
-                return new ByteArrayResource(imageBytes);
+                return Files.readAllBytes(path); // Trả về byte[] từ file
             }
         } else {
             throw new AppException(ErrorCode.USER_NOTFOUND);
         }
     }
-
     /*
     @req: Use to confirm the password reset code.
     @par: String passcode and String email of the customer.
     @des: This method checks if the provided passcode matches the stored token for the email. 
           It returns true if it matches, otherwise returns false.
     */
+
     public boolean confirmForgotPasswordCode(String passcode, String email) {
         var token = tokenRepository.findTokenByCustomerEmailAndUsed(email, false);
         if (!customerRepository.existsByEmail(email))

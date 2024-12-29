@@ -30,5 +30,5 @@ public interface ICustomerService {
     public List<Customer> listAllSort(String sort);
     public ActivateAccountResponse activateRequest(ActivateRequestToken treq) throws ParseException, JOSEException;
     public ForgotAccountRespone forgotAccount(String request) throws JOSEException;
-    public ByteArrayResource userImage(String username ) throws IOException;
+    public byte[] userImage(String username ) throws IOException;
 }

@@ -1,5 +1,6 @@
 package com.rs.employer.model.others;
 
+import java.io.Serializable;
 import java.sql.Blob;
 import java.time.Instant;
 import java.util.UUID;
@@ -10,7 +11,7 @@ import com.rs.employer.model.warehouse.Product;
 import jakarta.persistence.*;
 
 @Entity
-public class Image {
+public class Image implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id ;
