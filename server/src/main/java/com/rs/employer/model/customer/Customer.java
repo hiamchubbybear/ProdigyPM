@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -37,9 +38,9 @@ public class Customer implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @UuidGenerator
-  @Column(updatable = false)
+  @GeneratedValue(generator = "UUID")
+  @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+  @Column(name = "uuid", updatable = false, nullable = false, length = 36)
   private UUID uuid;
   @Size(min = 3, max = 20, message = "USERNAME_INVALID")
   @Column(name = "username", nullable = false, updatable = false)
@@ -50,7 +51,12 @@ public class Customer implements Serializable {
   private String email;
   private String name;
   private String address;
-  @ManyToMany(fetch = FetchType.EAGER)
+  @ManyToMany(cascade = CascadeType.ALL)
+  @JoinTable(
+          name = "customer_roles", // Tên bảng trung gian
+          joinColumns = @JoinColumn(name = "customer_id"), // Cột khóa chính của Customer
+          inverseJoinColumns = @JoinColumn(name = "role_id") // Cột khóa chính của Role
+  )
   private Set<Role> roles;
   private boolean gender;
   @Column(name = "status")

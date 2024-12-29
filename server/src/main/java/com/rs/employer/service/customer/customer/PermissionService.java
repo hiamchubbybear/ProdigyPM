@@ -26,7 +26,7 @@ public class PermissionService implements IPermissionService {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
+//    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public Permission addPermission(PermissionRequest request) {
         if (repo.existsById(request.getName())) {
             throw new AppException(ErrorCode.PRODUCT_ALREADY_EXISTS);
@@ -37,7 +37,7 @@ public class PermissionService implements IPermissionService {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
+//    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public Permission updatePermission(PermissionRequest request) {
         if (repo.existsById(request.getName())) {
             Permission permission = mapper.toPermission(request);
@@ -47,7 +47,7 @@ public class PermissionService implements IPermissionService {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
+//    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public Boolean deletePermission(String permission) {
         if (repo.existsById(permission)) {
             repo.deleteById(permission);
@@ -58,7 +58,7 @@ public class PermissionService implements IPermissionService {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
+//    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     public List<Permission> allPermission() {
         List<Permission> list = repo.findAll();
         return list;

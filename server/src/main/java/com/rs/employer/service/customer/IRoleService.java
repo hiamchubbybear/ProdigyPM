@@ -13,7 +13,7 @@ public interface IRoleService {
 
     public RoleRespone updateRole(RoleRequest role);
 
-    public Boolean deleteRole(String role);
+    public Boolean deleteRole(Integer role);
 
     public List<Role> allRole();
 }

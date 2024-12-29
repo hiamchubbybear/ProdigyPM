@@ -3,24 +3,62 @@ package com.rs.employer.model.customer;
 import java.io.Serializable;
 import java.util.Set;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.repository.cdi.Eager;
 
 @Entity
-public class Role  implements Serializable {
+public class Role implements Serializable {
     private static final long serialVersionUID = 2L;
-
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private String name;
     private String description;
     @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "role_permissions",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
     private Set<Permission> permissions;
 
+    @ManyToMany(mappedBy = "roles")
+    private Set<Customer> customers;
+
+    public Set<Customer> getCustomers() {
+        return customers;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setCustomers(Set<Customer> customers) {
+        this.customers = customers;
+    }
+
+    public Role(int id, String name, String description, Set<Permission> permissions, Set<Customer> customers) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.permissions = permissions;
+        this.customers = customers;
+    }
+    public Role(String name, String description, Set<Permission> permissions, Set<Customer> customers) {
+        this.name = name;
+        this.description = description;
+        this.permissions = permissions;
+        this.customers = customers;
+    }
+
+
     public Role() {
+
     }
 
     public Role(String name, String description, Set<Permission> permissions) {

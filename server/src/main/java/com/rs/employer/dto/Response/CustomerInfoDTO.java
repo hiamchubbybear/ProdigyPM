@@ -12,6 +12,17 @@ public class CustomerInfoDTO  implements Serializable {
     String address;
     boolean gender;
     boolean status;
+    String role;
+
+    public CustomerInfoDTO(String username, String email, String name, String address, boolean gender, boolean status, String role) {
+        this.username = username;
+        this.email = email;
+        this.name = name;
+        this.address = address;
+        this.gender = gender;
+        this.status = status;
+        this.role = role;
+    }
 
     public CustomerInfoDTO() {
     }

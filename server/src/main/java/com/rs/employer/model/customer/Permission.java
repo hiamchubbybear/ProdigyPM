@@ -16,10 +16,24 @@ public class Permission  implements Serializable {
     @Id
     private String name;
     private String description;
-
+    private String assigned;
     public Permission(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public String getAssigned() {
+        return assigned;
+    }
+
+    public void setAssigned(String assigned) {
+        this.assigned = assigned;
+    }
+
+    public Permission(String name, String description, String assigned) {
+        this.name = name;
+        this.description = description;
+        this.assigned = assigned;
     }
 
     public String getName() {

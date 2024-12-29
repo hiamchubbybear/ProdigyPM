@@ -28,6 +28,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,12 +43,6 @@ import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.CustomerMapper;
 import com.rs.employer.service.customer.ICustomerService;
 
-import lombok.extern.slf4j.Slf4j;
-
-/*
- @status : done
- */
-
 @Service
 public class CustomerService implements ICustomerService {
 
@@ -61,11 +56,12 @@ public class CustomerService implements ICustomerService {
     private final Instant now = Instant.now();
     private final TokenRepository tokenRepository;
     private final TokenService tokenService;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Autowired
     public CustomerService(CustomerRepo customerRepository, RoleRepository roleRepository,
                            PasswordEncoder passwordEncoder,
-                           CustomerMapper mapper, CustomerRepo customerRepo, EmailService emailService, TokenRepository tokenRepository, TokenService tokenService) {
+                           CustomerMapper mapper, CustomerRepo customerRepo, EmailService emailService, TokenRepository tokenRepository, TokenService tokenService, RedisTemplate<String, String> redisTemplate) {
         this.customerRepository = customerRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -74,6 +70,7 @@ public class CustomerService implements ICustomerService {
         this.emailService = emailService;
         this.tokenRepository = tokenRepository;
         this.tokenService = tokenService;
+        this.redisTemplate = redisTemplate;
     }
 
     /*
@@ -97,7 +94,6 @@ public class CustomerService implements ICustomerService {
                 customer.getEmail(),
                 now,
                 passwordEncoder.encode(customer.getPassword())
-
         );
         log.info("Customer created with email: {}", newCustomer.getEmail());
         customerRepository.save(newCustomer);
@@ -127,12 +123,17 @@ public class CustomerService implements ICustomerService {
         if (customerRepository.existsByUsername(customer.getUsername()))
             throw new AppException(ErrorCode.USERNAME_ALREADY_EXISTS);
         else {
-            var role = roleRepository.findAllById(customer.getRole());
+            Set<Role> roles = new HashSet<>();
+            for (String roleName : customer.getRole()) {
+                Role role = roleRepository.findByName(roleName)
+                        .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+                roles.add(role);
+            }
             customer.setPassword(passwordEncoder.encode(customer.getPassword()));
             Customer customer1 = mapper.toCustomer(customer);
             customer1.setCreate(now);
             customer1.setUpdate(now);
-            customer1.setRoles(new HashSet<>(role));
+            customer1.setRoles(new HashSet<>(roles));
             return customerRepository.save(customer1);
         }
     }
@@ -144,6 +145,9 @@ public class CustomerService implements ICustomerService {
           and updates their email, name, address, gender, and status. 
           It then saves the updated customer back to the database and returns the updated CustomerInfoDTO.
     */
+
+    @Override
+    @PostAuthorize("returnObject.username == authentication.name")
     @Caching(
             put = {
                     @CachePut(
@@ -159,8 +163,6 @@ public class CustomerService implements ICustomerService {
                     )
             }
     )
-    @Override
-    @PostAuthorize("returnObject.username == authentication.name")
     public CustomerInfoDTO updateCustomer(CustomerInfoDTO customer) {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         System.out.println("Tên của người dùng cập nhật là " + username);
@@ -186,7 +188,10 @@ public class CustomerService implements ICustomerService {
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_DELETE_MS')")
     public void deleteCustomerById(UUID id) {
-        customerRepository.findById(id).ifPresentOrElse(customerRepository::delete, () -> {
+        customerRepository.findById(id).ifPresentOrElse((customer) -> {
+            customerRepository.deleteById(id);
+            redisTemplate.delete(customer.getUsername());
+        }, () -> {
             throw new AppException(ErrorCode.USER_NOTFOUND);
         });
     }
@@ -199,6 +204,7 @@ public class CustomerService implements ICustomerService {
     */
     @Override
     @PostAuthorize("returnObject.username == authentication.name")
+    @Caching
     public CustomerResponse listCustomerById(UUID id) {
         return mapper.toCustomerRespone(customerRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND)));
     }
@@ -235,7 +241,11 @@ public class CustomerService implements ICustomerService {
                 customer.getName(),
                 customer.getAddress(),
                 customer.isGender(),
-                customer.isStatus()
+                customer.isStatus(),
+                customer.getRoles().stream()
+                        .findFirst()
+                        .map(Role::getName)
+                        .orElse(null)
         );
     }
 
@@ -256,25 +266,25 @@ public class CustomerService implements ICustomerService {
     @des: This method retrieves all customers from the database, sorts them by creation date, 
           and maps them to a list of CustomerAllInfoDTO objects for easier consumption.
     */
-    @Override
-    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
-    @Transactional
-    @Cacheable(value = "customer", key = "'AllCustomers'")
-    public List<CustomerAllInfoDTO> listAllCustomer() {
-        List<Customer> ListofCustomer = customerRepository.findAll(Sort.by("create").ascending());
-        return ListofCustomer.stream().map(customer -> new CustomerAllInfoDTO(
-                customer.getUuid(),
-                customer.getUsername(),
-                customer.getEmail(),
-                customer.getName(),
-                customer.getAddress(),
-                customer.isGender(),
-                customer.isStatus(),
-                customer.getCreate(),
-                customer.getDob(),
-                customer.getRoles().stream().map(Role::getName).toString()
-        )).toList();
-    }
+//    @Override
+////    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
+//    @Transactional
+//    @Cacheable(value = "customer", key = "'AllCustomers'")
+//    public List<CustomerAllInfoDTO> listAllCustomer() {
+//        List<Customer> ListofCustomer = customerRepository.findAll(Sort.by("create").ascending());
+//        return ListofCustomer.stream().map(customer -> new CustomerAllInfoDTO(
+//                customer.getUuid(),
+//                customer.getUsername(),
+//                customer.getEmail(),
+//                customer.getName(),
+//                customer.getAddress(),
+//                customer.isGender(),
+//                customer.isStatus(),
+//                customer.getCreate(),
+//                customer.getDob(),
+//                customer.getRoles().stream().map(Role::getName).toString()
+//        )).toList();
+//    }
 
     /*
     @req: Use to update the current user's information.
@@ -284,6 +294,21 @@ public class CustomerService implements ICustomerService {
           and date of birth. It then saves the updated customer back to the database.
     */
     @Override
+    @Caching(
+            put = {
+                    @CachePut(
+                            value = "customer",
+                            key = "#customer.username",
+                            condition = "#customer != null",
+                            unless = "#result == null"
+                    )
+            },
+            evict = {
+                    @CacheEvict(
+                            value = "customer", key = "'AllCustomers'"
+                    )
+            }
+    )
     public Customer customerRequest(CustomerUpdateRespone request) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customer = customerRepository.findByUsername(username)
@@ -296,8 +321,8 @@ public class CustomerService implements ICustomerService {
                 .ifPresent(customer::setEmail);
         customer.setName(request.getName());
         customer.setAddress(request.getAddress());
-        Role role = roleRepository.findByName(request.getRole());
-        customer.setRoles(Set.of(role));
+        Set<Role> role = roleRepository.findAllByName(request.getRole());
+        customer.setRoles(role);
         customer.setGender(request.isGender());
         customer.setStatus(customer.getStatus());
         customer.setUpdate(Instant.now());
@@ -347,7 +372,7 @@ public class CustomerService implements ICustomerService {
         if (tokenService.compareToken(treq.getToken(), treq.getEmail())) {
             Optional<Customer> foundCustomer = customerRepository.findByEmail(treq.getEmail());
             System.out.println("Found customer: " + foundCustomer.orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND)));
-            Customer customer = foundCustomer.get();
+            Customer customer = foundCustomer.orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
             return customerRepository.updateStatus(customer.getUsername()) > 0 ?
                     new ActivateAccountResponse(true) : new ActivateAccountResponse(false);
         } else throw new AppException(ErrorCode.ACTIVATED_FAILED);
@@ -408,4 +433,18 @@ public class CustomerService implements ICustomerService {
             return false;
         return token.map(token1 -> token1.getToken().equals(passcode)).orElse(false);
     }
+
+    // TEST
+    @Override
+    public List listAllCustomer() {
+        List<Customer> ListofCustomer = customerRepository.findAll(Sort.by("create").ascending());
+        return ListofCustomer;
+    }
 }
+
+
+
+
+
+
+

@@ -18,8 +18,16 @@ public enum ErrorCode {
     BOM_NOT_FOUND(001, "BOM not found", HttpStatus.NOT_FOUND),
     SUPPLIER_NOT_FOUND(001, "Supplier not found", HttpStatus.NOT_FOUND),
     PURCHASE_ORDER_NOT_FOUND(001, "Purchase not found", HttpStatus.NOT_FOUND),
-    CART_NOT_FOUND(001, "Cart not exists or can't be find ", HttpStatus.NOT_ACCEPTABLE),
-    JOURNAL_ENTRY_NOT_FOUND(001, "Journal entry not exists or can't be find ", HttpStatus.NOT_ACCEPTABLE ),
+    CART_NOT_FOUND(001, "Cart not exists or can't be find ", HttpStatus.NOT_FOUND),
+    JOURNAL_ENTRY_NOT_FOUND(001, "Journal entry not exists or can't be find ", HttpStatus.NOT_FOUND )
+    , ROLE_NOT_FOUND(001, "Role not exists or can't be find ", HttpStatus.NOT_FOUND  ),
+
+
+    //EXISTED
+    PRODUCT_ALREADY_EXISTS(002, "Product existed", HttpStatus.CONFLICT),
+    EMAIL_ALREADY_EXISTS(002, "Email existed", HttpStatus.CONFLICT),
+    USERNAME_ALREADY_EXISTS(002, "Username existed", HttpStatus.CONFLICT),
+
 
     // INVALID RESPONSE
     USERNAME_INVALID(003, "Username must be at least 4 characters and less than 20 characters", HttpStatus.BAD_REQUEST),
@@ -37,10 +45,6 @@ public enum ErrorCode {
     PRODUCT_EXISTED_CART(006, "Product added into cart", HttpStatus.NOT_ACCEPTABLE),
     NOT_MATCH(006, "Account doesn't match with system", HttpStatus.NOT_ACCEPTABLE),
 
-    //EXISTED
-    PRODUCT_ALREADY_EXISTS(002, "Product existed", HttpStatus.CONFLICT),
-    EMAIL_ALREADY_EXISTS(002, "Email existed", HttpStatus.CONFLICT),
-    USERNAME_ALREADY_EXISTS(002, "Username existed", HttpStatus.CONFLICT),
 
     //SERVER
     UNCATEGORIZE_EXCEPTION(007,"Uncategorize Exception",HttpStatus.INTERNAL_SERVER_ERROR),
