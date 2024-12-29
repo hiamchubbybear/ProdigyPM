@@ -137,8 +137,4 @@ public class CustomerController {
         return new ApiRespone<>(customerImplement.confirmForgotPasswordCode(passcode , email));
     }
 
-    @PostMapping(path = "/test")
-    public ApiRespone<Customer> test(@RequestParam String username) {
-        return new ApiRespone<>(customerImplement.findCustomerByUsername(username));
-    }
 }

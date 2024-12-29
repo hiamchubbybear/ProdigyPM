@@ -424,18 +424,6 @@ public class CustomerService implements ICustomerService {
         return token.map(token1 -> token1.getToken().equals(passcode)).orElse(false);
     }
 
-    // TEST
-//    @Override
-//    public List listAllCustomer() {
-//        List<Customer> ListofCustomer = customerRepository.findAll(Sort.by("create").ascending());
-//        return ListofCustomer;
-//    }
-    public Customer findCustomerByUsername(String username) {
-        Customer customer = customerRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
-        customer.setRole(username);
-        return customerRepository.save(customer);
-    }
 }
 
 

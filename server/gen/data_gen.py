@@ -43,7 +43,7 @@ def main():
     connection = create_connection("localhost", "root", "123456", "prodigypm")
 
     # Tạo và chèn 100 hàng dữ liệu giả
-    for _ in range(10000):
+    for _ in range(100000):
         uuid_value = str(uuid.uuid4())  # Tạo UUID
         username = fake.user_name()
         password = fake.password()
