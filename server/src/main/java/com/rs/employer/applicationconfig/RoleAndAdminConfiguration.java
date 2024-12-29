@@ -84,22 +84,22 @@ public class RoleAndAdminConfiguration {
 //                permissions.add(permission);
 //                role.setPermissions(permissions);
 //                roleRepository.save(role);
-                Role adminRole = roleRepository.findByName("ADMIN")
-                        .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
-
-                log.info("Creating admin role... {}", adminRole.getName());
+//                Role adminRole = roleRepository.findByName("ADMIN")
+//                        .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+//
+//                log.info("Creating admin role... {}", adminRole.getName());
 
                 // Tạo một tập hợp vai trò và thêm vai trò ADMIN vào đó
-                Set<Role> roles = new HashSet<>();
-                roles.add(adminRole);
+//                Set<Role> roles = new HashSet<>();
+//                roles.add(adminRole);
 //                Set<Role> role1 = new HashSet<>();
 //                role1.add(roleRepository.findById(1).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)));
 //                log.info("Creating admin role...{}" , role1.stream().findFirst().get().getName());
 
 
                 Customer admin = new Customer("admin",passwordEncoder.encode("160304")
-                        ,"ilovepakpak@gmail.com","Chessy","Hue",roles,true,true,now,now,null );
-                log.info("Creating admin role... {}", admin.getRoles().stream().findFirst().get().getName());
+                        ,"ilovepakpak@gmail.com","Chessy","Hue","ADMIN",true,true,now,now,null );
+                log.info("Creating admin role... {}", admin.getRole());
                 repo.save(admin);
                 log.info("Admin account created successfully.");
             } else {

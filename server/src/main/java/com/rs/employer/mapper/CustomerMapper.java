@@ -14,7 +14,7 @@ public interface CustomerMapper {
     @Mapping(target = "role", ignore = true)
     CustomerResponse toCustomerRespone(CustomerRequest request);
 
-    @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "role", ignore = true)
     Customer toCustomer(CustomerRequest request);
 
     @Mapping(target = "role", ignore = true)

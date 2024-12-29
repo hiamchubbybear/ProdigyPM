@@ -2,9 +2,11 @@ package com.rs.employer.dao.customer;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import com.rs.employer.model.customer.Customer;
+import com.rs.employer.model.customer.Role;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -65,4 +67,6 @@ public interface CustomerRepo extends JpaRepository<Customer, UUID> {
             "from schema_product w", nativeQuery = true)
     List<Product> getAllProductDetail();
     boolean existsByName(String name);
+
+//    Customer findByRoles(Set<Role> role);
 }

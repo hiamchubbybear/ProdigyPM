@@ -10,7 +10,7 @@ public class CustomerRequest {
     private String name;
     private String address;
     private String username;
-    private Set<String> roles;
+    private String roles;
     private boolean gender;
     private String password;
     private String status;
@@ -20,58 +20,7 @@ public class CustomerRequest {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dob;
 
-
-    public CustomerRequest(String name, String address, String username, Set<String> roles, boolean gender,
-            String password, String status, Instant create, Instant update, Long cart_id, LocalDate dob) {
-        this.name = name;
-        this.address = address;
-        this.username = username;
-        this.roles = roles;
-        this.gender = gender;
-        this.password = password;
-        this.status = status;
-        this.create = create;
-        this.update = update;
-        this.cart_id = cart_id;
-        this.dob = dob;
-    }
-
-    public Long getCart_id() {
-        return cart_id;
-    }
-
-    public void setCart_id(Long cart_id) {
-        this.cart_id = cart_id;
-    }
-
-    public Instant getCreate() {
-        return this.create;
-    }
-
-    public void setCreate(Instant create) {
-        this.create = create;
-    }
-
-    public Instant getUpdate() {
-        return this.update;
-    }
-
-    public void setUpdate(Instant update) {
-        this.update = update;
-    }
-
-    public CustomerRequest(String name, String address, String username, Set<String> roles, boolean gender,
-            String password, String status, Instant create, Instant update, LocalDate dob) {
-        this.name = name;
-        this.address = address;
-        this.username = username;
-        this.roles = roles;
-        this.gender = gender;
-        this.password = password;
-        this.status = status;
-        this.create = create;
-        this.update = update;
-        this.dob = dob;
+    public CustomerRequest() {
     }
 
     public String getName() {
@@ -98,12 +47,12 @@ public class CustomerRequest {
         this.username = username;
     }
 
-    public Set<String> getRole() {
+    public String getRoles() {
         return roles;
     }
 
-    public void setRole(Set<String> role) {
-        this.roles = role;
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 
     public boolean isGender() {
@@ -130,6 +79,30 @@ public class CustomerRequest {
         this.status = status;
     }
 
+    public Instant getCreate() {
+        return create;
+    }
+
+    public void setCreate(Instant create) {
+        this.create = create;
+    }
+
+    public Instant getUpdate() {
+        return update;
+    }
+
+    public void setUpdate(Instant update) {
+        this.update = update;
+    }
+
+    public Long getCart_id() {
+        return cart_id;
+    }
+
+    public void setCart_id(Long cart_id) {
+        this.cart_id = cart_id;
+    }
+
     public LocalDate getDob() {
         return dob;
     }
@@ -138,20 +111,17 @@ public class CustomerRequest {
         this.dob = dob;
     }
 
-    public CustomerRequest() {
-    }
-
-    public CustomerRequest(String name, String address, String username, Set<String> role, boolean gender,
-            String password, String status, LocalDate dob) {
-
+    public CustomerRequest(String name, String address, String username, String roles, boolean gender, String password, String status, Instant create, Instant update, Long cart_id, LocalDate dob) {
         this.name = name;
         this.address = address;
         this.username = username;
-        this.roles = role;
+        this.roles = roles;
         this.gender = gender;
         this.password = password;
         this.status = status;
+        this.create = create;
+        this.update = update;
+        this.cart_id = cart_id;
         this.dob = dob;
     }
-
 }

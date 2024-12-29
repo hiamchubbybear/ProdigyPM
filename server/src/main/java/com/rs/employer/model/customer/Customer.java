@@ -30,7 +30,6 @@ import org.springframework.data.repository.cdi.Eager;
 
 @Entity
 @Table(name = "customer")
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Customer implements Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -48,8 +47,8 @@ public class Customer implements Serializable {
   private String email;
   private String name;
   private String address;
-  @ManyToMany(fetch = FetchType.EAGER)
-  private Set<Role> roles;
+//  @ManyToMany(fetch = FetchType.EAGER)
+  private String role;
   private boolean gender;
   @Column(name = "status")
   private boolean status;
@@ -67,7 +66,6 @@ public class Customer implements Serializable {
   private Set<Token> token;
   @Lob
   @Column(name = "image", columnDefinition = "LONGBLOB")
-  @Nullable
   @JsonIgnore
   private byte[] image;
 
@@ -96,22 +94,6 @@ public class Customer implements Serializable {
     this.token = token;
   }
 
-  public Customer(UUID uuid, String username, String password, String email, String name, String address, Set<Role> roles, boolean gender, boolean status, Instant create, Instant update, LocalDate dob, Set<Token> token, @Nullable byte[] image) {
-    this.uuid = uuid;
-    this.username = username;
-    this.password = password;
-    this.email = email;
-    this.name = name;
-    this.address = address;
-    this.roles = roles;
-    this.gender = gender;
-    this.status = status;
-    this.create = create;
-    this.update = update;
-    this.dob = dob;
-    this.token = token;
-    this.image = image;
-  }
 
   public UUID getUuid() {
     return uuid;
@@ -133,13 +115,38 @@ public class Customer implements Serializable {
     return password;
   }
 
-  public Customer(String username, String password, String email, String name, String address, Set<Role> roles, boolean gender, boolean status, Instant create, Instant update, LocalDate dob) {
+  public String getRole() {
+    return role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
+  }
+
+  public Customer(UUID uuid, String username, String password, String email, String name, String address, String role, boolean gender, boolean status, Instant create, Instant update, LocalDate dob, Set<Token> token, byte[] image) {
+    this.uuid = uuid;
     this.username = username;
     this.password = password;
     this.email = email;
     this.name = name;
     this.address = address;
-    this.roles = roles;
+    this.role = role;
+    this.gender = gender;
+    this.status = status;
+    this.create = create;
+    this.update = update;
+    this.dob = dob;
+    this.token = token;
+    this.image = image;
+  }
+
+  public Customer(String username, String password, String email, String name, String address, String role, boolean gender, boolean status, Instant create, Instant update, LocalDate dob) {
+    this.username = username;
+    this.password = password;
+    this.email = email;
+    this.name = name;
+    this.address = address;
+    this.role = role;
     this.gender = gender;
     this.status = status;
     this.create = create;
@@ -167,13 +174,6 @@ public class Customer implements Serializable {
     this.address = address;
   }
 
-  public Set<Role> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
-  }
 
   public boolean isGender() {
     return gender;

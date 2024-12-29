@@ -8,8 +8,7 @@ import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.repository.cdi.Eager;
 
 @Entity
-public class Role implements Serializable {
-    private static final long serialVersionUID = 2L;
+public class Role  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;

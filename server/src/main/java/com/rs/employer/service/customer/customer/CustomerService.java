@@ -123,17 +123,11 @@ public class CustomerService implements ICustomerService {
         if (customerRepository.existsByUsername(customer.getUsername()))
             throw new AppException(ErrorCode.USERNAME_ALREADY_EXISTS);
         else {
-            Set<Role> roles = new HashSet<>();
-            for (String roleName : customer.getRole()) {
-                Role role = roleRepository.findByName(roleName)
-                        .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
-                roles.add(role);
-            }
             customer.setPassword(passwordEncoder.encode(customer.getPassword()));
             Customer customer1 = mapper.toCustomer(customer);
             customer1.setCreate(now);
             customer1.setUpdate(now);
-            customer1.setRoles(new HashSet<>(roles));
+            customer1.setRole(customer.getRoles());
             return customerRepository.save(customer1);
         }
     }
@@ -242,10 +236,7 @@ public class CustomerService implements ICustomerService {
                 customer.getAddress(),
                 customer.isGender(),
                 customer.isStatus(),
-                customer.getRoles().stream()
-                        .findFirst()
-                        .map(Role::getName)
-                        .orElse(null)
+                customer.getRole()
         );
     }
 
@@ -267,7 +258,7 @@ public class CustomerService implements ICustomerService {
           and maps them to a list of CustomerAllInfoDTO objects for easier consumption.
     */
     @Override
-//    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     @Transactional
     @Cacheable(value = "customer", key = "'AllCustomers'")
     public List<CustomerAllInfoDTO> listAllCustomer() {
@@ -282,7 +273,7 @@ public class CustomerService implements ICustomerService {
                 customer.isStatus(),
                 customer.getCreate(),
                 customer.getDob(),
-                customer.getRoles().stream().map(Role::getName).toString()
+                customer.getRole()
         )).toList();
     }
 
@@ -321,8 +312,7 @@ public class CustomerService implements ICustomerService {
                 .ifPresent(customer::setEmail);
         customer.setName(request.getName());
         customer.setAddress(request.getAddress());
-        Set<Role> role = roleRepository.findAllByName(request.getRole());
-        customer.setRoles(role);
+        customer.setRole(request.getRole());
         customer.setGender(request.isGender());
         customer.setStatus(customer.getStatus());
         customer.setUpdate(Instant.now());
@@ -353,8 +343,8 @@ public class CustomerService implements ICustomerService {
     @des: This method retrieves all customers from the database, sorted by the specified field, 
           and returns the list of customers.
     */
-    @Cacheable(value = "customersSorted", key = "#key")
-    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
+//    @Cacheable(value = "customersSorted", key = "#sort")
+//    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     @Override
     public List<Customer> listAllSort(String sort) {
         return customerRepository.findAll(Sort.by(sort).ascending());
@@ -440,6 +430,12 @@ public class CustomerService implements ICustomerService {
 //        List<Customer> ListofCustomer = customerRepository.findAll(Sort.by("create").ascending());
 //        return ListofCustomer;
 //    }
+    public Customer findCustomerByUsername(String username) {
+        Customer customer = customerRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+        customer.setRole(username);
+        return customerRepository.save(customer);
+    }
 }
 
 

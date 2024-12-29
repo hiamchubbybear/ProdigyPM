@@ -43,7 +43,6 @@ public class CustomerController {
     }
 
     @GetMapping(path = "/all")
-
     public ApiRespone<List<CustomerAllInfoDTO>> getAllUser() {
         return new ApiRespone<>(customerImplement.listAllCustomer());
     }
@@ -83,7 +82,6 @@ public class CustomerController {
     @GetMapping(path = "/getallandsortby/{value}")
     public ApiRespone<List<Customer>> getAllAndSort(
         @PathVariable(value = "value" ,required = true) String value) {
-
         return  new ApiRespone(customerImplement.listAllSort(value));
     }
 
@@ -137,5 +135,10 @@ public class CustomerController {
     @PostMapping(path = "/cfpwd/{passcode}/{email}")
         public ApiRespone<Boolean> confirmForgotPassword (@PathVariable String passcode , @PathVariable String email) {
         return new ApiRespone<>(customerImplement.confirmForgotPasswordCode(passcode , email));
+    }
+
+    @PostMapping(path = "/test")
+    public ApiRespone<Customer> test(@RequestParam String username) {
+        return new ApiRespone<>(customerImplement.findCustomerByUsername(username));
     }
 }

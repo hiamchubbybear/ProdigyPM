@@ -3,14 +3,13 @@ package com.rs.employer.service.customer.customer;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.Random;
-import java.util.StringJoiner;
-import java.util.UUID;
+import java.util.*;
 
 
 import com.nimbusds.jose.*;
+import com.rs.employer.dao.customer.RoleRepository;
 import com.rs.employer.dto.Request.ActivateRequestToken;
+import com.rs.employer.model.customer.Role;
 import com.rs.employer.service.EmailService;
 import com.rs.employer.model.customer.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,18 +47,21 @@ public class AuthenticationService {
     private final InvalidRepository invalidRepository;
     private final String signer_key = "UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
     private final EmailService emailService;
+    private final RoleRepository roleRepository;
+
     @Autowired
-    public AuthenticationService(CustomerRepo repo, InvalidRepository invalidRepository, EmailService emailService) {
+    public AuthenticationService(CustomerRepo repo, InvalidRepository invalidRepository, EmailService emailService, RoleRepository roleRepository, RoleRepository roleRepository1) {
         this.repo = repo;
         this.invalidRepository = invalidRepository;
         this.emailService = emailService;
+        this.roleRepository = roleRepository1;
     }
 
 
     public AuthenticationRespone authentication(AuthenticationRequest authenticationDto) {
         var user = repo.findByUsername(authenticationDto.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
-        user.getRoles().stream().forEach((item) -> System.out.println(item));
+//        user.getRoles().stream().forEach((item) -> System.out.println(item));
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         boolean authenticated = passwordEncoder.matches(authenticationDto.getPassword(),
                 user.getPassword());
@@ -187,15 +189,17 @@ public class AuthenticationService {
 
     private String buildScope(Customer customer) {
         StringJoiner joiner = new StringJoiner(" ");
-        if (!CollectionUtils.isEmpty(customer.getRoles())) {
-            customer.getRoles().forEach(role -> {
-                joiner.add(role.getName());
-                if (!CollectionUtils.isEmpty(role.getPermissions()))
-                    role.getPermissions().forEach(permission -> joiner.add(permission.getName()));
+        // Lấy vai trò từ repository
+        Optional<Role> optionalRole = roleRepository.findByName(customer.getRole());
+        // Nếu vai trò tồn tại, thêm tên vai trò và quyền vào joiner
+        optionalRole.ifPresent(role -> {
+            joiner.add(role.getName());
+            // Thêm quyền nếu có
+            if (!CollectionUtils.isEmpty(role.getPermissions())) {
+                role.getPermissions().forEach(permission -> joiner.add(permission.getName()));
+            }
+        });
 
-            });
-        }
-        System.out.println("SCOPE" + joiner.toString());
         return joiner.toString();
     }
 }

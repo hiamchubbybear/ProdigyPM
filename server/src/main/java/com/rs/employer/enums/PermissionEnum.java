@@ -1,13 +1,11 @@
 package com.rs.employer.enums;
 
 public enum PermissionEnum {
-    PERMIT_ALL("PERMIT_ALL", "All Permissions", "ALL"),
-    UPDATE_USER("UPDATE_USER", "Update User", "USER"),
+
+    // Admin
+    PERMIT_ALL("PERMIT_ALL", "All Permissions", "ADMIN"),
     DELETE_MS("DELETE_MS", "Delete Management System", "ADMIN"),
     ADD_USER("ADD_USER", "Add User", "ADMIN"),
-    UPDATE_PRODUCT("UPDATE_PRODUCT", "Update Product", "VENDOR"),
-    DELETE_PRODUCT("DELETE_PRODUCT", "Delete Product", "VENDOR"),
-    ADD_PRODUCT("ADD_PRODUCT", "Add Product", "VENDOR"),
     UPDATE_RESOURCES("UPDATE_RESOURCES", "Update Resources", "ADMIN"),
     DELETE_RESOURCES("DELETE_RESOURCES", "Delete Resources", "ADMIN"),
     ADD_RESOURCES("ADD_RESOURCES", "Add Resources", "ADMIN"),
@@ -16,7 +14,24 @@ public enum PermissionEnum {
     ADD_ROLE("ADD_ROLE", "Add Role", "ADMIN"),
     UPDATE_PERMISSION("UPDATE_PERMISSION", "Update Permission", "ADMIN"),
     DELETE_PERMISSION("DELETE_PERMISSION", "Delete Permission", "ADMIN"),
-    ADD_PERMISSION("ADD_PERMISSION", "Add Permission", "ADMIN");
+    ADD_PERMISSION("ADD_PERMISSION", "Add Permission", "ADMIN"),
+
+    // User
+    UPDATE_USER("UPDATE_USER", "Update User", "USER"),
+
+    // Vendor
+    UPDATE_PRODUCT("UPDATE_PRODUCT", "Update Product", "VENDOR"),
+    DELETE_PRODUCT("DELETE_PRODUCT", "Delete Product", "VENDOR"),
+    ADD_PRODUCT("ADD_PRODUCT", "Add Product", "VENDOR");
+
+
+
+
+
+
+
+
+
 
     private final String name;
     private final String description;
