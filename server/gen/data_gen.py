@@ -23,14 +23,14 @@ def create_connection(host_name, user_name, user_password, db_name):
         print(f"Lỗi '{e}' xảy ra khi kết nối đến cơ sở dữ liệu")
     return connection
 
-def insert_data(connection, uuid_value, username, password, email, name, address, gender, status, dob, image):
+def insert_data(connection, uuid_value, username, password, email, name, address, gender, status, dob, role, image):
     """Chèn dữ liệu vào bảng customers."""
     cursor = connection.cursor()
     query = """
-    INSERT INTO customer (uuid, username, password, email, name, address, gender, status, create_at, update_at, dob, image) 
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    INSERT INTO customer (uuid, username, password, email, name, address, gender, status, create_at, update_at, dob, role, image) 
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
-    values = (uuid_value, username, password, email, name, address, gender, status, datetime.now(), datetime.now(), dob, image)
+    values = (uuid_value, username, password, email, name, address, gender, status, datetime.now(), datetime.now(), dob, role, image)
     try:
         cursor.execute(query, values)
         connection.commit()
@@ -42,7 +42,7 @@ def main():
     # Thay đổi thông tin kết nối theo cơ sở dữ liệu của bạn
     connection = create_connection("localhost", "root", "123456", "prodigypm")
 
-    # Tạo và chèn 100 hàng dữ liệu giả
+    # Tạo và chèn 100000 hàng dữ liệu giả
     for _ in range(100000):
         uuid_value = str(uuid.uuid4())  # Tạo UUID
         username = fake.user_name()
@@ -53,9 +53,14 @@ def main():
         gender = random.choice([True, False])  # Giới tính ngẫu nhiên
         status = random.choice([True, False])  # Trạng thái ngẫu nhiên
         dob = fake.date_of_birth(minimum_age=18, maximum_age=80)  # Ngày sinh từ 18 đến 80 tuổi
-        image = None  # Bạn có thể thêm logic để tạo hình ảnh nếu cần
 
-        insert_data(connection, uuid_value, username, password, email, name, address, gender, status, dob, image)
+        # Chọn ngẫu nhiên role từ danh sách
+        role = random.choice(['ADMIN', 'USER', 'VENDOR'])
+
+        # Tạo dữ liệu hình ảnh giả (có thể là URL hoặc đường dẫn đến hình ảnh)
+        image = fake.image_url()  # Tạo URL hình ảnh giả
+
+        insert_data(connection, uuid_value, username, password, email, name, address, gender, status, dob, role, image)
 
     if connection.is_connected():
         connection.close()

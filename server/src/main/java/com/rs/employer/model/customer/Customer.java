@@ -47,7 +47,6 @@ public class Customer implements Serializable {
   private String email;
   private String name;
   private String address;
-//  @ManyToMany(fetch = FetchType.EAGER)
   private String role;
   private boolean gender;
   @Column(name = "status")

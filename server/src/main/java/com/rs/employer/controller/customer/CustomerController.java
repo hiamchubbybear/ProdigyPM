@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Base64;
 import java.util.List;
-import java.util.UUID;
+
 import com.nimbusds.jose.JOSEException;
 import com.rs.employer.dao.customer.CustomerRepo;
 import com.rs.employer.dto.CustomerAllInfoDTO;
@@ -17,6 +17,7 @@ import com.rs.employer.model.customer.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.rs.employer.apirespone.ApiRespone;
@@ -46,56 +47,55 @@ public class CustomerController {
     public ApiRespone<List<CustomerAllInfoDTO>> getAllUser() {
         return new ApiRespone<>(customerImplement.listAllCustomer());
     }
-    @GetMapping(path = "/getbyid/{id}")
-    public ApiRespone<Customer> getPaticipateUser(@PathVariable UUID id) {
-        ApiRespone apiRespone = new ApiRespone<>
-        (customerImplement.listCustomerById(id));
-        return apiRespone;
+
+    @GetMapping(path = "/{id}")
+    public ApiRespone<Customer> getPaticipateUser(@PathVariable String id) {
+        return new ApiRespone(customerImplement.listCustomerById(id));
     }
 
-    @GetMapping("/getMyInfo")
+    @GetMapping("/info")
     public ApiRespone<CustomerInfoDTO> getInfo() {
         return new ApiRespone<>
                 (customerImplement.getMyInfo());
     }
-    @DeleteMapping(path = "/delete/{id}")
-    public ApiRespone<Boolean> deleteCustomer(@PathVariable UUID id) {
+
+    @DeleteMapping(path = "/{id}")
+    public ApiRespone<Boolean> deleteCustomer(@PathVariable String id) {
         customerImplement.deleteCustomerById(id);
-        return  new ApiRespone<>(true);
+        return new ApiRespone<>(true);
     }
-    @PutMapping(path = "/update")
+
+    @PutMapping(path = "/update/{id}")
     public ApiRespone<CustomerInfoDTO> updatCustomer(
-            @RequestBody CustomerInfoDTO request) {
+            @RequestBody CustomerInfoDTO request , @PathVariable String id ) {
         return new ApiRespone<>
-                (customerImplement.updateCustomer(request));
+                (customerImplement.updateCustomer(request, id));
     }
+
     @PostMapping(path = "/add")
     public ApiRespone<Customer> addCustomer(@RequestBody @Valid CustomerRequest customer) {
-        return  new ApiRespone<>
+        return new ApiRespone<>
                 (customerImplement.addCustomer(customer));
     }
+
     @GetMapping(path = "/hello")
     public ApiRespone<String> hello() throws ParseException {
         customerRepo.updateStatus("admin");
-    return new ApiRespone<>("Hello worlds");
-    }
-    @GetMapping(path = "/getallandsortby/{value}")
-    public ApiRespone<List<Customer>> getAllAndSort(
-        @PathVariable(value = "value" ,required = true) String value) {
-        return  new ApiRespone(customerImplement.listAllSort(value));
+        return new ApiRespone<>("Hello worlds");
     }
 
-    /**
-     *
-     * @param customer
-     * @return
-     */
+    @GetMapping(path = "/all/{value}")
+    public ApiRespone<List<Customer>> getAllAndSort(
+            @PathVariable(value = "value", required = true) String value) {
+        return new ApiRespone(customerImplement.listAllSort(value));
+    }
+
     @PostMapping(path = "/register")
     public ApiRespone<Customer> registerCustomer(@RequestBody RegisterRequest customer) {
         return new ApiRespone(customerImplement.register(customer));
     }
 
-    @PutMapping(path = "/updateUser")
+    @PutMapping(path = "/user")
     public ApiRespone<Customer> updateCustomerData(@RequestBody CustomerUpdateRespone customer) {
         return new ApiRespone(customerImplement.customerRequest(customer));
     }
@@ -111,30 +111,35 @@ public class CustomerController {
     }
 
 
-    @PostMapping(path = "/resetpwd")
+    @PostMapping(path = "/pwd")
     public ApiRespone<ForgotAccountRespone> resetPassword(@RequestParam String email) throws JOSEException {
         return new ApiRespone(customerImplement.forgotAccount(email));
     }
-    @PostMapping("/upload")
-    public ApiRespone<String> uploadImage(@RequestParam String username,@RequestParam("file") MultipartFile file) throws IOException {
+
+    @PostMapping("/img/upload")
+    public ApiRespone<String> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         String fileName = file.getOriginalFilename();
         byte[] fileBytes = file.getBytes();
-        if(!customerRepo.existsByUsername(username)) {
+        if (!customerRepo.existsByUsername(username)) {
             throw new AppException(ErrorCode.USER_NOTFOUND);
-        }else {
+        } else {
             customerRepo.updateCustomerImage(username, fileBytes);
             return new ApiRespone<>("Image uploaded successfully: " + fileName);
         }
     }
+
     @GetMapping(path = "/image")
     @PostAuthorize("#username == authentication.name")
-    public ApiRespone<?> getImage(@RequestParam(name = "username") String username) throws IOException {
-                String imageResource = Base64.getEncoder().encodeToString(customerImplement.userImage(username));
-        return new ApiRespone<>(new ImageRespone(imageResource,username));
+    public ApiRespone<?> getImage() throws IOException {
+
+        String imageResource = Base64.getEncoder().encodeToString(customerImplement.userImage());
+        return new ApiRespone<>(new ImageRespone(imageResource, SecurityContextHolder.getContext().getAuthentication().getName()));
     }
+
     @PostMapping(path = "/cfpwd/{passcode}/{email}")
-        public ApiRespone<Boolean> confirmForgotPassword (@PathVariable String passcode , @PathVariable String email) {
-        return new ApiRespone<>(customerImplement.confirmForgotPasswordCode(passcode , email));
+    public ApiRespone<Boolean> confirmForgotPassword(@PathVariable String passcode, @PathVariable String email) {
+        return new ApiRespone<>(customerImplement.confirmForgotPasswordCode(passcode, email));
     }
 
 }

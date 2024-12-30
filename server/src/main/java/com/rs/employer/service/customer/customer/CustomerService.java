@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.util.*;
 
 import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jwt.JWT;
 import com.rs.employer.dao.customer.TokenRepository;
 import com.rs.employer.dao.customer.TokenService;
 import com.rs.employer.dto.CustomerAllInfoDTO;
@@ -18,6 +19,8 @@ import com.rs.employer.dto.Response.*;
 import com.rs.employer.service.EmailService;
 import com.rs.employer.model.customer.Customer;
 import com.rs.employer.model.customer.Role;
+import com.rs.employer.service.ProcessSecurityContextHolder;
+import io.jsonwebtoken.Jwt;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +51,6 @@ public class CustomerService implements ICustomerService {
 
     private static final Logger log = LoggerFactory.getLogger(CustomerService.class);
     private final CustomerRepo customerRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomerMapper mapper;
     private final CustomerRepo customerRepo;
@@ -59,11 +61,10 @@ public class CustomerService implements ICustomerService {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Autowired
-    public CustomerService(CustomerRepo customerRepository, RoleRepository roleRepository,
+    public CustomerService(CustomerRepo customerRepository,
                            PasswordEncoder passwordEncoder,
                            CustomerMapper mapper, CustomerRepo customerRepo, EmailService emailService, TokenRepository tokenRepository, TokenService tokenService, RedisTemplate<String, String> redisTemplate) {
         this.customerRepository = customerRepository;
-        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.mapper = mapper;
         this.customerRepo = customerRepo;
@@ -82,7 +83,7 @@ public class CustomerService implements ICustomerService {
           and sends an activation email to the user.
     */
     @Override
-    public RegisterRespone register(RegisterRequest customer) {
+    public RegisterRespone register(RegisterRequest customer ) {
         if (customerRepository.existsByEmail(customer.getEmail())) {
             throw new AppException(ErrorCode.EMAIL_ALREADY_EXISTS);
         }
@@ -157,10 +158,10 @@ public class CustomerService implements ICustomerService {
                     )
             }
     )
-    public CustomerInfoDTO updateCustomer(CustomerInfoDTO customer) {
+    public CustomerInfoDTO updateCustomer(CustomerInfoDTO customer ,String uuid) {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         System.out.println("Tên của người dùng cập nhật là " + username);
-        Customer existingCustomer = customerRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
+        Customer existingCustomer = customerRepository.findById(UUID.fromString(uuid)).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
         if (username.equals(customer.getUsername())) {
             existingCustomer.setEmail(customer.getEmail());
             existingCustomer.setName(customer.getName());
@@ -181,9 +182,9 @@ public class CustomerService implements ICustomerService {
     */
     @Override
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_DELETE_MS')")
-    public void deleteCustomerById(UUID id) {
-        customerRepository.findById(id).ifPresentOrElse((customer) -> {
-            customerRepository.deleteById(id);
+    public void deleteCustomerById(String id) {
+        customerRepository.findById(UUID.fromString(id)).ifPresentOrElse((customer) -> {
+            customerRepository.deleteById(UUID.fromString(id));
             redisTemplate.delete(customer.getUsername());
         }, () -> {
             throw new AppException(ErrorCode.USER_NOTFOUND);
@@ -199,8 +200,8 @@ public class CustomerService implements ICustomerService {
     @Override
     @PostAuthorize("returnObject.username == authentication.name")
     @Caching
-    public CustomerResponse listCustomerById(UUID id) {
-        return mapper.toCustomerRespone(customerRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND)));
+    public CustomerResponse listCustomerById(String id) {
+        return mapper.toCustomerRespone(customerRepository.findById(UUID.fromString(id)).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND)));
     }
 
     /*
@@ -300,6 +301,7 @@ public class CustomerService implements ICustomerService {
                     )
             }
     )
+
     public Customer customerRequest(CustomerUpdateRespone request) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customer = customerRepository.findByUsername(username)
@@ -343,8 +345,8 @@ public class CustomerService implements ICustomerService {
     @des: This method retrieves all customers from the database, sorted by the specified field, 
           and returns the list of customers.
     */
-//    @Cacheable(value = "customersSorted", key = "#sort")
-//    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
+    @Cacheable(value = "customersSorted", key = "#sort")
+    @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL')")
     @Override
     public List<Customer> listAllSort(String sort) {
         return customerRepository.findAll(Sort.by(sort).ascending());
@@ -395,28 +397,29 @@ public class CustomerService implements ICustomerService {
     */
     @Cacheable(value = "userImage", key = "#username")
     @Override
-    public byte[] userImage(String username) throws IOException {
+    public byte[] userImage() throws IOException {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<Customer> customerOpt = customerRepository.findByUsername(username);
         if (customerOpt.isPresent()) {
             Customer customer = customerOpt.get();
             byte[] image = customer.getImage();
             if (image != null) {
-                return image; // Trả về byte[]
+                return image;
             } else {
                 Path path = Paths.get("server/src/main/resources/Default-Profile-Picture-Download-PNG-Image.png");
-                return Files.readAllBytes(path); // Trả về byte[] từ file
+                return Files.readAllBytes(path);
             }
         } else {
             throw new AppException(ErrorCode.USER_NOTFOUND);
         }
     }
+
     /*
     @req: Use to confirm the password reset code.
     @par: String passcode and String email of the customer.
-    @des: This method checks if the provided passcode matches the stored token for the email. 
+    @des: This method checks if the provided passcode matches the stored token for the email.
           It returns true if it matches, otherwise returns false.
     */
-
     public boolean confirmForgotPasswordCode(String passcode, String email) {
         var token = tokenRepository.findTokenByCustomerEmailAndUsed(email, false);
         if (!customerRepository.existsByEmail(email))

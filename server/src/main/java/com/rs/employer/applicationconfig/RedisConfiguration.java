@@ -27,7 +27,6 @@ public class RedisConfiguration {
         config.setHostName("localhost");
         config.setPort(6379);
         config.setPassword("123456");
-
         return new JedisConnectionFactory(config);
     }
 
