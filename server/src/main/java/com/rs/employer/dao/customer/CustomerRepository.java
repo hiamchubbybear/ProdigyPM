@@ -2,11 +2,10 @@ package com.rs.employer.dao.customer;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
+import com.rs.employer.dto.Response.CustomerInfoDTO;
 import com.rs.employer.model.customer.Customer;
-import com.rs.employer.model.customer.Role;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -19,11 +18,15 @@ import com.rs.employer.model.warehouse.Product;
 
 
 @Repository
-@EnableJpaRepositories
-public interface CustomerRepo extends JpaRepository<Customer, UUID> {
+public interface CustomerRepository extends JpaRepository<Customer, UUID> {
     boolean existsByUsername(String username);
+    void deleteByUsername(String username);
     boolean existsByEmail(String email);
     Optional<Customer> findByUsername(String username);
+    @Query("DELETE Customer c where c.username=?1")
+    @Transactional
+    @Modifying
+    void deleteCustomerByUsername(String username);
 //    @Query("SELECT c FROM Customer c WHERE c.username = :username")
 //    Optional<Customer> findByUsername(@Param("username") String username);
     Optional<Customer> findByEmail(String email);

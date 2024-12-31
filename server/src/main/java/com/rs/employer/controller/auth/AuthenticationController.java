@@ -2,7 +2,7 @@ package com.rs.employer.controller.auth;
 
 import java.text.ParseException;
 
-import com.rs.employer.dao.customer.CustomerRepo;
+import com.rs.employer.dao.customer.CustomerRepository;
 import com.rs.employer.dao.customer.TokenService;
 import com.rs.employer.dto.Response.LoginInactiveAccountRespone;
 import com.rs.employer.service.EmailService;
@@ -23,13 +23,13 @@ import com.rs.employer.service.customer.customer.AuthenticationService;
 @RequestMapping("/auth")
 public class AuthenticationController {
     private final AuthenticationService authen;
-    private final CustomerRepo customerRepo;
+    private final CustomerRepository customerRepo;
     private final TokenService tokenService;
     private final AuthenticationService authenticationService;
     private final EmailService emailService;
 
     @Autowired
-    public AuthenticationController(AuthenticationService authen, CustomerRepo customerRepo, TokenService tokenService, AuthenticationService authenticationService, EmailService emailService) {
+    public AuthenticationController(AuthenticationService authen, CustomerRepository customerRepo, TokenService tokenService, AuthenticationService authenticationService, EmailService emailService) {
         this.authen = authen;
         this.customerRepo = customerRepo;
         this.tokenService = tokenService;

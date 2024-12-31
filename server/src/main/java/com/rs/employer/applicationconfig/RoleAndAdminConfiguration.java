@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.rs.employer.enums.RoleEnum;
-import com.rs.employer.globalexception.AppException;
-import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.customer.Customer;
 import com.rs.employer.model.customer.Permission;
 import com.rs.employer.model.customer.Role;
@@ -19,7 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.rs.employer.dao.customer.CustomerRepo;
+import com.rs.employer.dao.customer.CustomerRepository;
 import com.rs.employer.dao.customer.PermissionRepository;
 import com.rs.employer.dao.customer.RoleRepository;
 import com.rs.employer.enums.PermissionEnum;
@@ -31,11 +29,11 @@ public class RoleAndAdminConfiguration {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
-    private final CustomerRepo repo;
+    private final CustomerRepository repo;
     private final Instant now = Instant.now();
 
     @Autowired
-    public RoleAndAdminConfiguration(PasswordEncoder passwordEncoder, RoleRepository roleRepository, PermissionRepository permissionRepository, CustomerRepo repo) {
+    public RoleAndAdminConfiguration(PasswordEncoder passwordEncoder, RoleRepository roleRepository, PermissionRepository permissionRepository, CustomerRepository repo) {
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.permissionRepository = permissionRepository;

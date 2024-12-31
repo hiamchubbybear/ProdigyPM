@@ -18,7 +18,7 @@ public class Token {
     @Column(nullable = false )
     private LocalDateTime expireDate;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id" , nullable = false , updatable = true)
+    @JoinColumn(name = "uuid"  , updatable = true)
     private Customer customer;
 
 

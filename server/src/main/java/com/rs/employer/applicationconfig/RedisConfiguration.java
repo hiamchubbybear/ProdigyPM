@@ -21,8 +21,6 @@ import java.time.Duration;
 
 @Configuration
 public class RedisConfiguration {
-    @Autowired
-    private static CacheManager cacheManager;
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
@@ -55,23 +53,7 @@ public class RedisConfiguration {
         return (builder) -> builder
                 .withCacheConfiguration("customCache",
                         RedisCacheConfiguration.defaultCacheConfig()
-                                .entryTtl(Duration.ofMinutes(30)))
-                ;
+                                .entryTtl(Duration.ofMinutes(30)));
     }
 
-    public static void evictCaches(String key) {
-        Cache customerInfoCache = cacheManager.getCache("customerInfo");
-        if (customerInfoCache != null) {
-            customerInfoCache.evict(key);
-        }
-        Cache customerCache = cacheManager.getCache("customer");
-        if (customerCache != null) {
-            customerCache.evict(key);
-            customerCache.evict("allCustomers"); // Sửa lỗi cú pháp
-        }
-        Cache userAddedCache = cacheManager.getCache("userAdded");
-        if (userAddedCache != null) {
-            userAddedCache.evict(key);
-        }
-    }
 }

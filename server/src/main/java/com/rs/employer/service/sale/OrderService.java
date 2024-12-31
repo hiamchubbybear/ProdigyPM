@@ -1,6 +1,6 @@
 package com.rs.employer.service.sale;
 
-import com.rs.employer.dao.customer.CustomerRepo;
+import com.rs.employer.dao.customer.CustomerRepository;
 import com.rs.employer.dao.purchase.UserRepository;
 import com.rs.employer.dao.temp.OrderRepository;
 import com.rs.employer.dto.OrderDTO;
@@ -8,7 +8,6 @@ import com.rs.employer.dto.OrderDTO;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.mapper.OrderMapper;
-import com.rs.employer.model.customer.Customer;
 import com.rs.employer.model.sale.Order;
 import com.rs.employer.model.temp.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +23,10 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final OrderMapper orderMapper;
-    private final CustomerRepo customerRepo;
+    private final CustomerRepository customerRepo;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, UserRepository userRepository, OrderMapper orderMapper, CustomerRepo customerRepo) {
+    public OrderService(OrderRepository orderRepository, UserRepository userRepository, OrderMapper orderMapper, CustomerRepository customerRepo) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.orderMapper = orderMapper;

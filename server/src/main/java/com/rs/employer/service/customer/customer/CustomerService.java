@@ -16,9 +16,14 @@ import com.rs.employer.dto.CustomerAllInfoDTO;
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
 import com.rs.employer.dto.Response.*;
+import com.rs.employer.service.CacheService;
 import com.rs.employer.service.EmailService;
 import com.rs.employer.model.customer.Customer;
-import com.rs.employer.service.ProcessSecurityContextHolder;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaUpdate;
+import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,14 +33,13 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.rs.employer.dao.customer.CustomerRepo;
+import com.rs.employer.dao.customer.CustomerRepository;
 import com.rs.employer.dto.Request.User.CustomerRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
@@ -44,22 +48,24 @@ import com.rs.employer.service.customer.ICustomerService;
 
 @Service
 public class CustomerService implements ICustomerService {
-
+    private final CacheService cacheService;
+    @PersistenceContext
+    private EntityManager entityManager;
     private static final Logger log = LoggerFactory.getLogger(CustomerService.class);
-    private final CustomerRepo customerRepository;
+    private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomerMapper mapper;
-    private final CustomerRepo customerRepo;
+    private final CustomerRepository customerRepo;
     private final EmailService emailService;
     private final Instant now = Instant.now();
     private final TokenRepository tokenRepository;
     private final TokenService tokenService;
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisConfiguration redisConfiguration;
 
     @Autowired
-    public CustomerService(CustomerRepo customerRepository,
+    public CustomerService(CustomerRepository customerRepository,
                            PasswordEncoder passwordEncoder,
-                           CustomerMapper mapper, CustomerRepo customerRepo, EmailService emailService, TokenRepository tokenRepository, TokenService tokenService, RedisTemplate<String, String> redisTemplate) {
+                           CustomerMapper mapper, CustomerRepository customerRepo, EmailService emailService, TokenRepository tokenRepository, TokenService tokenService, RedisConfiguration redisConfiguration, CacheService cacheService) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
         this.mapper = mapper;
@@ -67,7 +73,8 @@ public class CustomerService implements ICustomerService {
         this.emailService = emailService;
         this.tokenRepository = tokenRepository;
         this.tokenService = tokenService;
-        this.redisTemplate = redisTemplate;
+        this.redisConfiguration = redisConfiguration;
+        this.cacheService = cacheService;
     }
 
     /*
@@ -140,6 +147,7 @@ public class CustomerService implements ICustomerService {
     */
 
     @Override
+    @Transactional(rollbackOn = RuntimeException.class)
     @PostAuthorize("returnObject.username == authentication.name")
     @Caching(
             put = {
@@ -155,21 +163,44 @@ public class CustomerService implements ICustomerService {
                     )
             }
     )
-    public CustomerInfoDTO updateCustomer(CustomerInfoDTO customer, String username) {
-        Customer existingCustomer = customerRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
-        if (ProcessSecurityContextHolder.getUsername(SecurityContextHolder.getContext()).equals(customer.getUsername())) {
-            log.info("Customer updated {}", existingCustomer.getUsername());
-            existingCustomer.setEmail(customer.getEmail());
-            existingCustomer.setName(customer.getName());
-            existingCustomer.setAddress(customer.getAddress());
-            existingCustomer.setGender(customer.isGender());
-            existingCustomer.setStatus(customer.isStatus());
-            customerRepository.save(existingCustomer);
+    public CustomerInfoDTO updateCustomer(CustomerInfoDTO existingCustomer, String username) {
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaUpdate<Customer> update = cb.createCriteriaUpdate(Customer.class);
+            Root<Customer> root = update.from(Customer.class);
 
-            return customer;
+            // Set fields only if not null
+            if (existingCustomer.getEmail() != null) {
+                update.set(root.get("email"), existingCustomer.getEmail());
+            }
+            if (existingCustomer.getName() != null) {
+                update.set(root.get("name"), existingCustomer.getName());
+            }
+            if (existingCustomer.getAddress() != null) {
+                update.set(root.get("address"), existingCustomer.getAddress());
+            }
+            if (existingCustomer.getRole() != null) {
+                update.set(root.get("role"), existingCustomer.getRole());
+            }
+            if (existingCustomer.getGender() != null) {
+                update.set(root.get("gender"), existingCustomer.getGender());
+            }
+
+            // Add where condition
+            update.where(cb.equal(root.get("username"), username));
+
+            // Execute the update
+            entityManager.createQuery(update).executeUpdate();
+            entityManager.flush();
+
+            return existingCustomer; // Return DTO after update
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to update customer information: " + e.getMessage());
         }
-        throw new AppException(ErrorCode.USER_NOTFOUND);
     }
+
 
     /*
     @req: Use to delete a customer by their ID.
@@ -178,15 +209,21 @@ public class CustomerService implements ICustomerService {
           If not, it throws an exception indicating the user was not found.
     */
     @Override
+    @Transactional(rollbackOn = AppException.class)
     @PreAuthorize("hasAuthority('SCOPE_PERMIT_ALL') or hasAuthority('SCOPE_DELETE_MS')")
-    public boolean deleteCustomerById(String username) {
+    public Boolean deleteCustomerById(String username) {
+        log.info("Customer deleting");
         Optional<Customer> foundCustomer = customerRepository.findByUsername(username);
         if (foundCustomer.isPresent()) {
-            customerRepository.deleteById(foundCustomer.get().getUuid());
-            RedisConfiguration.evictCaches(username);
+
+            customerRepository.deleteCustomerByUsername(username);
+            log.info("Customer deleted {}", foundCustomer.get().getUsername());
+            cacheService.evictCaches(username);
             return true;
-    } else throw new AppException(ErrorCode.USER_NOTFOUND);
+        } else throw new AppException(ErrorCode.USER_NOTFOUND);
+
     }
+
 
     /*
     @req: Use to retrieve customer information by their ID.
@@ -198,7 +235,7 @@ public class CustomerService implements ICustomerService {
     @PostAuthorize("returnObject.username == authentication.name")
     @Caching
     public CustomerResponse listCustomerById(String username) {
-        return mapper.toCustomerRespone(customerRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND)));
+        return mapper.toCustomerResponse(customerRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND)));
     }
 
     /*
@@ -226,7 +263,6 @@ public class CustomerService implements ICustomerService {
                 customer.getName(),
                 customer.getAddress(),
                 customer.isGender(),
-                customer.isStatus(),
                 customer.getRole()
         );
     }

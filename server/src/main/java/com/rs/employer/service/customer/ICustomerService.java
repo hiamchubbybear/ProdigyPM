@@ -3,7 +3,6 @@ package com.rs.employer.service.customer;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
-import java.util.UUID;
 
 import com.nimbusds.jose.JOSEException;
 
@@ -21,7 +20,7 @@ public interface ICustomerService {
     public RegisterRespone register(RegisterRequest registerRequest);
     public Customer addCustomer(CustomerRequest customer );
     public CustomerResponse listCustomerById(String username);
-    public boolean deleteCustomerById(String username);
+    public Boolean deleteCustomerById(String username);
     public List listAllCustomer();
     public Customer customerRequest(CustomerUpdateResponse request , String username);
     public CustomerInfoDTO updateCustomer(CustomerInfoDTO customer, String username);

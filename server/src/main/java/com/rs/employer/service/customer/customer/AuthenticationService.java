@@ -23,7 +23,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import com.rs.employer.dao.customer.CustomerRepo;
+import com.rs.employer.dao.customer.CustomerRepository;
 import com.rs.employer.dao.others.InvalidRepository;
 import com.rs.employer.dto.Request.Auth.AuthenticationRequest;
 import com.rs.employer.dto.Request.Auth.IntrospectRequest;
@@ -43,14 +43,14 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class AuthenticationService {
-    private final CustomerRepo repo;
+    private final CustomerRepository repo;
     private final InvalidRepository invalidRepository;
     private final String signer_key = "UgCfRRF43z88eCjjLQyzLZBp5hw1WyG15tR2VWg13F5yAPBP4oxKhpy3KViWnwSP";
     private final EmailService emailService;
     private final RoleRepository roleRepository;
 
     @Autowired
-    public AuthenticationService(CustomerRepo repo, InvalidRepository invalidRepository, EmailService emailService, RoleRepository roleRepository, RoleRepository roleRepository1) {
+    public AuthenticationService(CustomerRepository repo, InvalidRepository invalidRepository, EmailService emailService, RoleRepository roleRepository, RoleRepository roleRepository1) {
         this.repo = repo;
         this.invalidRepository = invalidRepository;
         this.emailService = emailService;

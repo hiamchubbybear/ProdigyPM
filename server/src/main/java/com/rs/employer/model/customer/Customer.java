@@ -55,7 +55,7 @@ public class Customer implements Serializable {
     @Column(name = "update_at")
     private Instant update;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @DobValidator(min = 18, message = "UNCATEGORIZE_EXCEPTION")
+    @DobValidator(min = 18, message = "UNCATEGORIZED_EXCEPTION")
     @Column(name = "dob")
     @JsonIgnore
     private LocalDate dob;

@@ -4,7 +4,7 @@ import com.rs.employer.dao.account.ChartOfAccountRepository;
 import com.rs.employer.dao.account.JournalEntryDetailRepository;
 import com.rs.employer.dao.account.JournalEntryRepository;
 import com.rs.employer.dao.customer.AccountRepository;
-import com.rs.employer.dao.customer.CustomerRepo;
+import com.rs.employer.dao.customer.CustomerRepository;
 import com.rs.employer.dto.Request.JournalEntryDetailRequestDTO;
 import com.rs.employer.dto.Response.BalanceMonthlyResponse;
 import com.rs.employer.globalexception.AppException;
@@ -29,7 +29,7 @@ public class JournalEntryDetailService {
     private final JournalEntryDetailRepository journalEntryDetailRepository;
     private final JournalEntryDetailMapper journalEntryDetailMapper;
     private final JournalEntryRepository journalEntryRepository;
-    private final CustomerRepo customerRepo;
+    private final CustomerRepository customerRepo;
     private final AccountRepository accountRepository;
 
     @Autowired
@@ -37,7 +37,7 @@ public class JournalEntryDetailService {
                                      JournalEntryDetailMapper journalEntryDetailMapper,
                                      ChartOfAccountRepository chartOfAccountRepository,
                                      JournalEntryRepository journalEntryRepository,
-                                     CustomerRepo customerRepo, AccountRepository accountRepository) {
+                                     CustomerRepository customerRepo, AccountRepository accountRepository) {
         this.journalEntryDetailRepository = journalEntryDetailRepository;
         this.journalEntryDetailMapper = journalEntryDetailMapper;
         this.journalEntryRepository = journalEntryRepository;

@@ -1,6 +1,5 @@
 package com.rs.employer.dao.customer;
 
-import com.rs.employer.service.EmailService;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.customer.Token;
@@ -14,9 +13,9 @@ import java.util.Optional;
 public class TokenService {
     public final GenerateTokenService generateTokenService;
     public final TokenRepository tokenRepository;
-    private final CustomerRepo customerRepo;
+    private final CustomerRepository customerRepo;
 
-    public TokenService(GenerateTokenService generateTokenService, TokenRepository tokenRepository, CustomerRepo customerRepo) {
+    public TokenService(GenerateTokenService generateTokenService, TokenRepository tokenRepository, CustomerRepository customerRepo) {
         this.generateTokenService = generateTokenService;
         this.tokenRepository = tokenRepository;
         this.customerRepo = customerRepo;

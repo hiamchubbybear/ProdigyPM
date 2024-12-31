@@ -1,7 +1,7 @@
 package com.rs.employer.service.account;
 
 import com.rs.employer.dao.account.JournalEntryRepository;
-import com.rs.employer.dao.customer.CustomerRepo;
+import com.rs.employer.dao.customer.CustomerRepository;
 import com.rs.employer.dto.Request.JournalEntryRequest;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
@@ -27,10 +27,10 @@ public class JournalEntryService {
 	private static final Logger log = LoggerFactory.getLogger(JournalEntryService.class);
 	private JournalEntryRepository journalEntryRepository;
 	private JournalEntryMapper journalEntryMapper;
-	private CustomerRepo customerRepo;
+	private CustomerRepository customerRepo;
 
 	@Autowired
-	JournalEntryService(JournalEntryRepository journalEntryRepository, JournalEntryMapper journalEntryMapper, CustomerRepo customerRepo) {
+	JournalEntryService(JournalEntryRepository journalEntryRepository, JournalEntryMapper journalEntryMapper, CustomerRepository customerRepo) {
 		this.journalEntryRepository = journalEntryRepository;
 		this.journalEntryMapper = journalEntryMapper;
 		this.customerRepo = customerRepo;

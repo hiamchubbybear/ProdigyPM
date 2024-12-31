@@ -1,6 +1,6 @@
 package com.rs.employer.service.human_resource;
 
-import com.rs.employer.dao.customer.CustomerRepo;
+import com.rs.employer.dao.customer.CustomerRepository;
 import com.rs.employer.dao.human_resource.EmployeeRepository;
 import com.rs.employer.dao.human_resource.PayrollRepository;
 import com.rs.employer.dto.Request.human_resource.PayrollRequest;
@@ -23,11 +23,11 @@ public class PayrollService {
 
     private final PayrollRepository payrollRepository;
     private final PayrollMapper payrollMapper;
-    private final CustomerRepo customerRepo;
+    private final CustomerRepository customerRepo;
     private final EmployeeRepository employeeRepository;
 
     @Autowired
-    public PayrollService(PayrollRepository payrollRepository, PayrollMapper payrollMapper, CustomerRepo customerRepo, EmployeeRepository employeeRepository) {
+    public PayrollService(PayrollRepository payrollRepository, PayrollMapper payrollMapper, CustomerRepository customerRepo, EmployeeRepository employeeRepository) {
         this.payrollRepository = payrollRepository;
         this.payrollMapper = payrollMapper;
         this.customerRepo = customerRepo;

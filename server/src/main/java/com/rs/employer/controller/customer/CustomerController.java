@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Base64;
 import java.util.List;
-import java.util.UUID;
 
 import com.nimbusds.jose.JOSEException;
-import com.rs.employer.dao.customer.CustomerRepo;
+import com.rs.employer.dao.customer.CustomerRepository;
 import com.rs.employer.dto.CustomerAllInfoDTO;
 import com.rs.employer.dto.Request.ActivateRequestToken;
 import com.rs.employer.dto.Request.Register.RegisterRequest;
@@ -35,10 +34,10 @@ import org.springframework.web.multipart.MultipartFile;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class CustomerController {
     private final CustomerService customerImplement;
-    private final CustomerRepo customerRepo;
+    private final CustomerRepository customerRepo;
 
     @Autowired
-    public CustomerController(CustomerService customerImplement, CustomerRepo customerRepo) {
+    public CustomerController(CustomerService customerImplement, CustomerRepository customerRepo) {
         this.customerImplement = customerImplement;
         this.customerRepo = customerRepo;
     }
@@ -61,8 +60,7 @@ public class CustomerController {
 
     @DeleteMapping(path = "/delete")
     public ApiRespone<Boolean> deleteCustomer() {
-        customerImplement.deleteCustomerById(ProcessSecurityContextHolder.getUsername(SecurityContextHolder.getContext()));
-        return new ApiRespone<>(true);
+        return new ApiRespone<>(customerImplement.deleteCustomerById(ProcessSecurityContextHolder.getUsername(SecurityContextHolder.getContext())));
     }
 
     @PutMapping(path = "/update")
@@ -81,6 +79,7 @@ public class CustomerController {
     @GetMapping(path = "/hello")
     public ApiRespone<String> hello() throws ParseException {
         customerRepo.updateStatus("admin");
+        customerRepo.delete(customerRepo.findByUsername("admin").get());
         return new ApiRespone<>("Hello worlds");
     }
 
