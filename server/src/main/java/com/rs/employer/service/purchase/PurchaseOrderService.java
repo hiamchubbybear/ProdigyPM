@@ -74,7 +74,6 @@ public class PurchaseOrderService {
         return true;
     }
 
-    @Transactional
     public PurchaseOrderDTO updateStatus(Long id, Integer status) {
         PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.PURCHASE_ORDER_NOT_FOUND));

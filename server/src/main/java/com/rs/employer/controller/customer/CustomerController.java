@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 
 import com.nimbusds.jose.JOSEException;
 import com.rs.employer.dao.customer.CustomerRepo;
@@ -14,9 +15,8 @@ import com.rs.employer.dto.Response.*;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.customer.Customer;
+import com.rs.employer.service.ProcessSecurityContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,28 +48,28 @@ public class CustomerController {
         return new ApiRespone<>(customerImplement.listAllCustomer());
     }
 
-    @GetMapping(path = "/{id}")
-    public ApiRespone<Customer> getPaticipateUser(@PathVariable String id) {
-        return new ApiRespone(customerImplement.listCustomerById(id));
+    @GetMapping(path = "get")
+    public ApiRespone<CustomerResponse> getPaticipateUser(@RequestParam String username) {
+        return new ApiRespone<>(customerImplement.listCustomerById(username));
     }
 
     @GetMapping("/info")
     public ApiRespone<CustomerInfoDTO> getInfo() {
         return new ApiRespone<>
-                (customerImplement.getMyInfo());
+                (customerImplement.getMyInfo(ProcessSecurityContextHolder.getUsername(SecurityContextHolder.getContext())));
     }
 
-    @DeleteMapping(path = "/{id}")
-    public ApiRespone<Boolean> deleteCustomer(@PathVariable String id) {
-        customerImplement.deleteCustomerById(id);
+    @DeleteMapping(path = "/delete")
+    public ApiRespone<Boolean> deleteCustomer() {
+        customerImplement.deleteCustomerById(ProcessSecurityContextHolder.getUsername(SecurityContextHolder.getContext()));
         return new ApiRespone<>(true);
     }
 
-    @PutMapping(path = "/update/{id}")
-    public ApiRespone<CustomerInfoDTO> updatCustomer(
-            @RequestBody CustomerInfoDTO request , @PathVariable String id ) {
+    @PutMapping(path = "/update")
+    public ApiRespone<CustomerInfoDTO> updateCustomer(
+            @RequestBody CustomerInfoDTO request , @RequestParam String username ) {
         return new ApiRespone<>
-                (customerImplement.updateCustomer(request, id));
+                (customerImplement.updateCustomer(request, username));
     }
 
     @PostMapping(path = "/add")
@@ -84,20 +84,20 @@ public class CustomerController {
         return new ApiRespone<>("Hello worlds");
     }
 
-    @GetMapping(path = "/all/{value}")
+    @GetMapping(path = "/all/sort")
     public ApiRespone<List<Customer>> getAllAndSort(
-            @PathVariable(value = "value", required = true) String value) {
-        return new ApiRespone(customerImplement.listAllSort(value));
+            @RequestParam(value = "by", required = true) String value) {
+        return new ApiRespone<>(customerImplement.listAllSort(value));
     }
 
     @PostMapping(path = "/register")
-    public ApiRespone<Customer> registerCustomer(@RequestBody RegisterRequest customer) {
-        return new ApiRespone(customerImplement.register(customer));
+    public ApiRespone<RegisterRespone> registerCustomer(@RequestBody RegisterRequest customer) {
+        return new ApiRespone<>(customerImplement.register(customer));
     }
 
     @PutMapping(path = "/user")
-    public ApiRespone<Customer> updateCustomerData(@RequestBody CustomerUpdateRespone customer) {
-        return new ApiRespone(customerImplement.customerRequest(customer));
+    public ApiRespone<Customer> updateCustomerData(@RequestBody CustomerUpdateResponse customer , @RequestParam String username) {
+        return new ApiRespone<>(customerImplement.customerRequest(customer,username));
     }
 
     @PostMapping(path = "/activate")
@@ -113,7 +113,7 @@ public class CustomerController {
 
     @PostMapping(path = "/pwd")
     public ApiRespone<ForgotAccountRespone> resetPassword(@RequestParam String email) throws JOSEException {
-        return new ApiRespone(customerImplement.forgotAccount(email));
+        return new ApiRespone<>(customerImplement.forgotAccount(email));
     }
 
     @PostMapping("/img/upload")
@@ -130,10 +130,8 @@ public class CustomerController {
     }
 
     @GetMapping(path = "/image")
-    @PostAuthorize("#username == authentication.name")
     public ApiRespone<?> getImage() throws IOException {
-
-        String imageResource = Base64.getEncoder().encodeToString(customerImplement.userImage());
+        String imageResource = Base64.getEncoder().encodeToString(customerImplement.userImage( ProcessSecurityContextHolder.getUsername(SecurityContextHolder.getContext())));
         return new ApiRespone<>(new ImageRespone(imageResource, SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 

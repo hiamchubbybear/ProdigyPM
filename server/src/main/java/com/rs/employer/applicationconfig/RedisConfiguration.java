@@ -1,6 +1,8 @@
 package com.rs.employer.applicationconfig;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +21,8 @@ import java.time.Duration;
 
 @Configuration
 public class RedisConfiguration {
-
+    @Autowired
+    private static CacheManager cacheManager;
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
@@ -30,13 +33,12 @@ public class RedisConfiguration {
         return new JedisConnectionFactory(config);
     }
 
-
     @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(jedisConnectionFactory());
+        template.setConnectionFactory(connectionFactory);
+        template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-        template.setKeySerializer(RedisSerializer.string());
         return template;
     }
 
@@ -55,5 +57,21 @@ public class RedisConfiguration {
                         RedisCacheConfiguration.defaultCacheConfig()
                                 .entryTtl(Duration.ofMinutes(30)))
                 ;
+    }
+
+    public static void evictCaches(String key) {
+        Cache customerInfoCache = cacheManager.getCache("customerInfo");
+        if (customerInfoCache != null) {
+            customerInfoCache.evict(key);
+        }
+        Cache customerCache = cacheManager.getCache("customer");
+        if (customerCache != null) {
+            customerCache.evict(key);
+            customerCache.evict("allCustomers"); // Sửa lỗi cú pháp
+        }
+        Cache userAddedCache = cacheManager.getCache("userAdded");
+        if (userAddedCache != null) {
+            userAddedCache.evict(key);
+        }
     }
 }

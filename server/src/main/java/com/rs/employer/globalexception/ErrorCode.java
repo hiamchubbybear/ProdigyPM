@@ -34,6 +34,8 @@ public enum ErrorCode {
     PASSWORD_INVALID(003, "Password must be at least 8 characters", HttpStatus.BAD_REQUEST),
     TOKEN_INVALID(003, "Token is used or has expired", HttpStatus.NOT_ACCEPTABLE),
 
+    // NOT MATCH
+    UUID_NOT_MATCH(004, "UUID you provided do not match with any user" , HttpStatus.NOT_EXTENDED ),
 
     //AUTHENTICATED FAILED
     USER_UNAUTHENTICATED(005, "User authentication failed", HttpStatus.UNAUTHORIZED),
@@ -49,6 +51,7 @@ public enum ErrorCode {
     //SERVER
     UNCATEGORIZE_EXCEPTION(007,"Uncategorize Exception",HttpStatus.INTERNAL_SERVER_ERROR),
     SERVER_INTERNAL_ERROR(007,"Server Internal Error",HttpStatus.INTERNAL_SERVER_ERROR);
+
 
 
     private int code;

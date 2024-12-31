@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import java.time.Instant;
 import java.time.LocalDate;
 
-public class CustomerUpdateRespone {
+public class CustomerUpdateResponse {
 //    @Size(min = 2, message = "PASSWORD_INVALID")
     @Nullable
     String password;
@@ -15,43 +15,24 @@ public class CustomerUpdateRespone {
     private String address;
     private String role;
     private boolean gender;
-    private String status;
+    private Boolean status;
     private Instant update;
     private LocalDate dob;
 
-    public CustomerUpdateRespone() {
+    public CustomerUpdateResponse() {
     }
 
-    public CustomerUpdateRespone(String password, String email, String name, String address, String role, boolean gender, String status, Instant update, LocalDate dob) {
-        this.password = password;
-        this.email = email;
-        this.name = name;
-        this.address = address;
-        this.role = role;
-        this.gender = gender;
-        this.status = status;
-        this.update = update;
-        this.dob = dob;
-    }
-
-    public @Size(min = 2, message = "PASSWORD_INVALID") String getPassword() {
+    @Nullable
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(@Size(min = 2, message = "PASSWORD_INVALID") String password) {
+    public void setPassword(@Nullable String password) {
         this.password = password;
     }
 
     public String getEmail() {
         return email;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public void setEmail(String email) {
@@ -74,6 +55,14 @@ public class CustomerUpdateRespone {
         this.address = address;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public boolean isGender() {
         return gender;
     }
@@ -82,11 +71,11 @@ public class CustomerUpdateRespone {
         this.gender = gender;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -106,4 +95,15 @@ public class CustomerUpdateRespone {
         this.dob = dob;
     }
 
+    public CustomerUpdateResponse(@Nullable String password, String email, String name, String address, String role, boolean gender, Boolean status, Instant update, LocalDate dob) {
+        this.password = password;
+        this.email = email;
+        this.name = name;
+        this.address = address;
+        this.role = role;
+        this.gender = gender;
+        this.status = status;
+        this.update = update;
+        this.dob = dob;
+    }
 }

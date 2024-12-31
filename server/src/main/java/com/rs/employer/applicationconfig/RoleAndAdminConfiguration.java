@@ -60,7 +60,7 @@ public class RoleAndAdminConfiguration {
             log.info("Finished creating permissions.");
             log.info("Starting to create roles...");
             for (RoleEnum role : RoleEnum.values()) {
-                if (roleRepository.findAllByName(role.getName())!= null) {
+                if (!roleRepository.existsByName(role.getName())) {
                     Set<Permission> permissions = new HashSet<>(permissionRepository.findAllByAssigned(role.getName()));
                     roleRepository.save(new Role(role.getName(), role.getDescription(), permissions));
                     log.info("Role {} has been created", role.getName());

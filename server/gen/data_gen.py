@@ -4,6 +4,7 @@ import random
 import faker
 from datetime import datetime
 import uuid
+import bcrypt  # Thêm thư viện bcrypt
 
 # Tạo một đối tượng Faker để tạo dữ liệu giả
 fake = faker.Faker()
@@ -46,7 +47,9 @@ def main():
     for _ in range(100000):
         uuid_value = str(uuid.uuid4())  # Tạo UUID
         username = fake.user_name()
-        password = fake.password()
+        password = "123456"
+        # Mã hóa mật khẩu trước khi lưu vào DB
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         email = fake.email()
         name = fake.name()
         address = fake.address()
@@ -60,7 +63,7 @@ def main():
         # Tạo dữ liệu hình ảnh giả (có thể là URL hoặc đường dẫn đến hình ảnh)
         image = fake.image_url()  # Tạo URL hình ảnh giả
 
-        insert_data(connection, uuid_value, username, password, email, name, address, gender, status, dob, role, image)
+        insert_data(connection, uuid_value, username, hashed_password, email, name, address, gender, status, dob, role, image)
 
     if connection.is_connected():
         connection.close()

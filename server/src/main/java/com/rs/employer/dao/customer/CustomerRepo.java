@@ -23,8 +23,9 @@ import com.rs.employer.model.warehouse.Product;
 public interface CustomerRepo extends JpaRepository<Customer, UUID> {
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
-    @Query("SELECT c FROM Customer c WHERE c.username = :username")
-    Optional<Customer> findByUsername(@Param("username") String username);
+    Optional<Customer> findByUsername(String username);
+//    @Query("SELECT c FROM Customer c WHERE c.username = :username")
+//    Optional<Customer> findByUsername(@Param("username") String username);
     Optional<Customer> findByEmail(String email);
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Customer c WHERE c.username = :username AND c.email = :email")
     boolean existsByUsernameAndEmail(@Param("username") String username,@Param("email") String email);

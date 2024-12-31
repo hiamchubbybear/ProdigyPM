@@ -189,12 +189,9 @@ public class AuthenticationService {
 
     private String buildScope(Customer customer) {
         StringJoiner joiner = new StringJoiner(" ");
-        // Lấy vai trò từ repository
         Optional<Role> optionalRole = roleRepository.findByName(customer.getRole());
-        // Nếu vai trò tồn tại, thêm tên vai trò và quyền vào joiner
         optionalRole.ifPresent(role -> {
             joiner.add(role.getName());
-            // Thêm quyền nếu có
             if (!CollectionUtils.isEmpty(role.getPermissions())) {
                 role.getPermissions().forEach(permission -> joiner.add(permission.getName()));
             }
