@@ -50,7 +50,7 @@ public class AuthenticationService {
     private final RoleRepository roleRepository;
 
     @Autowired
-    public AuthenticationService(CustomerRepository repo, InvalidRepository invalidRepository, EmailService emailService, RoleRepository roleRepository, RoleRepository roleRepository1) {
+    public AuthenticationService(CustomerRepository repo, InvalidRepository invalidRepository, EmailService emailService,  RoleRepository roleRepository1) {
         this.repo = repo;
         this.invalidRepository = invalidRepository;
         this.emailService = emailService;
@@ -61,7 +61,6 @@ public class AuthenticationService {
     public AuthenticationRespone authentication(AuthenticationRequest authenticationDto) {
         var user = repo.findByUsername(authenticationDto.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOTFOUND));
-//        user.getRoles().stream().forEach((item) -> System.out.println(item));
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         boolean authenticated = passwordEncoder.matches(authenticationDto.getPassword(),
                 user.getPassword());
@@ -85,6 +84,7 @@ public class AuthenticationService {
         }
         return treq;
     }
+
     public IntrospectRespone introspectRequest(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
         IntrospectRespone respone = new IntrospectRespone();
@@ -108,7 +108,7 @@ public class AuthenticationService {
                 .expirationTime(new Date(Instant.now()
                         .plus(1, ChronoUnit.HOURS)
                         .toEpochMilli()))
-                .jwtID(UUID.randomUUID().toString()).claim("uuid",customer.getUuid())
+                .jwtID(UUID.randomUUID().toString()).claim("uuid", customer.getUuid())
                 .claim("scope", buildScope(customer))
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -120,6 +120,7 @@ public class AuthenticationService {
             throw new RuntimeException(e);
         }
     }
+
     public String extractUsernameFromToken(String token) throws ParseException, JOSEException {
         JWSVerifier verifier = new MACVerifier(signer_key.getBytes());
         SignedJWT signedJWT = SignedJWT.parse(token);
@@ -131,14 +132,15 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.USER_UNAUTHENTICATED);
         }
     }
-    public String EmailVerification(AuthenticationRequest customer)  {
+
+    public String EmailVerification(AuthenticationRequest customer) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
         String email = repo.findEmailByUsername(customer.getUsername());
         String token = new Random().nextInt(1000000) + "";
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(customer.getUsername()).issuer("Chessy")
                 .jwtID(token).expirationTime(new Date(Instant.now()
-                .plus(15, ChronoUnit.MINUTES).toEpochMilli()))
+                        .plus(15, ChronoUnit.MINUTES).toEpochMilli()))
                 .claim("email", email).build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject = new JWSObject(header, payload);
@@ -150,21 +152,22 @@ public class AuthenticationService {
             throw new RuntimeException();
         }
     }
-    public String ResetPasswordToken(String username , String email ) throws JOSEException {
+
+    public String ResetPasswordToken(String username, String email) throws JOSEException {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
         long token = 100000L + new Random().nextInt(900000);
-//        repo.updateResetToken(username,String.valueOf(token));
         System.out.println("Update token to reset token" + token);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject(username).issuer("Chessy")
                 .claim("email", email)
-                .expirationTime(new Date(Instant.now().plus(5,ChronoUnit.MINUTES).
-                        toEpochMilli())).claim("token" , token).build();
+                .expirationTime(new Date(Instant.now().plus(5, ChronoUnit.MINUTES).
+                        toEpochMilli())).claim("token", token).build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
 
         JWSObject jwsObject = new JWSObject(header, payload);
         jwsObject.sign(new MACSigner(signer_key));
         return jwsObject.serialize();
     }
+
     public void Logout(LogoutRequest request) throws JOSEException, ParseException {
         var signedToken = verifiedToken(request.getToken());
         String jit = signedToken.getJWTClaimsSet().getJWTID();

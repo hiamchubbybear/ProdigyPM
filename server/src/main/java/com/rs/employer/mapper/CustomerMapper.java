@@ -19,6 +19,4 @@ public interface CustomerMapper {
     @Mapping(target = "role", ignore = true)
     CustomerResponse toCustomerResponse(Customer request);
 
-//    CustomerInfoDTO toCustomerInfoDTO(Customer customer);
-//    Customer toCustomer(CustomerInfoDTO customerInfoDTO);
 }

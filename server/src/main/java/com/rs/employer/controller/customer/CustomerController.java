@@ -30,7 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping(path = "/api/customer")
 @RestController
 @Slf4j
-
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class CustomerController {
     private final CustomerService customerImplement;
@@ -47,8 +46,8 @@ public class CustomerController {
         return new ApiRespone<>(customerImplement.listAllCustomer());
     }
 
-    @GetMapping(path = "get")
-    public ApiRespone<CustomerResponse> getPaticipateUser(@RequestParam String username) {
+    @GetMapping(path = "/get")
+    public ApiRespone<CustomerResponse> getParticipateUser(@RequestParam String username) {
         return new ApiRespone<>(customerImplement.listCustomerById(username));
     }
 
@@ -65,7 +64,7 @@ public class CustomerController {
 
     @PutMapping(path = "/update")
     public ApiRespone<CustomerInfoDTO> updateCustomer(
-            @RequestBody CustomerInfoDTO request , @RequestParam String username ) {
+            @RequestBody CustomerInfoDTO request, @RequestParam String username) {
         return new ApiRespone<>
                 (customerImplement.updateCustomer(request, username));
     }
@@ -77,7 +76,7 @@ public class CustomerController {
     }
 
     @GetMapping(path = "/hello")
-    public ApiRespone<String> hello() throws ParseException {
+    public ApiRespone<String> hello() {
         customerRepo.updateStatus("admin");
         customerRepo.delete(customerRepo.findByUsername("admin").get());
         return new ApiRespone<>("Hello worlds");
@@ -95,8 +94,8 @@ public class CustomerController {
     }
 
     @PutMapping(path = "/user")
-    public ApiRespone<Customer> updateCustomerData(@RequestBody CustomerUpdateResponse customer , @RequestParam String username) {
-        return new ApiRespone<>(customerImplement.customerRequest(customer,username));
+    public ApiRespone<Customer> updateCustomerData(@RequestBody CustomerUpdateResponse customer, @RequestParam String username) {
+        return new ApiRespone<>(customerImplement.customerRequest(customer, username));
     }
 
     @PostMapping(path = "/activate")
@@ -104,33 +103,25 @@ public class CustomerController {
             @RequestBody ActivateRequestToken request
     ) throws ParseException, JOSEException {
         if (request == null || request.getToken() == null) {
-            throw new AppException(ErrorCode.UNCATEGORIZE_EXCEPTION);
+            throw new AppException(ErrorCode.NULL_EXCEPTION);
         }
         return new ApiRespone<>(customerImplement.activateRequest(request));
     }
 
-
     @PostMapping(path = "/pwd")
-    public ApiRespone<ForgotAccountRespone> resetPassword(@RequestParam String email) throws JOSEException {
+    public ApiRespone<ForgotAccountRespone> resetPassword(@RequestParam String email) {
         return new ApiRespone<>(customerImplement.forgotAccount(email));
     }
 
     @PostMapping("/img/upload")
     public ApiRespone<String> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        String fileName = file.getOriginalFilename();
-        byte[] fileBytes = file.getBytes();
-        if (!customerRepo.existsByUsername(username)) {
-            throw new AppException(ErrorCode.USER_NOTFOUND);
-        } else {
-            customerRepo.updateCustomerImage(username, fileBytes);
-            return new ApiRespone<>("Image uploaded successfully: " + fileName);
-        }
+        return new ApiRespone<>(customerImplement.uploadImage(file, username));
     }
 
     @GetMapping(path = "/image")
     public ApiRespone<?> getImage() throws IOException {
-        String imageResource = Base64.getEncoder().encodeToString(customerImplement.userImage( ProcessSecurityContextHolder.getUsername(SecurityContextHolder.getContext())));
+        String imageResource = Base64.getEncoder().encodeToString(customerImplement.userImage(ProcessSecurityContextHolder.getUsername(SecurityContextHolder.getContext())));
         return new ApiRespone<>(new ImageRespone(imageResource, SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 

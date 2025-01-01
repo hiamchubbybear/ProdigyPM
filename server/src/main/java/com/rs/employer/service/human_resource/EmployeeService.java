@@ -60,8 +60,7 @@ public class EmployeeService {
 
     public Employee updateEmployee(EmployeeRequest employeeRequest) {
         logger.info("Request to update employee : {}", employeeRequest);
-        Set<Long> payrollIds = employeeRequest.getPayrolls().stream()
-                .collect(Collectors.toSet());
+        Set<Long> payrollIds = new HashSet<>(employeeRequest.getPayrolls());
         Set<Payroll> payrolls = new HashSet<>(payrollRepository.findAllById(payrollIds));
         Employee employee = mapper.toEmployeeRequest(employeeRequest);
         logger.info("Updating employee: {}", employee);
@@ -104,7 +103,7 @@ public class EmployeeService {
     @status : suspend
      */
     public List<Employee> searchEmployees(Map<String, String> filters) {
-        logger.info("Search employees called with filters: {}", filters);  // Log tham số đầu vào
+        logger.info("Search employees called with filters: {}", filters);
         String name = filters.get("name");
         String departmentName = filters.get("departmentName");
         List<Employee> employees;
@@ -121,7 +120,7 @@ public class EmployeeService {
             logger.info("Fetching all employees as no filters are provided");
             employees = new ArrayList<>(employeeRepository.findAll());
         }
-        logger.info("Found {} employees", employees.size());  // Log số lượng nhân viên tìm được
+        logger.info("Found {} employees", employees.size());
         return employees;
     }
 }

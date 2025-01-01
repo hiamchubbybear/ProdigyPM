@@ -50,7 +50,10 @@ public enum ErrorCode {
 
     //SERVER
     UNCATEGORIZE_EXCEPTION(007,"Uncategorize Exception",HttpStatus.INTERNAL_SERVER_ERROR),
-    SERVER_INTERNAL_ERROR(007,"Server Internal Error",HttpStatus.INTERNAL_SERVER_ERROR);
+    SERVER_INTERNAL_ERROR(007,"Server Internal Error",HttpStatus.INTERNAL_SERVER_ERROR)
+
+    // NULL
+    , NULL_EXCEPTION(010, "Your input data is null" , HttpStatus.GONE );
 
 
 
