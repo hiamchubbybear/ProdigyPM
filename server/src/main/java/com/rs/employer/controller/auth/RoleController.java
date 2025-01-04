@@ -3,6 +3,7 @@ package com.rs.employer.controller.auth;
 import java.util.List;
 
 import com.rs.employer.dao.customer.RoleRepository;
+import com.rs.employer.dto.Response.RoleRespone;
 import com.rs.employer.globalexception.AppException;
 import com.rs.employer.globalexception.ErrorCode;
 import com.rs.employer.model.customer.Role;
@@ -25,9 +26,8 @@ public class RoleController {
 
     @GetMapping("/all")
     public ApiRespone<List<Role>> getAllRole() {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(svc.allRole());
-        return apiRespone;
+
+        return new ApiRespone<>(svc.allRole());
     }
 
     @GetMapping("/{role}")
@@ -36,24 +36,20 @@ public class RoleController {
     }
 
     @PutMapping("/update")
-    public ApiRespone<Role> updateRole(@RequestBody RoleRequest role) {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(svc.updateRole(role));
-        return apiRespone;
+    public ApiRespone<RoleRespone> updateRole(@RequestBody RoleRequest role) {
+
+        return new ApiRespone<>(svc.updateRole(role));
     }
 
     @PostMapping("/add")
-    public ApiRespone<Role> addRole(@RequestBody RoleRequest role) {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(svc.addRole(role));
-        return apiRespone;
+    public ApiRespone<RoleRespone> addRole(@RequestBody RoleRequest role) {
+
+        return new ApiRespone<>(svc.addRole(role));
     }
 
     @DeleteMapping("/delete/{role}")
     public ApiRespone<Boolean> deleteRole(@PathVariable("role") Integer role) {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(svc.deleteRole(role));
-        return apiRespone;
+        return new ApiRespone<>(svc.deleteRole(role));
     }
 
 }
