@@ -12,7 +12,7 @@ import com.rs.employer.dto.Request.Auth.PermissionRequest;
 import com.rs.employer.service.customer.customer.PermissionService;
 
 @RestController
-
+// Test test khu khu
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/api/permission")
 public class PermissionController {
