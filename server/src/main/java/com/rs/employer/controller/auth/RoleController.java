@@ -37,13 +37,11 @@ public class RoleController {
 
     @PutMapping("/update")
     public ApiRespone<RoleRespone> updateRole(@RequestBody RoleRequest role) {
-
         return new ApiRespone<>(svc.updateRole(role));
     }
 
     @PostMapping("/add")
     public ApiRespone<RoleRespone> addRole(@RequestBody RoleRequest role) {
-
         return new ApiRespone<>(svc.addRole(role));
     }
 
