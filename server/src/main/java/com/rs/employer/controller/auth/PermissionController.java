@@ -21,29 +21,21 @@ public class PermissionController {
 
     @GetMapping("/all")
     public ApiRespone<List<Permission>> getAllPermission() {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(svc.allPermission());
-        return apiRespone;
+        return new ApiRespone<>((svc.allPermission()));
     }
 
     @PutMapping("/update")
     public ApiRespone<Permission> updatePermission(@RequestBody PermissionRequest permission) {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(svc.updatePermission(permission));
-        return apiRespone;
+        return new ApiRespone<>((svc.updatePermission(permission)));
     }
 
     @PostMapping("/add")
     public ApiRespone<Permission> addPermission(@RequestBody PermissionRequest permission) {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(svc.addPermission(permission));
-        return apiRespone;
+        return new ApiRespone<>((svc.addPermission(permission)));
     }
 
     @DeleteMapping("/delete/{permission}")
     public ApiRespone<Boolean> deletePermission(@PathVariable("permission") String permission) {
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(svc.deletePermission(permission));
-        return apiRespone;
+        return new ApiRespone<>((svc.deletePermission(permission)));
     }
 }
