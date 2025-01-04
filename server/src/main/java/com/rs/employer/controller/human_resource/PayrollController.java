@@ -12,6 +12,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/payrolls")
+@CrossOrigin(origins = "*")
 public class PayrollController {
 
     private final PayrollService payrollService;
