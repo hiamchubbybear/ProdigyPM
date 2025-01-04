@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import com.rs.employer.dao.customer.CustomerRepository;
 import com.rs.employer.dao.customer.TokenService;
+import com.rs.employer.dto.Response.IntrospectRespone;
 import com.rs.employer.dto.Response.LoginInactiveAccountRespone;
 import com.rs.employer.service.EmailService;
 import com.rs.employer.globalexception.AppException;
@@ -51,30 +52,22 @@ public class AuthenticationController {
             } else {
 
                 String token = (authenticationService.authentication(authenticated)).getToken();
-                ApiRespone apiRespone = new ApiRespone();
-                apiRespone.setCode(101);
                 emailService.sendActivateToken(email,"Activate token "  , tokenService.checkTokenAndRegenerateToken(email));
-                apiRespone.setData(new LoginInactiveAccountRespone(token, true));
-                return apiRespone;
+                return new ApiRespone<>(new LoginInactiveAccountRespone(token, true));
             }
         }
         else throw new AppException(ErrorCode.NOT_MATCH);
     }
 
     @PostMapping("/token")
-    public ApiRespone<IntrospectRequest> introspect(@RequestBody IntrospectRequest authenticated)
+    public ApiRespone<IntrospectRespone> introspect(@RequestBody IntrospectRequest authenticated)
             throws ParseException, JOSEException {
-        var result = authen.introspectRequest(authenticated);
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setData(result);
-        return apiRespone;
+        return new ApiRespone<>(authen.introspectRequest(authenticated));
     }
 
     @PostMapping("/logout")
     public ApiRespone<Void> logout(@RequestBody LogoutRequest request) throws JOSEException, ParseException {
         authen.Logout(request);
-        ApiRespone apiRespone = new ApiRespone<>();
-        apiRespone.setCode(1000);
-        return apiRespone;
+        return new ApiRespone<>(null);
     }
 }
